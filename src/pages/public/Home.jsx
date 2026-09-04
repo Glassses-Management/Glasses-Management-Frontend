@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import Card from '@/components/Card'
-import Button from '@/components/Button'
+import { useState } from "react";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 
 function Home() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <section>
@@ -15,7 +15,7 @@ function Home() {
         <Button onClick={() => setCount((c) => c + 1)}>Add one</Button>
       </Card>
     </section>
-  )
+  );
 }
 
-export default Home
+export default Home;

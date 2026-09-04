@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import Card from '@/components/Card'
-import Button from '@/components/Button'
+import { useState } from "react";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 
 function Contact() {
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false);
 
   // preventDefault stops the browser's default full-page reload on form submit
   function handleSubmit(event) {
-    event.preventDefault()
-    setSubmitted(true)
+    event.preventDefault();
+    setSubmitted(true);
   }
 
   return (
@@ -46,7 +46,7 @@ function Contact() {
         )}
       </Card>
     </section>
-  )
+  );
 }
 
-export default Contact
+export default Contact;
