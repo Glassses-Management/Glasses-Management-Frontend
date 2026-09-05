@@ -10,7 +10,7 @@ glasses-web/
 │   │   ├── productApi.js             # CRUD /products (+ filters)
 │   │   ├── inventoryApi.js           # CRUD /inventories, GET /low-stock
 │   │   ├── orderApi.js               # CRUD /orders, POST /orders/{id}/status
-│   │   ├── orderItemApi.js           # CRUD /order-items
+│   │   ├── orderItemApi.js           # CRUD /orderitem
 │   │   ├── appointmentApi.js         # CRUD /appointments
 │   │   ├── prescriptionApi.js        # CRUD /prescriptions, GET by customer/user
 │   │   ├── attachmentApi.js          # Upload, CRUD /attachments, by-user/by-product
@@ -62,8 +62,9 @@ glasses-web/
 │   │       └── PrescriptionForm.jsx
 │   │
 │   ├── pages/                        # Route-level pages (one per backend domain)
-│   │   ├── LoginPage.jsx
-│   │   ├── RegisterPage.jsx          # Self-registration: creates User + Customer
+│   │   ├── auth/
+│   │   │   ├── LoginPage.jsx
+│   │   │   └── RegisterPage.jsx      # Self-registration: creates User + Customer
 │   │   ├── DashboardPage.jsx         # Summary cards + recent orders
 │   │   │
 │   │   ├── customers/
