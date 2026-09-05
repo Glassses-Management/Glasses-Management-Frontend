@@ -1,6 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
 import DashboardLayout from '@/components/layout/DashboardLayout'
-import Home from '@/pages/public/Home'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import LoginPage from '@/pages/auth/LoginPage'
+import RegisterPage from '@/pages/auth/RegisterPage'
+import DashboardPage from '@/pages/DashboardPage'
 import About from '@/pages/public/About'
 import Contact from '@/pages/public/Contact'
 import NotFound from '@/pages/public/NotFound'
@@ -11,15 +14,26 @@ function App() {
   return (
     <AuthProvider>
       <ToastProvider>
-        <DashboardLayout activeRoute="dashboard" onNavigate={(key) => console.log(key)}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            {/* "*" matches any path that didn't match a route above */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </DashboardLayout>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout activeRoute="dashboard" onNavigate={() => undefined}>
+                  <Routes>
+                    <Route path="/" element={<DashboardPage />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    {/* "*" matches any path that didn't match a route above */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </ToastProvider>
     </AuthProvider>
   )
