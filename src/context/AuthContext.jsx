@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { AuthContext } from "@/context/AuthContext";
-import { login as loginApi, register as registerApi, getMe } from "@/api/authApi";
+import { AuthContext } from "@/context/AuthContextStore";
+import { login as loginApi, getMe } from "@/api/authApi";
+import { registerCustomer as registerApi } from "@/api/customerApi";
 
 export function AuthProvider({ children }){
     const [user, setUser] = useState(() => {
