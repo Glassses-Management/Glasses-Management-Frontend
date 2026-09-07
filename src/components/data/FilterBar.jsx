@@ -98,13 +98,15 @@ function FilterBar({ filters, onFilterChange, onClearAll, onAddNew }) {
         </button>
       )}
 
-      <button
-        type="button"
-        onClick={onAddNew}
-        className="ml-auto rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700"
-      >
-        + Register New Client
-      </button>
+      {onAddNew && (
+        <button
+          type="button"
+          onClick={onAddNew}
+          className="ml-auto rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700"
+        >
+          + Register New Client
+        </button>
+      )}
     </div>
   )
 }

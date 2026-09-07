@@ -3,6 +3,9 @@
 
 import { formatCurrency } from '@/utils/FormatCurrency'
 
+// Re-exported so pages can import from a single format.js file.
+export { formatCurrency }
+
 export const formatDate = (dateStr, options) => {
   if (!dateStr) return '—'
   const date = new Date(dateStr)

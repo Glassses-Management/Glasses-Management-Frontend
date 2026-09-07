@@ -14,17 +14,21 @@
   "customers": [
     {
       "id": 1,
-      "name": "Ethan Carter",
-      "phone": "555-0142",
-      "email": "ethan.carter@example.com",
-      "address": "142 Maple Avenue, Springfield",
+      "name": "Sok Dara",
+      "phone": "012 345 678",
+      "email": "sok.dara@gmail.com",
+      "address": "142 Street 136, Toul Kork, Phnom Penh",
       "dateOfBirth": "1988-04-12",
       "createdAt": "2024-02-11T09:30:00Z",
       "updatedAt": "2025-06-20T14:45:00Z",
       "appointments": [
         {
           "id": 101,
-          "optometrist": { "id": 1, "name": "Dr. Claire Lawson", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 1,
+            "name": "Dr. Claire Lawson",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-06-20T14:00:00Z",
           "status": "COMPLETED",
           "notes": "Annual checkup, vision stable",
@@ -32,7 +36,11 @@
         },
         {
           "id": 102,
-          "optometrist": { "id": 2, "name": "Dr. Marcus Reed", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 2,
+            "name": "Dr. Marcus Reed",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-09-15T10:30:00Z",
           "status": "SCHEDULED",
           "notes": "Follow-up on new prescription",
@@ -42,8 +50,12 @@
       "prescriptions": [
         {
           "id": 1001,
-          "od_sphere": -1.75, "od_cylinder": -0.75, "od_axis": 90,
-          "os_sphere": -1.5, "os_cylinder": -0.5, "os_axis": 85,
+          "od_sphere": -1.75,
+          "od_cylinder": -0.75,
+          "od_axis": 90,
+          "os_sphere": -1.5,
+          "os_cylinder": -0.5,
+          "os_axis": 85,
           "near_addition": 1.25,
           "pupillary_distance": 62.5,
           "notes": "Mild myopia with astigmatism",
@@ -67,9 +79,15 @@
             {
               "id": 3001,
               "product": {
-                "id": 10, "sku": "FRM-1001", "model": "Aviator Classic", "brand": "Ray-Ban",
-                "color": "Gold", "material": "Metal", "size": "Medium",
-                "sale_price": 350.00, "category": "Frames"
+                "id": 10,
+                "sku": "FRM-1001",
+                "model": "Aviator Classic",
+                "brand": "Ray-Ban",
+                "color": "Gold",
+                "material": "Metal",
+                "size": "Medium",
+                "sale_price": 350.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -85,17 +103,21 @@
     },
     {
       "id": 2,
-      "name": "Maya Patel",
-      "phone": "555-0187",
-      "email": "maya.patel@example.com",
-      "address": "87 Oak Street, Springfield",
+      "name": "Chan Vannak",
+      "phone": "017 456 789",
+      "email": "chan.vannak@gmail.com",
+      "address": "87 Wat Bo Road, Siem Reap",
       "dateOfBirth": "1992-09-30",
       "createdAt": "2023-11-05T15:20:00Z",
       "updatedAt": "2025-05-12T16:10:00Z",
       "appointments": [
         {
           "id": 103,
-          "optometrist": { "id": 2, "name": "Dr. Marcus Reed", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 2,
+            "name": "Dr. Marcus Reed",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-05-12T09:00:00Z",
           "status": "COMPLETED",
           "notes": "Prescription updated for progression",
@@ -105,8 +127,12 @@
       "prescriptions": [
         {
           "id": 1002,
-          "od_sphere": -2.25, "od_cylinder": -1.0, "od_axis": 95,
-          "os_sphere": -2.0, "os_cylinder": -0.75, "os_axis": 90,
+          "od_sphere": -2.25,
+          "od_cylinder": -1.0,
+          "od_axis": 95,
+          "os_sphere": -2.0,
+          "os_cylinder": -0.75,
+          "os_axis": 90,
           "near_addition": 1.5,
           "pupillary_distance": 60.0,
           "notes": "Progressive lenses recommended",
@@ -130,9 +156,15 @@
             {
               "id": 3002,
               "product": {
-                "id": 11, "sku": "FRM-1002", "model": "Round Retro", "brand": "Persol",
-                "color": "Black", "material": "Acetate", "size": "Medium",
-                "sale_price": 290.00, "category": "Frames"
+                "id": 11,
+                "sku": "FRM-1002",
+                "model": "Round Retro",
+                "brand": "Persol",
+                "color": "Black",
+                "material": "Acetate",
+                "size": "Medium",
+                "sale_price": 290.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Progressive",
@@ -148,17 +180,21 @@
     },
     {
       "id": 3,
-      "name": "Liam O'Brien",
-      "phone": "555-0135",
-      "email": "liam.obrien@example.com",
-      "address": "23 Cedar Lane, Riverside",
+      "name": "Lim Sreypov",
+      "phone": "015 234 567",
+      "email": "lim.sreypov@gmail.com",
+      "address": "23 Street 105, Battambang",
       "dateOfBirth": "1981-12-05",
       "createdAt": "2024-06-18T10:45:00Z",
       "updatedAt": "2025-07-02T13:40:00Z",
       "appointments": [
         {
           "id": 104,
-          "optometrist": { "id": 1, "name": "Dr. Claire Lawson", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 1,
+            "name": "Dr. Claire Lawson",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-07-02T11:00:00Z",
           "status": "COMPLETED",
           "notes": "Diabetic eye screening",
@@ -166,7 +202,11 @@
         },
         {
           "id": 105,
-          "optometrist": { "id": 3, "name": "Dr. Sofia Alvarez", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 3,
+            "name": "Dr. Sofia Alvarez",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-08-01T14:30:00Z",
           "status": "CANCELLED",
           "notes": "Patient rescheduled",
@@ -176,8 +216,12 @@
       "prescriptions": [
         {
           "id": 1003,
-          "od_sphere": 1.0, "od_cylinder": -0.5, "od_axis": 70,
-          "os_sphere": 1.25, "os_cylinder": -0.25, "os_axis": 75,
+          "od_sphere": 1.0,
+          "od_cylinder": -0.5,
+          "od_axis": 70,
+          "os_sphere": 1.25,
+          "os_cylinder": -0.25,
+          "os_axis": 75,
           "near_addition": 2.0,
           "pupillary_distance": 63.0,
           "notes": "Hyperopia, presbyopia",
@@ -201,9 +245,15 @@
             {
               "id": 3003,
               "product": {
-                "id": 12, "sku": "FRM-1003", "model": "Wayfarer", "brand": "Oakley",
-                "color": "Matte Black", "material": "Plastic", "size": "Large",
-                "sale_price": 320.00, "category": "Frames"
+                "id": 12,
+                "sku": "FRM-1003",
+                "model": "Wayfarer",
+                "brand": "Oakley",
+                "color": "Matte Black",
+                "material": "Plastic",
+                "size": "Large",
+                "sale_price": 320.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -219,17 +269,21 @@
     },
     {
       "id": 4,
-      "name": "Sophie Nguyen",
-      "phone": "555-0169",
-      "email": "sophie.nguyen@example.com",
-      "address": "198 Birchwood Drive, Riverside",
+      "name": "Ouk Rathanak",
+      "phone": "096 789 123",
+      "email": "ouk.rathanak@gmail.com",
+      "address": "198 Riverside Road, Kampot",
       "dateOfBirth": "1995-03-22",
       "createdAt": "2025-01-08T08:50:00Z",
       "updatedAt": "2025-08-17T09:25:00Z",
       "appointments": [
         {
           "id": 106,
-          "optometrist": { "id": 3, "name": "Dr. Sofia Alvarez", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 3,
+            "name": "Dr. Sofia Alvarez",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-08-17T10:00:00Z",
           "status": "COMPLETED",
           "notes": "Contact lens fitting",
@@ -239,8 +293,12 @@
       "prescriptions": [
         {
           "id": 1004,
-          "od_sphere": -3.0, "od_cylinder": -1.25, "od_axis": 110,
-          "os_sphere": -2.75, "os_cylinder": -1.0, "os_axis": 105,
+          "od_sphere": -3.0,
+          "od_cylinder": -1.25,
+          "od_axis": 110,
+          "os_sphere": -2.75,
+          "os_cylinder": -1.0,
+          "os_axis": 105,
           "near_addition": 0.75,
           "pupillary_distance": 61.0,
           "notes": "High myopia",
@@ -264,9 +322,15 @@
             {
               "id": 3004,
               "product": {
-                "id": 13, "sku": "FRM-1004", "model": "Wire Round", "brand": "Warby Parker",
-                "color": "Silver", "material": "Metal", "size": "Small",
-                "sale_price": 195.00, "category": "Frames"
+                "id": 13,
+                "sku": "FRM-1004",
+                "model": "Wire Round",
+                "brand": "Warby Parker",
+                "color": "Silver",
+                "material": "Metal",
+                "size": "Small",
+                "sale_price": 195.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -282,17 +346,21 @@
     },
     {
       "id": 5,
-      "name": "Daniel Kim",
-      "phone": "555-0193",
-      "email": "daniel.kim@example.com",
-      "address": "54 Pinecrest Road, Springfield",
+      "name": "Chea Visal",
+      "phone": "097 123 456",
+      "email": "chea.visal@gmail.com",
+      "address": "54 Sok San Road, Sihanoukville",
       "dateOfBirth": "1976-07-18",
       "createdAt": "2023-09-22T13:15:00Z",
       "updatedAt": "2025-04-09T17:30:00Z",
       "appointments": [
         {
           "id": 107,
-          "optometrist": { "id": 1, "name": "Dr. Claire Lawson", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 1,
+            "name": "Dr. Claire Lawson",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-04-09T13:30:00Z",
           "status": "COMPLETED",
           "notes": "Bifocal adjustment",
@@ -300,7 +368,11 @@
         },
         {
           "id": 108,
-          "optometrist": { "id": 2, "name": "Dr. Marcus Reed", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 2,
+            "name": "Dr. Marcus Reed",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-10-01T09:00:00Z",
           "status": "SCHEDULED",
           "notes": "Routine renewal",
@@ -310,8 +382,12 @@
       "prescriptions": [
         {
           "id": 1005,
-          "od_sphere": 1.75, "od_cylinder": -0.25, "od_axis": 60,
-          "os_sphere": 1.5, "os_cylinder": 0.0, "os_axis": 0,
+          "od_sphere": 1.75,
+          "od_cylinder": -0.25,
+          "od_axis": 60,
+          "os_sphere": 1.5,
+          "os_cylinder": 0.0,
+          "os_axis": 0,
           "near_addition": 2.25,
           "pupillary_distance": 64.5,
           "notes": "Bifocal for presbyopia",
@@ -335,9 +411,15 @@
             {
               "id": 3005,
               "product": {
-                "id": 14, "sku": "FRM-1005", "model": "Clubmaster", "brand": "Ray-Ban",
-                "color": "Havana", "material": "Acetate", "size": "Medium",
-                "sale_price": 270.00, "category": "Frames"
+                "id": 14,
+                "sku": "FRM-1005",
+                "model": "Clubmaster",
+                "brand": "Ray-Ban",
+                "color": "Havana",
+                "material": "Acetate",
+                "size": "Medium",
+                "sale_price": 270.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Bifocal",
@@ -353,17 +435,21 @@
     },
     {
       "id": 6,
-      "name": "Isabella Rossi",
-      "phone": "555-0114",
-      "email": "isabella.rossi@example.com",
-      "address": "311 Willow Court, Brookside",
+      "name": "Kimly Nita",
+      "phone": "088 654 321",
+      "email": "kimly.nita@gmail.com",
+      "address": "311 National Road 21, Kandal",
       "dateOfBirth": "1990-11-09",
       "createdAt": "2024-08-02T11:05:00Z",
       "updatedAt": "2025-09-14T10:20:00Z",
       "appointments": [
         {
           "id": 109,
-          "optometrist": { "id": 3, "name": "Dr. Sofia Alvarez", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 3,
+            "name": "Dr. Sofia Alvarez",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-09-14T11:30:00Z",
           "status": "COMPLETED",
           "notes": "New prescription issued",
@@ -373,8 +459,12 @@
       "prescriptions": [
         {
           "id": 1006,
-          "od_sphere": -0.5, "od_cylinder": -0.75, "od_axis": 80,
-          "os_sphere": -0.5, "os_cylinder": -0.5, "os_axis": 82,
+          "od_sphere": -0.5,
+          "od_cylinder": -0.75,
+          "od_axis": 80,
+          "os_sphere": -0.5,
+          "os_cylinder": -0.5,
+          "os_axis": 82,
           "near_addition": 1.0,
           "pupillary_distance": 58.0,
           "notes": "Minimal correction",
@@ -398,9 +488,15 @@
             {
               "id": 3006,
               "product": {
-                "id": 15, "sku": "FRM-1006", "model": "Geometric", "brand": "Gentle Monster",
-                "color": "Clear", "material": "Acetate", "size": "Medium",
-                "sale_price": 200.00, "category": "Frames"
+                "id": 15,
+                "sku": "FRM-1006",
+                "model": "Geometric",
+                "brand": "Gentle Monster",
+                "color": "Clear",
+                "material": "Acetate",
+                "size": "Medium",
+                "sale_price": 200.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -427,9 +523,15 @@
             {
               "id": 3007,
               "product": {
-                "id": 41, "sku": "ACC-2001", "model": "Polarized Clip", "brand": "GlassesCo",
-                "color": "Black", "material": "Plastic", "size": "Universal",
-                "sale_price": 85.00, "category": "Accessories"
+                "id": 41,
+                "sku": "ACC-2001",
+                "model": "Polarized Clip",
+                "brand": "GlassesCo",
+                "color": "Black",
+                "material": "Plastic",
+                "size": "Universal",
+                "sale_price": 85.00,
+                "category": "Accessories"
               },
               "quantity": 1,
               "len_type": "Standard",
@@ -445,17 +547,21 @@
     },
     {
       "id": 7,
-      "name": "Noah Williams",
-      "phone": "555-0171",
-      "email": "noah.williams@example.com",
-      "address": "76 Aspen Terrace, Brookside",
+      "name": "Heng Sothea",
+      "phone": "018 765 432",
+      "email": "heng.sothea@gmail.com",
+      "address": "76 Preah Norodom Boulevard, Chamkar Mon, Phnom Penh",
       "dateOfBirth": "1985-01-27",
       "createdAt": "2023-12-15T14:40:00Z",
       "updatedAt": "2025-06-02T15:55:00Z",
       "appointments": [
         {
           "id": 110,
-          "optometrist": { "id": 2, "name": "Dr. Marcus Reed", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 2,
+            "name": "Dr. Marcus Reed",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-06-02T10:00:00Z",
           "status": "COMPLETED",
           "notes": "Computer vision syndrome review",
@@ -465,8 +571,12 @@
       "prescriptions": [
         {
           "id": 1007,
-          "od_sphere": -1.25, "od_cylinder": -0.5, "od_axis": 100,
-          "os_sphere": -1.0, "os_cylinder": -0.5, "os_axis": 95,
+          "od_sphere": -1.25,
+          "od_cylinder": -0.5,
+          "od_axis": 100,
+          "os_sphere": -1.0,
+          "os_cylinder": -0.5,
+          "os_axis": 95,
           "near_addition": 1.0,
           "pupillary_distance": 63.5,
           "notes": "Blue light filter suggested",
@@ -490,9 +600,15 @@
             {
               "id": 3008,
               "product": {
-                "id": 16, "sku": "FRM-1007", "model": "Square Titanium", "brand": "Lindberg",
-                "color": "Gunmetal", "material": "Titanium", "size": "Medium",
-                "sale_price": 320.00, "category": "Frames"
+                "id": 16,
+                "sku": "FRM-1007",
+                "model": "Square Titanium",
+                "brand": "Lindberg",
+                "color": "Gunmetal",
+                "material": "Titanium",
+                "size": "Medium",
+                "sale_price": 320.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -508,17 +624,21 @@
     },
     {
       "id": 8,
-      "name": "Emily Zhang",
-      "phone": "555-0126",
-      "email": "emily.zhang@example.com",
-      "address": "12 Harbor View, Brookside",
+      "name": "Touch Pich",
+      "phone": "098 765 432",
+      "email": "touch.pich@gmail.com",
+      "address": "12 Preah Bath Street, Kampong Cham",
       "dateOfBirth": "1998-05-14",
       "createdAt": "2025-03-01T09:10:00Z",
       "updatedAt": "2025-07-19T12:00:00Z",
       "appointments": [
         {
           "id": 111,
-          "optometrist": { "id": 1, "name": "Dr. Claire Lawson", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 1,
+            "name": "Dr. Claire Lawson",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-07-19T09:30:00Z",
           "status": "COMPLETED",
           "notes": "First-time eyeglasses",
@@ -528,8 +648,12 @@
       "prescriptions": [
         {
           "id": 1008,
-          "od_sphere": -4.5, "od_cylinder": -1.5, "od_axis": 78,
-          "os_sphere": -4.25, "os_cylinder": -1.25, "os_axis": 82,
+          "od_sphere": -4.5,
+          "od_cylinder": -1.5,
+          "od_axis": 78,
+          "os_sphere": -4.25,
+          "os_cylinder": -1.25,
+          "os_axis": 82,
           "near_addition": 0.5,
           "pupillary_distance": 59.0,
           "notes": "Very high myopia",
@@ -553,9 +677,15 @@
             {
               "id": 3009,
               "product": {
-                "id": 17, "sku": "FRM-1008", "model": "Cat-eye", "brand": "Chloé",
-                "color": "Tortoise", "material": "Acetate", "size": "Medium",
-                "sale_price": 340.00, "category": "Frames"
+                "id": 17,
+                "sku": "FRM-1008",
+                "model": "Cat-eye",
+                "brand": "Chloé",
+                "color": "Tortoise",
+                "material": "Acetate",
+                "size": "Medium",
+                "sale_price": 340.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -571,17 +701,21 @@
     },
     {
       "id": 9,
-      "name": "Lucas Meyer",
-      "phone": "555-0158",
-      "email": "lucas.meyer@example.com",
-      "address": "233 Elmwood Drive, Springfield",
+      "name": "Nhem Vicheka",
+      "phone": "099 321 654",
+      "email": "nhem.vicheka@gmail.com",
+      "address": "233 Sivatha Boulevard, Siem Reap",
       "dateOfBirth": "1979-10-03",
       "createdAt": "2024-04-20T16:30:00Z",
       "updatedAt": "2025-08-05T09:45:00Z",
       "appointments": [
         {
           "id": 112,
-          "optometrist": { "id": 3, "name": "Dr. Sofia Alvarez", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 3,
+            "name": "Dr. Sofia Alvarez",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-08-05T14:30:00Z",
           "status": "COMPLETED",
           "notes": "Glaucoma pressure check",
@@ -591,8 +725,12 @@
       "prescriptions": [
         {
           "id": 1009,
-          "od_sphere": 0.75, "od_cylinder": -0.5, "od_axis": 55,
-          "os_sphere": 0.5, "os_cylinder": -0.25, "os_axis": 50,
+          "od_sphere": 0.75,
+          "od_cylinder": -0.5,
+          "od_axis": 55,
+          "os_sphere": 0.5,
+          "os_cylinder": -0.25,
+          "os_axis": 50,
           "near_addition": 1.75,
           "pupillary_distance": 65.0,
           "notes": "Reading glasses needed",
@@ -616,9 +754,15 @@
             {
               "id": 3010,
               "product": {
-                "id": 18, "sku": "FRM-1009", "model": "Half Rim Reader", "brand": "Foster Grant",
-                "color": "Bronze", "material": "Metal", "size": "Small",
-                "sale_price": 95.00, "category": "Frames"
+                "id": 18,
+                "sku": "FRM-1009",
+                "model": "Half Rim Reader",
+                "brand": "Foster Grant",
+                "color": "Bronze",
+                "material": "Metal",
+                "size": "Small",
+                "sale_price": 95.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -645,9 +789,15 @@
             {
               "id": 3011,
               "product": {
-                "id": 19, "sku": "FRM-1010", "model": "Classic Reader", "brand": "Foster Grant",
-                "color": "Black", "material": "Plastic", "size": "Medium",
-                "sale_price": 60.00, "category": "Frames"
+                "id": 19,
+                "sku": "FRM-1010",
+                "model": "Classic Reader",
+                "brand": "Foster Grant",
+                "color": "Black",
+                "material": "Plastic",
+                "size": "Medium",
+                "sale_price": 60.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -663,17 +813,21 @@
     },
     {
       "id": 10,
-      "name": "Amelia Brown",
-      "phone": "555-0109",
-      "email": "amelia.brown@example.com",
-      "address": "89 Spring Lane, Brookside",
+      "name": "Keo Sophea",
+      "phone": "089 876 543",
+      "email": "keo.sophea@gmail.com",
+      "address": "89 Street 214, Daun Penh, Phnom Penh",
       "dateOfBirth": "1993-06-25",
       "createdAt": "2024-10-11T12:15:00Z",
       "updatedAt": "2025-06-28T11:35:00Z",
       "appointments": [
         {
           "id": 113,
-          "optometrist": { "id": 2, "name": "Dr. Marcus Reed", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 2,
+            "name": "Dr. Marcus Reed",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-06-28T09:30:00Z",
           "status": "COMPLETED",
           "notes": "Astigmatism assessment",
@@ -683,8 +837,12 @@
       "prescriptions": [
         {
           "id": 1010,
-          "od_sphere": -1.0, "od_cylinder": -1.75, "od_axis": 120,
-          "os_sphere": -0.75, "os_cylinder": -1.5, "os_axis": 115,
+          "od_sphere": -1.0,
+          "od_cylinder": -1.75,
+          "od_axis": 120,
+          "os_sphere": -0.75,
+          "os_cylinder": -1.5,
+          "os_axis": 115,
           "near_addition": 0.75,
           "pupillary_distance": 60.5,
           "notes": "Significant astigmatism",
@@ -708,9 +866,15 @@
             {
               "id": 3012,
               "product": {
-                "id": 20, "sku": "FRM-1011", "model": "Oversized Square", "brand": "Prada",
-                "color": "Black", "material": "Acetate", "size": "Large",
-                "sale_price": 380.00, "category": "Frames"
+                "id": 20,
+                "sku": "FRM-1011",
+                "model": "Oversized Square",
+                "brand": "Prada",
+                "color": "Black",
+                "material": "Acetate",
+                "size": "Large",
+                "sale_price": 380.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -726,17 +890,21 @@
     },
     {
       "id": 11,
-      "name": "James Anderson",
-      "phone": "555-0180",
-      "email": "james.anderson@example.com",
-      "address": "145 Summit Road, Springfield",
+      "name": "Bunthy Makara",
+      "phone": "010 111 222",
+      "email": "bunthy.makara@gmail.com",
+      "address": "145 Street 302, Battambang",
       "dateOfBirth": "1972-02-11",
       "createdAt": "2023-10-03T09:45:00Z",
       "updatedAt": "2025-09-09T16:20:00Z",
       "appointments": [
         {
           "id": 114,
-          "optometrist": { "id": 1, "name": "Dr. Claire Lawson", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 1,
+            "name": "Dr. Claire Lawson",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-09-09T13:00:00Z",
           "status": "COMPLETED",
           "notes": "Cataract pre-op screening",
@@ -746,8 +914,12 @@
       "prescriptions": [
         {
           "id": 1011,
-          "od_sphere": 2.5, "od_cylinder": -0.5, "od_axis": 65,
-          "os_sphere": 2.25, "os_cylinder": -0.75, "os_axis": 70,
+          "od_sphere": 2.5,
+          "od_cylinder": -0.5,
+          "od_axis": 65,
+          "os_sphere": 2.25,
+          "os_cylinder": -0.75,
+          "os_axis": 70,
           "near_addition": 2.5,
           "pupillary_distance": 66.0,
           "notes": "Strong reading aid needed",
@@ -771,9 +943,15 @@
             {
               "id": 3013,
               "product": {
-                "id": 21, "sku": "FRM-1012", "model": "Executive", "brand": "Hugo Boss",
-                "color": "Brown", "material": "Acetate", "size": "Medium",
-                "sale_price": 360.00, "category": "Frames"
+                "id": 21,
+                "sku": "FRM-1012",
+                "model": "Executive",
+                "brand": "Hugo Boss",
+                "color": "Brown",
+                "material": "Acetate",
+                "size": "Medium",
+                "sale_price": 360.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Bifocal",
@@ -789,17 +967,21 @@
     },
     {
       "id": 12,
-      "name": "Charlotte Dubois",
-      "phone": "555-0162",
-      "email": "charlotte.dubois@example.com",
-      "address": "27 Riverview Drive, Brookside",
+      "name": "Sreyneang Chhun",
+      "phone": "011 222 333",
+      "email": "sreyneang.chhun@gmail.com",
+      "address": "27 Old Market Street, Kampot",
       "dateOfBirth": "1997-08-19",
       "createdAt": "2025-02-14T10:05:00Z",
       "updatedAt": "2025-07-25T13:50:00Z",
       "appointments": [
         {
           "id": 115,
-          "optometrist": { "id": 3, "name": "Dr. Sofia Alvarez", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 3,
+            "name": "Dr. Sofia Alvarez",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-07-25T11:00:00Z",
           "status": "COMPLETED",
           "notes": "Prescription check",
@@ -807,7 +989,11 @@
         },
         {
           "id": 116,
-          "optometrist": { "id": 2, "name": "Dr. Marcus Reed", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 2,
+            "name": "Dr. Marcus Reed",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-11-03T10:00:00Z",
           "status": "SCHEDULED",
           "notes": "Annual review",
@@ -817,8 +1003,12 @@
       "prescriptions": [
         {
           "id": 1012,
-          "od_sphere": -2.75, "od_cylinder": -0.25, "od_axis": 85,
-          "os_sphere": -2.5, "os_cylinder": -0.25, "os_axis": 80,
+          "od_sphere": -2.75,
+          "od_cylinder": -0.25,
+          "od_axis": 85,
+          "os_sphere": -2.5,
+          "os_cylinder": -0.25,
+          "os_axis": 80,
           "near_addition": 0.5,
           "pupillary_distance": 61.5,
           "notes": "Regular myopia correction",
@@ -842,9 +1032,15 @@
             {
               "id": 3014,
               "product": {
-                "id": 22, "sku": "FRM-1013", "model": "Butterfly", "brand": "Tom Ford",
-                "color": "Navy", "material": "Acetate", "size": "Medium",
-                "sale_price": 310.00, "category": "Frames"
+                "id": 22,
+                "sku": "FRM-1013",
+                "model": "Butterfly",
+                "brand": "Tom Ford",
+                "color": "Navy",
+                "material": "Acetate",
+                "size": "Medium",
+                "sale_price": 310.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -860,17 +1056,21 @@
     },
     {
       "id": 13,
-      "name": "Henry Müller",
-      "phone": "555-0148",
-      "email": "henry.muller@example.com",
-      "address": "410 Oak Grove, Springfield",
+      "name": "Piseth Long",
+      "phone": "012 333 444",
+      "email": "piseth.long@gmail.com",
+      "address": "410 Monivong Boulevard, Phnom Penh",
       "dateOfBirth": "1983-12-08",
       "createdAt": "2024-07-17T15:00:00Z",
       "updatedAt": "2025-08-28T09:15:00Z",
       "appointments": [
         {
           "id": 117,
-          "optometrist": { "id": 1, "name": "Dr. Claire Lawson", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 1,
+            "name": "Dr. Claire Lawson",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-08-28T10:30:00Z",
           "status": "COMPLETED",
           "notes": "Progressive lens fitting",
@@ -880,8 +1080,12 @@
       "prescriptions": [
         {
           "id": 1013,
-          "od_sphere": -0.25, "od_cylinder": -0.75, "od_axis": 90,
-          "os_sphere": -0.5, "os_cylinder": -1.0, "os_axis": 88,
+          "od_sphere": -0.25,
+          "od_cylinder": -0.75,
+          "od_axis": 90,
+          "os_sphere": -0.5,
+          "os_cylinder": -1.0,
+          "os_axis": 88,
           "near_addition": 1.5,
           "pupillary_distance": 64.0,
           "notes": "Progressives for office work",
@@ -905,9 +1109,15 @@
             {
               "id": 3015,
               "product": {
-                "id": 23, "sku": "FRM-1014", "model": "Rectangular", "brand": "Armani",
-                "color": "Silver", "material": "Metal", "size": "Medium",
-                "sale_price": 290.00, "category": "Frames"
+                "id": 23,
+                "sku": "FRM-1014",
+                "model": "Rectangular",
+                "brand": "Armani",
+                "color": "Silver",
+                "material": "Metal",
+                "size": "Medium",
+                "sale_price": 290.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Progressive",
@@ -923,17 +1133,21 @@
     },
     {
       "id": 14,
-      "name": "Olivia Taylor",
-      "phone": "555-0197",
-      "email": "olivia.taylor@example.com",
-      "address": "58 Meadowbrook Ave, Riverside",
+      "name": "Vannary Sok",
+      "phone": "013 444 555",
+      "email": "vannary.sok@gmail.com",
+      "address": "58 Ochheuteal Beach Road, Sihanoukville",
       "dateOfBirth": "1991-04-16",
       "createdAt": "2024-12-03T13:20:00Z",
       "updatedAt": "2025-07-30T10:40:00Z",
       "appointments": [
         {
           "id": 118,
-          "optometrist": { "id": 2, "name": "Dr. Marcus Reed", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 2,
+            "name": "Dr. Marcus Reed",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-07-30T09:00:00Z",
           "status": "COMPLETED",
           "notes": "Runner-up lens check",
@@ -943,8 +1157,12 @@
       "prescriptions": [
         {
           "id": 1014,
-          "od_sphere": -1.5, "od_cylinder": -0.25, "od_axis": 100,
-          "os_sphere": -1.75, "os_cylinder": -0.25, "os_axis": 95,
+          "od_sphere": -1.5,
+          "od_cylinder": -0.25,
+          "od_axis": 100,
+          "os_sphere": -1.75,
+          "os_cylinder": -0.25,
+          "os_axis": 95,
           "near_addition": 0.75,
           "pupillary_distance": 62.0,
           "notes": "sport-oriented correction",
@@ -968,9 +1186,15 @@
             {
               "id": 3016,
               "product": {
-                "id": 24, "sku": "FRM-1015", "model": "Sport Wrap", "brand": "Oakley",
-                "color": "Black", "material": "Plastic", "size": "Large",
-                "sale_price": 260.00, "category": "Frames"
+                "id": 24,
+                "sku": "FRM-1015",
+                "model": "Sport Wrap",
+                "brand": "Oakley",
+                "color": "Black",
+                "material": "Plastic",
+                "size": "Large",
+                "sale_price": 260.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -997,9 +1221,15 @@
             {
               "id": 3017,
               "product": {
-                "id": 42, "sku": "ACC-2002", "model": "Neoprene Strap", "brand": "GlassesCo",
-                "color": "Blue", "material": "Neoprene", "size": "Universal",
-                "sale_price": 30.00, "category": "Accessories"
+                "id": 42,
+                "sku": "ACC-2002",
+                "model": "Neoprene Strap",
+                "brand": "GlassesCo",
+                "color": "Blue",
+                "material": "Neoprene",
+                "size": "Universal",
+                "sale_price": 30.00,
+                "category": "Accessories"
               },
               "quantity": 1,
               "len_type": "Standard",
@@ -1015,17 +1245,21 @@
     },
     {
       "id": 15,
-      "name": "Grace Lee",
-      "phone": "555-0110",
-      "email": "grace.lee@example.com",
-      "address": "301 Silver Birch Lane, Riverside",
+      "name": "Ratha Chan",
+      "phone": "016 555 666",
+      "email": "ratha.chan@gmail.com",
+      "address": "301 Koh Pich Street, Ta Khmau, Kandal",
       "dateOfBirth": "1996-09-02",
       "createdAt": "2025-05-09T08:30:00Z",
       "updatedAt": "2025-08-21T14:25:00Z",
       "appointments": [
         {
           "id": 119,
-          "optometrist": { "id": 1, "name": "Dr. Claire Lawson", "role": "OPTOMETRIST" },
+          "optometrist": {
+            "id": 1,
+            "name": "Dr. Claire Lawson",
+            "role": "OPTOMETRIST"
+          },
           "scheduledAt": "2025-08-21T14:30:00Z",
           "status": "COMPLETED",
           "notes": "Contact lens aftercare",
@@ -1035,8 +1269,12 @@
       "prescriptions": [
         {
           "id": 1015,
-          "od_sphere": -3.5, "od_cylinder": -0.5, "od_axis": 95,
-          "os_sphere": -3.25, "os_cylinder": -0.75, "os_axis": 92,
+          "od_sphere": -3.5,
+          "od_cylinder": -0.5,
+          "od_axis": 95,
+          "os_sphere": -3.25,
+          "os_cylinder": -0.75,
+          "os_axis": 92,
           "near_addition": 0.5,
           "pupillary_distance": 60.0,
           "notes": "Moderate to high myopia",
@@ -1060,9 +1298,15 @@
             {
               "id": 3018,
               "product": {
-                "id": 25, "sku": "FRM-1016", "model": "Rectangle Thin", "brand": "Vogue",
-                "color": "Rose Gold", "material": "Metal", "size": "Medium",
-                "sale_price": 260.00, "category": "Frames"
+                "id": 25,
+                "sku": "FRM-1016",
+                "model": "Rectangle Thin",
+                "brand": "Vogue",
+                "color": "Rose Gold",
+                "material": "Metal",
+                "size": "Medium",
+                "sale_price": 260.00,
+                "category": "Frames"
               },
               "quantity": 1,
               "len_type": "Single Vision",
@@ -1089,9 +1333,15 @@
             {
               "id": 3019,
               "product": {
-                "id": 43, "sku": "ACC-2003", "model": "Care Kit", "brand": "GlassesCo",
-                "color": "White", "material": "Mixed", "size": "Universal",
-                "sale_price": 95.00, "category": "Accessories"
+                "id": 43,
+                "sku": "ACC-2003",
+                "model": "Care Kit",
+                "brand": "GlassesCo",
+                "color": "White",
+                "material": "Mixed",
+                "size": "Universal",
+                "sale_price": 95.00,
+                "category": "Accessories"
               },
               "quantity": 1,
               "len_type": "Standard",

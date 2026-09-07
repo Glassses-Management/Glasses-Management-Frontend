@@ -26,7 +26,7 @@ export const getAvatarColors = (seed) => {
     typeof seed === 'number'
       ? seed
       : String(seed)
-          .split('')
-          .reduce((acc, char) => acc + char.charCodeAt(0), 0)
+        .split('')
+        .reduce((acc, char) => acc + char.charCodeAt(0), 0)
   return PALETTE[numericSeed % PALETTE.length]
 }
