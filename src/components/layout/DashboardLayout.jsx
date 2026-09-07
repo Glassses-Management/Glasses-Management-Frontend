@@ -11,7 +11,7 @@ export default function DashboardLayout({ activeRoute, onNavigate, user, onLogou
   }
 
   return (
-    <div className="flex min-h-screen bg-[#f5f6fb]">
+    <div className="flex min-h-screen bg-[#f5f6fb] transition-colors duration-300 dark:bg-[#111118]">
       <Sidebar
         activeRoute={activeRoute}
         onNavigate={handleNavigate}

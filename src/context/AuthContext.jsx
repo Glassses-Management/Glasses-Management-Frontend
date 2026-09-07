@@ -34,10 +34,33 @@ export function AuthProvider({ children }){
 
     const login = useCallback(async (identifier, password) => {
         const data = await loginApi(identifier, password);
-        setToken(data.access_token);
-        setUser(data.user);
 
-        return data.user;
+        // The backend may return the documented AuthResponse object
+        // ({access_token, user}) or the raw JWT as plain text. Normalise both.
+        const token = typeof data === 'string' ? data : data?.access_token;
+        if(!token){
+            throw new Error('Login response did not include a token');
+        }
+
+        let user;
+        if(data && typeof data === 'object' && data.user){
+            user = data.user;
+        }
+        else{
+            // Raw-token response: fetch the profile with the token we just got.
+            localStorage.setItem('token', token);
+            try{
+                user = await getMe();
+            }
+            catch{
+                user = null;
+            }
+        }
+
+        setToken(token);
+        setUser(user);
+
+        return user;
     }, [])
 
     const register = useCallback(async (payload) => {

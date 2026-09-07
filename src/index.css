@@ -1,5 +1,40 @@
 @import 'tailwindcss';
 
+/* Class-based dark mode (Tailwind v4): `.dark` on <html> activates `dark:` variants. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Prevent a white flash while the theme script decides the initial mode. */
+html {
+  background-color: #f5f6fb;
+}
+html.dark {
+  background-color: #15151f;
+}
+html.theme-ready {
+  transition: background-color 150ms ease;
+  color-scheme: light;
+}
+html.theme-ready.dark {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
+}
+
+/* Subtle icon swap animation for the theme toggle. */
+@keyframes theme-icon-swap {
+  0% {
+    transform: rotate(-90deg) scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@utility animate-theme-icon {
+  display: inline-block;
+  animation: theme-icon-swap 100ms ease;
 }

@@ -1,21 +1,19 @@
-import { useState } from "react";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
+import HomeHeader from '@/pages/public/HomeHeader'
+import HomeHero from '@/pages/public/HomeHero'
+import NewArrivals from '@/pages/public/NewArrivals'
+import CraftSection from '@/pages/public/CraftSection'
+import HomeFooter from '@/pages/public/HomeFooter'
 
 function Home() {
-  const [count, setCount] = useState(0);
-
   return (
-    <section>
-      <h1 className="mb-4 text-3xl font-bold">Welcome Home</h1>
-      <p>This is a beginner-friendly React + Vite starter.</p>
-      <Card title="Try the counter">
-        <p>Count: {count}</p>
-        {/* state stays in the page, Button just renders — keeps Button reusable elsewhere */}
-        <Button onClick={() => setCount((c) => c + 1)}>Add one</Button>
-      </Card>
-    </section>
-  );
+    <div className="min-h-screen bg-[#faf7f2] font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#111118] dark:text-neutral-200">
+      <HomeHeader />
+      <HomeHero />
+      <NewArrivals />
+      <CraftSection />
+      <HomeFooter />
+    </div>
+  )
 }
 
-export default Home;
+export default Home

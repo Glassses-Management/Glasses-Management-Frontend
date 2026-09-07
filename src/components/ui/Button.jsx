@@ -6,10 +6,10 @@ function cn(...classes) {
 // Reusable button so every page shares the same look instead of styling its own <button>
 const variants = {
   primary: 'bg-violet-600 text-white hover:bg-violet-700',
-  secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-  outline: 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50',
+  secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700',
+  outline: 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-white/5',
   danger: 'bg-red-600 text-white hover:bg-red-700',
-  ghost: 'bg-transparent hover:bg-gray-100 text-gray-700',
+  ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 dark:text-neutral-300 dark:hover:bg-white/5',
 }
 
 const sizes = {

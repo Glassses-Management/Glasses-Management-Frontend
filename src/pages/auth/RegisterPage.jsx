@@ -51,8 +51,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f5f6fb] px-4 py-8">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-[#f5f6fb] px-4 py-8 transition-colors duration-300 dark:bg-[#111118]">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800">
         <div className="mb-6 flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1a2e] text-white">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -63,87 +63,87 @@ export default function RegisterPage() {
             </svg>
           </div>
           <div>
-            <h1 className="text-lg font-bold text-[#1a1a2e]">glasses-web</h1>
-            <p className="text-xs text-gray-400">Optical Shop Management</p>
+            <h1 className="text-lg font-bold text-[#1a1a2e] dark:text-neutral-50">glasses-web</h1>
+            <p className="text-xs text-gray-400 dark:text-neutral-500">Optical Shop Management</p>
           </div>
         </div>
 
-        <h2 className="text-xl font-semibold text-[#1a1a2e]">Create your account</h2>
-        <p className="mt-1 mb-6 text-sm text-gray-400">Register as a customer to get started</p>
+        <h2 className="text-xl font-semibold text-[#1a1a2e] dark:text-neutral-50">Create your account</h2>
+        <p className="mt-1 mb-6 text-sm text-gray-400 dark:text-neutral-500">Register as a customer to get started</p>
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#1a1a2e]">Name</label>
+            <label className="mb-1 block text-sm font-medium text-[#1a1a2e] dark:text-neutral-300">Name</label>
             <input
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
               placeholder="John Doe"
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f]"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
             />
             {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#1a1a2e]">Phone</label>
+              <label className="mb-1 block text-sm font-medium text-[#1a1a2e] dark:text-neutral-300">Phone</label>
               <input
                 type="text"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
                 placeholder="0123456789"
-                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f]"
+                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
               />
               {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#1a1a2e]">Email</label>
+              <label className="mb-1 block text-sm font-medium text-[#1a1a2e] dark:text-neutral-300">Email</label>
               <input
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
                 placeholder="john@example.com"
-                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f]"
+                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
               />
               {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#1a1a2e]">Address</label>
+            <label className="mb-1 block text-sm font-medium text-[#1a1a2e] dark:text-neutral-300">Address</label>
             <input
               type="text"
               name="address"
               value={form.address}
               onChange={handleChange}
               placeholder="123 Main St"
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f]"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#1a1a2e]">Date of birth</label>
+            <label className="mb-1 block text-sm font-medium text-[#1a1a2e] dark:text-neutral-300">Date of birth</label>
             <input
               type="date"
               name="date_of_birth"
               value={form.date_of_birth}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f]"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-[#8fa88f]"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#1a1a2e]">Password</label>
+            <label className="mb-1 block text-sm font-medium text-[#1a1a2e] dark:text-neutral-300">Password</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="At least 6 characters"
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f]"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
             />
             {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
           </div>
@@ -157,7 +157,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-400">
+        <p className="mt-6 text-center text-sm text-gray-400 dark:text-neutral-500">
           Already have an account?{' '}
           <Link to="/login" className="font-medium text-[#8fa88f] hover:underline">
             Sign in

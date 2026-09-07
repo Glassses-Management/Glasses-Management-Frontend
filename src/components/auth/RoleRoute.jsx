@@ -12,7 +12,7 @@ export default function RoleRoute({ roles, children }) {
   const allowed = roles.some((role) => hasRole(user, role))
 
   if (!allowed) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/dashboard" replace />
   }
 
   return children

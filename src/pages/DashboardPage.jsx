@@ -10,13 +10,13 @@ import { STATUS_COLORS } from '@/utils/OrderStatus'
 
 function SummaryCard({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#8fa88f]/10">
         <Icon size={22} className="text-[#8fa88f]" />
       </div>
       <div>
-        <p className="text-sm text-gray-400">{label}</p>
-        <p className="text-2xl font-bold text-[#1a1a2e]">{value}</p>
+        <p className="text-sm text-gray-400 dark:text-neutral-500">{label}</p>
+        <p className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">{value}</p>
       </div>
     </div>
   )
@@ -49,7 +49,7 @@ export default function DashboardPage() {
         const [customers, products, orders, lowStock] = await Promise.all([
           getCustomers({ page: 0, size: 1 }),
           getProducts({ page: 0, size: 1 }),
-          getOrders({ page: 0, size: 5, sort: 'order_date,desc' }),
+          getOrders({ page: 0, size: 5, sort: 'id,desc' }),
           getLowStock(),
         ])
         if (cancelled) return
@@ -60,8 +60,10 @@ export default function DashboardPage() {
           lowStock: lowStock?.length || 0,
         })
         setRecentOrders(orders.content || [])
+      } catch (err) {
+        console.error('DashboardPage: failed to load dashboard data:', err?.response?.status || err?.message || err)
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
     load()
@@ -73,12 +75,12 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1a1a2e]">Dashboard</h1>
-        <p className="text-sm text-gray-400">Overview of your optical shop</p>
+        <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Dashboard</h1>
+        <p className="text-sm text-gray-400 dark:text-neutral-500">Overview of your optical shop</p>
       </div>
 
       {loading ? (
-        <p className="text-sm text-gray-400">Loading...</p>
+        <p className="text-sm text-gray-400 dark:text-neutral-500">Loading...</p>
       ) : (
         <>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -88,18 +90,18 @@ export default function DashboardPage() {
             <SummaryCard icon={Package} label="Low stock items" value={stats.lowStock} />
           </div>
 
-          <div className="rounded-2xl border border-gray-100 bg-white shadow-sm">
-            <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-4">
+          <div className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+            <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-4 dark:border-neutral-800">
               <AlertTriangle size={16} className="text-[#8fa88f]" />
-              <h2 className="text-base font-semibold text-[#1a1a2e]">Recent orders</h2>
+              <h2 className="text-base font-semibold text-[#1a1a2e] dark:text-neutral-50">Recent orders</h2>
             </div>
             {recentOrders.length === 0 ? (
-              <p className="px-5 py-6 text-sm text-gray-400">No orders yet.</p>
+              <p className="px-5 py-6 text-sm text-gray-400 dark:text-neutral-500">No orders yet.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-gray-100 text-xs uppercase tracking-wide text-gray-400">
+                    <tr className="border-b border-gray-100 text-xs uppercase tracking-wide text-gray-400 dark:border-neutral-800 dark:text-neutral-500">
                       <th className="px-5 py-3">Order</th>
                       <th className="px-5 py-3">Customer</th>
                       <th className="px-5 py-3">Total</th>
@@ -109,16 +111,16 @@ export default function DashboardPage() {
                   </thead>
                   <tbody>
                     {recentOrders.map((order) => (
-                      <tr key={order.id} className="border-b border-gray-50 last:border-0">
-                        <td className="px-5 py-3 font-medium text-[#1a1a2e]">#{order.id}</td>
-                        <td className="px-5 py-3 text-gray-500">{order.customer_id}</td>
-                        <td className="px-5 py-3 font-medium text-[#1a1a2e]">
+                      <tr key={order.id} className="border-b border-gray-50 last:border-0 dark:border-neutral-800">
+                        <td className="px-5 py-3 font-medium text-[#1a1a2e] dark:text-neutral-50">#{order.id}</td>
+                        <td className="px-5 py-3 text-gray-500 dark:text-neutral-400">{order.customer_id}</td>
+                        <td className="px-5 py-3 font-medium text-[#1a1a2e] dark:text-neutral-50">
                           {formatCurrency(order.total)}
                         </td>
                         <td className="px-5 py-3">
                           <span className={statusBadge(order.status)}>{order.status}</span>
                         </td>
-                        <td className="px-5 py-3 text-gray-500">
+                        <td className="px-5 py-3 text-gray-500 dark:text-neutral-400">
                           {formatDate(order.order_date)}
                         </td>
                       </tr>
