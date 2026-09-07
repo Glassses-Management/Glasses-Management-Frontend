@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, Upload, ImageIcon } from 'lucide-react'
 import { createProduct, updateProduct } from '@/api/productApi'
+import { uploadAttachment } from '@/api/attachmentApi'
 
 const EMPTY = {
   sku: '',
@@ -30,10 +31,13 @@ const FIELDS = [
   { name: 'supplier_contact', label: 'Supplier Contact' },
 ]
 
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_SIZE_MB = 5
+
 export default function ProductForm({ product, onClose, onSaved }) {
   const isEdit = !!product
   const [form, setForm] = useState(() => {
-    if (!product) return EMPTY
+    if (!product) return { ...EMPTY }
     return {
       sku: product.sku || '',
       model: product.model || '',
@@ -48,10 +52,28 @@ export default function ProductForm({ product, onClose, onSaved }) {
       supplier_contact: product.supplier_contact || '',
     }
   })
+  const [file, setFile] = useState(null)
+  const [preview, setPreview] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
   const set = (name, value) => setForm((prev) => ({ ...prev, [name]: value }))
+
+  const handleFileChange = (e) => {
+    const f = e.target.files?.[0]
+    if (!f) return
+    if (!ACCEPTED_TYPES.includes(f.type)) {
+      setError('Please upload a JPG, PNG, or WebP image.')
+      return
+    }
+    if (f.size > MAX_SIZE_MB * 1024 * 1024) {
+      setError(`Image must be under ${MAX_SIZE_MB}MB.`)
+      return
+    }
+    setError('')
+    setFile(f)
+    setPreview(URL.createObjectURL(f))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -60,6 +82,10 @@ export default function ProductForm({ product, onClose, onSaved }) {
     const required = FIELDS.filter((f) => f.required && !String(form[f.name]).trim())
     if (required.length > 0) {
       setError(`Please fill in: ${required.map((f) => f.label).join(', ')}`)
+      return
+    }
+    if (!isEdit && !file) {
+      setError('Please upload a product image.')
       return
     }
 
@@ -71,8 +97,14 @@ export default function ProductForm({ product, onClose, onSaved }) {
 
       if (isEdit) {
         await updateProduct(product.id, payload)
+        if (file) {
+          await uploadAttachment({ file, productId: product.id })
+        }
       } else {
-        await createProduct(payload)
+        const saved = await createProduct(payload)
+        if (file && saved?.id) {
+          await uploadAttachment({ file, productId: saved.id })
+        }
       }
       onSaved?.()
     } catch (err) {
@@ -102,14 +134,42 @@ export default function ProductForm({ product, onClose, onSaved }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-400">
+              Product Image {!isEdit && <span className="text-red-500">*</span>}
+            </label>
+            <label
+              htmlFor="product-image"
+              className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 p-6 transition-colors hover:border-[#8fa88f] hover:bg-[#8fa88f]/5 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-[#8fa88f]"
+            >
+              {preview ? (
+                <img src={preview} alt="Preview" className="h-32 w-32 rounded-lg object-cover" />
+              ) : (
+                <>
+                  <ImageIcon size={32} className="text-gray-300 dark:text-neutral-600" />
+                  <span className="text-xs text-gray-400 dark:text-neutral-500">
+                    Click to upload JPG, PNG, or WebP (max {MAX_SIZE_MB}MB)
+                  </span>
+                </>
+              )}
+            </label>
+            <input
+              id="product-image"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {FIELDS.map((f) => (
               <div key={f.name} className={f.name === 'sku' || f.name === 'model' ? 'sm:col-span-2' : ''}>
-                <label htmlFor={f.name} className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-400">
+                <label htmlFor={`pf-${f.name}`} className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-400">
                   {f.label}{f.required && ' *'}
                 </label>
                 <input
-                  id={f.name}
+                  id={`pf-${f.name}`}
                   type={f.type || 'text'}
                   value={form[f.name]}
                   onChange={(e) => set(f.name, e.target.value)}
@@ -134,8 +194,9 @@ export default function ProductForm({ product, onClose, onSaved }) {
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-xl bg-[#8fa88f] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#8fa88f] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
+              <Upload size={16} />
               {submitting ? 'Saving...' : isEdit ? 'Update' : 'Create'}
             </button>
           </div>
