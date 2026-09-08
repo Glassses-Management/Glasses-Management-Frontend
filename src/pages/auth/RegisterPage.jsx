@@ -43,8 +43,17 @@ export default function RegisterPage() {
     try {
       await register(form)
       navigate('/')
-    } catch {
-      toastError('Registration failed. Check your details or try again.')
+    } catch (err) {
+      const data = err?.response?.data
+      let msg =
+        data?.error ||
+        data?.message ||
+        err?.message ||
+        ''
+      if (!msg && data && typeof data === 'object') {
+        msg = Object.values(data).find((v) => typeof v === 'string') || ''
+      }
+      toastError(msg || 'Registration failed. Check your details or try again.')
     } finally {
       setSubmitting(false)
     }

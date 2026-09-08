@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { ToastContext } from "@/context/ToastContextStore";
+import ToastContainer from "@/components/ui/ToastContainer";
 
 let idCounter = 0;
 
@@ -30,6 +31,7 @@ export function ToastProvider({children }){
     return (
         <ToastContext.Provider value={value}>
             {children}
+            <ToastContainer />
         </ToastContext.Provider>
     )
 }

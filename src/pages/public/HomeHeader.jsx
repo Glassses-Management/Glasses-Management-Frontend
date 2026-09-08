@@ -4,10 +4,9 @@ import { useAuth } from '@/hook/UseAuth'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const NAV_LINKS = [
-  { label: 'Frames', href: '#frames' },
-  { label: 'Sunglasses', href: '#frames' },
+  { label: 'Frames', href: '/products' },
+  { label: 'Sunglasses', href: '/products' },
   { label: 'Lenses & Exams', href: '#craft' },
-  { label: 'Virtual Try-On', href: '#frames' },
   { label: 'About', href: '/about' },
 ]
 

@@ -25,6 +25,8 @@ import OrderCreate from '@/pages/orders/OrderCreate'
 import Home from '@/pages/public/Home'
 import About from '@/pages/public/About'
 import Contact from '@/pages/public/Contact'
+import PublicProductList from '@/pages/public/PublicProductList'
+import PublicProductDetail from '@/pages/public/PublicProductDetail'
 import NotFound from '@/pages/public/NotFound'
 
 import { AuthProvider } from '@/context/AuthContext.jsx'
@@ -141,6 +143,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/products" element={<PublicProductList />} />
+            <Route path="/products/:id" element={<PublicProductDetail />} />
 
             {/* Authentication */}
             <Route path="/login" element={<LoginPage />} />
