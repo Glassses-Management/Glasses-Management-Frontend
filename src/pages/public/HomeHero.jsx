@@ -29,7 +29,7 @@ function HomeHero() {
 
         <div className="mt-8 flex flex-wrap gap-3">
           <a
-            href="/register"
+            href="/products"
             className="rounded-full bg-[#8fa88f] px-6 py-3 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90"
           >
             Explore 2025 Collection

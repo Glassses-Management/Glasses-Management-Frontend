@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { createProduct, updateProduct } from '@/api/productApi'
+import { uploadAttachment } from '@/api/attachmentApi'
+import ProductImageField from '@/components/product/ProductImageField'
 
 const EMPTY = {
   sku: '',
@@ -50,6 +52,7 @@ export default function ProductForm({ product, onClose, onSaved }) {
   })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [picture, setPicture] = useState(null)
 
   const set = (name, value) => setForm((prev) => ({ ...prev, [name]: value }))
 
@@ -63,17 +66,25 @@ export default function ProductForm({ product, onClose, onSaved }) {
       return
     }
 
+    if (!isEdit && !picture) {
+      setError('Please add a picture.')
+      return
+    }
+
     setSubmitting(true)
     try {
       const payload = { ...form }
       if (payload.cost_price !== '') payload.cost_price = Number(payload.cost_price)
       if (payload.sale_price !== '') payload.sale_price = Number(payload.sale_price)
 
-      if (isEdit) {
-        await updateProduct(product.id, payload)
-      } else {
-        await createProduct(payload)
+      const saved = isEdit
+        ? await updateProduct(product.id, payload)
+        : await createProduct(payload)
+
+      if (picture) {
+        await uploadAttachment({ file: picture, productId: saved.id })
       }
+
       onSaved?.()
     } catch (err) {
       const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Something went wrong'
@@ -102,6 +113,13 @@ export default function ProductForm({ product, onClose, onSaved }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <ProductImageField
+            label="Picture"
+            required={!isEdit}
+            file={picture}
+            onFileChange={setPicture}
+          />
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {FIELDS.map((f) => (
               <div key={f.name} className={f.name === 'sku' || f.name === 'model' ? 'sm:col-span-2' : ''}>

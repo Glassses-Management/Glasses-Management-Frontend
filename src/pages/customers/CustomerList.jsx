@@ -1,36 +1,18 @@
-// Client Registry & Patients — reads from mock data so the shape matches what a
-// future fetch() to /api/customers would return (customer + nested relations).
-// Display-only values (avatar, memberId, provider, latest status) are derived here.
-
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
-import StatsCard from '@/components/ui/StatsCard'
 import SearchBar from '@/components/data/SearchBar'
-import FilterBar from '@/components/data/FilterBar'
 import DataTable from '@/components/data/DataTable'
 import Pagination from '@/components/ui/Pagination'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
-import Badge, { getVariantFromStatus } from '@/components/ui/Badge'
-import { usersIcon, calendarIcon, clipboardIcon, dollarIcon } from '@/components/ui/icons'
-import mockData from "@/mockData/mockCustomers.json";
+import { getCustomers, updateCustomer, deleteCustomer } from '@/api/customerApi'
 import { getInitials, getAvatarColors } from '@/utils/avatar'
-import { formatDate, deriveMemberId, formatCurrency } from '@/utils/format'
+import { formatDate, deriveMemberId } from '@/utils/format'
 
 const cn = (...classes) => classes.filter(Boolean).join(' ')
 
 const ITEMS_PER_PAGE = 10
-
-const TABS = ['All Clients', 'Recent Sign-Ups', 'Upcoming Appointments', 'Active Orders']
-
-const ORDER_STATUS_OPTIONS = [
-  { value: 'PENDING', label: 'Pending' },
-  { value: 'PROCESSING', label: 'Processing' },
-  { value: 'READY', label: 'Ready' },
-  { value: 'COMPLETED', label: 'Completed' },
-  { value: 'CANCELLED', label: 'Cancelled' },
-]
 
 function Avatar({ name, id }) {
   const { bg, text } = getAvatarColors(id)
@@ -54,7 +36,21 @@ function CustomerEditModal({ customer, onSave, onClose }) {
     email: customer.email,
     address: customer.address,
   })
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
   const setField = (field) => (event) => setForm((f) => ({ ...f, [field]: event.target.value }))
+
+  const handleSubmit = async () => {
+    setSaving(true)
+    setError('')
+    try {
+      await onSave({ ...customer, ...form })
+    } catch (err) {
+      const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to save changes.'
+      setError(msg)
+      setSaving(false)
+    }
+  }
 
   return (
     <div className={modalBackdrop} onClick={onClose}>
@@ -66,9 +62,10 @@ function CustomerEditModal({ customer, onSave, onClose }) {
           <Input label="Email" name="email" value={form.email} onChange={setField('email')} />
           <Input label="Address" name="address" value={form.address} onChange={setField('address')} />
         </div>
+        {error && <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>}
         <div className="mt-6 flex justify-end gap-2">
           <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => onSave({ ...customer, ...form })}>Save Changes</Button>
+          <Button onClick={handleSubmit} disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
         </div>
       </div>
     </div>
@@ -95,65 +92,48 @@ function CustomerDeleteModal({ customer, onConfirm, onClose }) {
 
 function CustomerList({ onNavigate }) {
   const navigate = useNavigate()
-  const { summary } = mockData
-
   const [search, setSearch] = useState('')
-  const [filters, setFilters] = useState({ provider: 'all', orderStatus: 'all' })
-  const [activeTab, setActiveTab] = useState(TABS[0])
   const [currentPage, setCurrentPage] = useState(1)
-  const [customerList, setCustomerList] = useState(() => mockData.customers)
+  const [customers, setCustomers] = useState([])
+  const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(null)
   const [deleting, setDeleting] = useState(null)
 
-  // Attach derived, display-only values to each customer.
-  const customers = useMemo(
-    () =>
-      customerList.map((customer) => {
-        const appointments = [...(customer.appointments || [])].sort(
-          (a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt),
-        )
-        const orders = [...(customer.orders || [])].sort(
-          (a, b) => new Date(b.order_date) - new Date(a.order_date),
-        )
-        return {
-          ...customer,
-          careProvider: appointments[0]?.optometrist?.name || null,
-          latestOrderStatus: orders[0]?.status || null,
-        }
-      }),
-    [customerList],
-  )
+  const loadCustomers = async () => {
+    setLoading(true)
+    try {
+      const data = await getCustomers({ page: 0, size: 100, sort: 'id,desc' })
+      setCustomers(Array.isArray(data?.content) ? data.content : [])
+    } catch (err) {
+      console.error('CustomerList: failed to load customers:', err?.response?.status || err?.message || err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const providerOptions = useMemo(
-    () => [...new Set(customers.map((c) => c.careProvider).filter(Boolean))].sort(),
-    [customers],
-  )
+  useEffect(() => {
+    loadCustomers()
+  }, [])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     return customers.filter((c) => {
-      const matchesSearch =
+      return (
         !q ||
         c.name.toLowerCase().includes(q) ||
-        c.phone.includes(q) ||
-        c.email.toLowerCase().includes(q)
-      const matchesProvider = filters.provider === 'all' || c.careProvider === filters.provider
-      const matchesStatus =
-        filters.orderStatus === 'all' || c.latestOrderStatus === filters.orderStatus
-      return matchesSearch && matchesProvider && matchesStatus
+        (c.phone || '').includes(q) ||
+        (c.email || '').toLowerCase().includes(q)
+      )
     })
-  }, [customers, search, filters])
+  }, [customers, search])
 
   useEffect(() => {
     setCurrentPage(1)
-  }, [search, filters])
+  }, [search])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
   const effectivePage = Math.min(currentPage, totalPages)
-  const paged = filtered.slice(
-    (effectivePage - 1) * ITEMS_PER_PAGE,
-    effectivePage * ITEMS_PER_PAGE,
-  )
+  const paged = filtered.slice((effectivePage - 1) * ITEMS_PER_PAGE, effectivePage * ITEMS_PER_PAGE)
 
   const columns = [
     {
@@ -174,23 +154,12 @@ function CustomerList({ onNavigate }) {
       header: 'Contact',
       render: (row) => (
         <div>
-          <p className="text-gray-900 dark:text-neutral-100">{row.phone}</p>
-          <p className="text-xs text-gray-500 dark:text-neutral-400">{row.email}</p>
+          <p className="text-gray-900 dark:text-neutral-100">{row.phone || '—'}</p>
+          <p className="text-xs text-gray-500 dark:text-neutral-400">{row.email || '—'}</p>
         </div>
       ),
     },
-    { key: 'careProvider', header: 'Vision Care Provider', render: (row) => <span className="text-gray-900 dark:text-neutral-100">{row.careProvider || 'No visits yet'}</span> },
-    { key: 'createdAt', header: 'Registration Date', render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.createdAt)}</span> },
-    {
-      key: 'latestOrderStatus',
-      header: 'Latest Order Status',
-      render: (row) =>
-        row.latestOrderStatus ? (
-          <Badge text={row.latestOrderStatus} variant={getVariantFromStatus(row.latestOrderStatus)} />
-        ) : (
-          <span className="text-sm text-gray-500 dark:text-neutral-400">No orders yet</span>
-        ),
-    },
+    { key: 'created_at', header: 'Registration Date', render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.created_at)}</span> },
     {
       key: 'actions',
       header: 'Actions',
@@ -217,26 +186,26 @@ function CustomerList({ onNavigate }) {
     },
   ]
 
-  const filterOptions = [
-    { key: 'provider', label: 'Care Provider', value: filters.provider, options: providerOptions.map((name) => ({ label: name, value: name })) },
-    { key: 'orderStatus', label: 'Order Status', value: filters.orderStatus, options: ORDER_STATUS_OPTIONS },
-  ]
-
-  const statCards = [
-    { label: 'Total Customers', value: summary.totalCustomers, trend: summary.trends.totalCustomers, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300">{usersIcon}</span> },
-    { label: 'Appointments This Month', value: summary.totalAppointmentsThisMonth, trend: summary.trends.totalAppointmentsThisMonth, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-300">{calendarIcon}</span> },
-    { label: 'Total Active Orders', value: summary.totalActiveOrders, trend: summary.trends.totalActiveOrders, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300">{clipboardIcon}</span> },
-    { label: 'Total Revenue', value: formatCurrency(summary.totalRevenue), trend: summary.trends.totalRevenue, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-300">{dollarIcon}</span> },
-  ]
-
-  const handleUpdate = (updated) => {
-    setCustomerList((list) => list.map((c) => (c.id === updated.id ? updated : c)))
+  const handleUpdate = async (updated) => {
+    const saved = await updateCustomer(updated.id, {
+      name: updated.name,
+      phone: updated.phone,
+      email: updated.email,
+      address: updated.address,
+    })
+    setCustomers((list) => list.map((c) => (c.id === saved.id ? saved : c)))
     setEditing(null)
   }
 
-  const handleDelete = (customer) => {
-    setCustomerList((list) => list.filter((c) => c.id !== customer.id))
-    setDeleting(null)
+  const handleDelete = async (customer) => {
+    try {
+      await deleteCustomer(customer.id)
+      setCustomers((list) => list.filter((c) => c.id !== customer.id))
+      setDeleting(null)
+    } catch (err) {
+      console.error('CustomerList: failed to delete customer:', err?.response?.status || err?.message || err)
+      setDeleting(null)
+    }
   }
 
   return (
@@ -245,80 +214,38 @@ function CustomerList({ onNavigate }) {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Client Registry & Patients</h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
-            Manage customers, their appointments, prescriptions, and orders.
+            Manage customers and their contact details.
           </p>
         </div>
-        <Button variant="outline">Export Report</Button>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {statCards.map((card) => (
-          <StatsCard key={card.label} label={card.label} value={card.value} trend={card.trend} icon={card.icon} />
-        ))}
       </div>
 
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         <div className="w-full shrink-0 lg:max-w-xs">
           <SearchBar value={search} onChange={setSearch} />
         </div>
-        <FilterBar
-          filters={filterOptions}
-          onFilterChange={(key, value) => setFilters((f) => ({ ...f, [key]: value }))}
-          onClearAll={() => setFilters({ provider: 'all', orderStatus: 'all' })}
-          onAddNew={() => navigate('/customers/new')}
-        />
       </div>
 
-      <div className="flex gap-6 border-b border-gray-200 dark:border-neutral-800">
-        {TABS.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => setActiveTab(tab)}
-            className={cn(
-              'pb-3 text-sm font-medium transition-colors',
-              activeTab === tab
-                ? '-mb-px border-b-2 border-violet-600 text-violet-600'
-                : 'text-gray-500 hover:text-gray-700 transition-colors duration-300 dark:text-neutral-400 dark:hover:text-neutral-100',
-            )}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      <DataTable
-        columns={columns}
-        data={paged}
-        onRowClick={(row) => onNavigate?.(`customers/${row.id}`)}
-      />
-
-      <Pagination
-        currentPage={effectivePage}
-        totalPages={totalPages}
-        totalItems={filtered.length}
-        itemsPerPage={ITEMS_PER_PAGE}
-        onPageChange={setCurrentPage}
-      />
-
-      <div className="flex flex-col items-start justify-between gap-4 rounded-2xl bg-gray-900 p-6 md:flex-row md:items-center">
-        <div className="flex items-start gap-4">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600">{calendarIcon}</span>
-          <div>
-            <h3 className="text-lg font-semibold text-white">Annual Refractive Recall Campaign</h3>
-            <p className="mt-1 max-w-xl text-sm text-gray-400">
-              Remind patients whose prescription is more than a year old to rebook an exam and
-              keep their vision sharp.
-            </p>
-          </div>
+      {loading ? (
+        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-[#1c1c28] dark:text-neutral-400">
+          Loading customers...
         </div>
-        <button
-          type="button"
-          className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-green-700"
-        >
-          Run Campaign
-        </button>
-      </div>
+      ) : (
+        <>
+          <DataTable
+            columns={columns}
+            data={paged}
+            onRowClick={(row) => onNavigate?.(`customers/${row.id}`)}
+          />
+
+          <Pagination
+            currentPage={effectivePage}
+            totalPages={totalPages}
+            totalItems={filtered.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={setCurrentPage}
+          />
+        </>
+      )}
 
       {editing && (
         <CustomerEditModal

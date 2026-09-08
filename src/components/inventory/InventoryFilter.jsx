@@ -27,11 +27,8 @@ function InventoryFilter({
     setCategory,
     status,
     setStatus,
-    branch,
-    setBranch,
     categories,
     statuses,
-    branches,
     onReset,
 }) {
     return (
@@ -51,10 +48,9 @@ function InventoryFilter({
                     </div>
                 </div>
 
-                <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-3">
+                <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2">
                     <Select label="Category" value={category} onChange={setCategory} options={categories} />
                     <Select label="Status" value={status} onChange={setStatus} options={statuses} />
-                    <Select label="Branch" value={branch} onChange={setBranch} options={branches} />
                 </div>
 
                 <button

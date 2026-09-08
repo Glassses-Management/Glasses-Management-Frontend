@@ -21,8 +21,8 @@ function OrderTable({ orders, onViewDetail }) {
             header: 'Customer',
             render: (row) => (
                 <div>
-                    <p className="font-medium text-gray-900 dark:text-neutral-100">{row.customer.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-neutral-400">Customer #{row.customer.id}</p>
+                    <p className="font-medium text-gray-900 dark:text-neutral-100">{row.customer_name || '—'}</p>
+                    <p className="text-xs text-gray-500 dark:text-neutral-400">Customer #{row.customer_id ?? '—'}</p>
                 </div>
             ),
         },

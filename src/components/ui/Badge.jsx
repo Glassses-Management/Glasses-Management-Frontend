@@ -38,6 +38,8 @@ export const getVariantFromStatus = (status) => {
     case 'SCHEDULED':
     case 'PROCESSING':
     case 'PARTIAL':
+    case 'CONFIRMED':
+    case 'IN_PROGRESS':
       return 'info'
     case 'PENDING':
     case 'UNPAID':
@@ -45,6 +47,8 @@ export const getVariantFromStatus = (status) => {
     case 'CANCELLED':
     case 'FAILED':
       return 'danger'
+    case 'READY_FOR_PICKUP':
+      return 'success'
     default:
       return 'neutral'
   }

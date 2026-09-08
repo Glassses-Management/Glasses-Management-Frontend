@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 // Reusable product image with a glasses fallback when there is no photo yet.
 const FILE_PATH_REGEX = /\.(jpg|jpeg|png|webp|avif)([?#]|$)/i
 
@@ -23,12 +25,20 @@ export function GlassesFallback({ className = '' }) {
 }
 
 function ProductImage({ src, alt, className = '' }) {
+  const [failed, setFailed] = useState(false)
+  const showFallback = !src || failed
+
   return (
     <div className={`relative aspect-square bg-neutral-100 dark:bg-neutral-700 ${className}`}>
-      {src ? (
-        <img src={src} alt={alt || ''} className="h-full w-full object-cover" />
-      ) : (
+      {showFallback ? (
         <GlassesFallback />
+      ) : (
+        <img
+          src={src}
+          alt={alt || ''}
+          onError={() => setFailed(true)}
+          className="h-full w-full object-cover"
+        />
       )}
     </div>
   )
