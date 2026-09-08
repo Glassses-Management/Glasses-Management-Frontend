@@ -94,11 +94,11 @@ function DashboardRoutes() {
           {/* Customers */}
           <Route
             path="customers"
-            element={<CustomerList />}
+            element={<CustomerList onNavigate={handleNavigate} />}
           />
           <Route
             path="customers/:id"
-            element={<CustomerDetail />}
+            element={<CustomerDetail onNavigate={handleNavigate} />}
           />
 
           {/* Inventory */}

@@ -4,6 +4,7 @@ import { getProducts, deleteProduct } from '@/api/productApi'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { useDebouce } from '@/hook/UseDebounce'
 import ProductForm from '@/pages/products/ProductForm'
+import Button from '@/components/ui/Button'
 
 const PAGE_SIZE = 10
 
@@ -95,14 +96,12 @@ export default function ProductListPage({ onNavigate }) {
           <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Products</h1>
           <p className="text-sm text-gray-400 dark:text-neutral-500">Manage your optical product catalog</p>
         </div>
-        <button
-          type="button"
+        <Button
+          icon={<Plus size={18} />}
           onClick={() => { setEditing(null); setFormOpen(true) }}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#8fa88f] px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
-          <Plus size={18} />
           Add Product
-        </button>
+        </Button>
       </div>
 
       {/* Search */}
@@ -164,23 +163,23 @@ export default function ProductListPage({ onNavigate }) {
                     </td>
                     <td className="px-5 py-3 font-mono text-xs text-gray-500 dark:text-neutral-400">{p.sku}</td>
                     <td className="px-5 py-3 text-right">
-                      <div className="inline-flex gap-1">
-                        <button
-                          type="button"
+                      <div className="inline-flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          icon={<Pencil size={14} />}
                           onClick={(e) => { e.stopPropagation(); setEditing(p); setFormOpen(true) }}
-                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100"
                         >
-                          <Pencil size={14} />
-                          Edit
-                        </button>
-                        <button
-                          type="button"
+                          Update
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          icon={<Trash2 size={14} />}
                           onClick={(e) => { e.stopPropagation(); setDeleting(p) }}
-                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-red-500 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
                         >
-                          <Trash2 size={14} />
                           Delete
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -197,22 +196,22 @@ export default function ProductListPage({ onNavigate }) {
               Page {page + 1} of {totalPages}
             </p>
             <div className="flex gap-2">
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-white/5"
               >
                 Previous
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={page >= totalPages - 1}
-                className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-white/5"
               >
                 Next
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -238,20 +237,13 @@ export default function ProductListPage({ onNavigate }) {
               <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">{deleteError}</p>
             )}
             <div className="mt-5 flex justify-end gap-3">
-              <button
-                type="button"
+              <Button
+                variant="ghost"
                 onClick={() => { setDeleting(null); setDeleteError('') }}
-                className="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-white/5"
               >
                 Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="rounded-xl bg-red-500 px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-              >
-                Delete
-              </button>
+              </Button>
+              <Button variant="danger" onClick={handleDelete}>Delete</Button>
             </div>
           </div>
         </div>

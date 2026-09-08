@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   LayoutDashboard,
   Users,
@@ -99,19 +100,19 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
 
   const sidebarContent = (
     <div className="flex h-full flex-col bg-white transition-colors duration-300 dark:bg-[#1c1c28]">
-      <div
-        className={`flex items-center gap-3 border-b border-gray-100 px-4 py-4 transition-all duration-200 dark:border-neutral-800 ${
+<div
+        className={`flex items-center gap-3 border-b border-gray-100 px-4 py-4 transition-all duration-200 ${
           collapsed ? 'justify-center' : 'justify-between'
         }`}
       >
-        {!collapsed && (
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1a1a2e]">
-              <Glasses size={18} className="text-white" />
-            </div>
-            <span className="text-lg font-bold text-[#1a1a2e] dark:text-neutral-50">glasses-web</span>
+        <Link to="/" className="flex items-center gap-2" title="Back to home">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1a1a2e]">
+            <Glasses size={18} className="text-white" />
           </div>
-        )}
+          {!collapsed && (
+            <span className="text-lg font-bold text-[#1a1a2e]">glasses-web</span>
+          )}
+        </Link>
         <button
           type="button"
           onClick={handleCollapseToggle}

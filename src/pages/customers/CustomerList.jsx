@@ -93,7 +93,7 @@ function CustomerDeleteModal({ customer, onConfirm, onClose }) {
   )
 }
 
-function CustomerList() {
+function CustomerList({ onNavigate }) {
   const navigate = useNavigate()
   const { summary } = mockData
 
@@ -290,7 +290,7 @@ function CustomerList() {
       <DataTable
         columns={columns}
         data={paged}
-        onRowClick={(row) => navigate(`/customers/${row.id}`)}
+        onRowClick={(row) => onNavigate?.(`customers/${row.id}`)}
       />
 
       <Pagination

@@ -46,7 +46,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#f5f6fb] px-4 transition-colors duration-300 dark:bg-[#111118]">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800">
-        <div className="mb-6 flex items-center gap-2">
+        <Link to="/" className="mb-6 flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1a2e] text-white">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="6" cy="15" r="4" />
@@ -59,7 +59,7 @@ export default function LoginPage() {
             <h1 className="text-lg font-bold text-[#1a1a2e] dark:text-neutral-50">glasses-web</h1>
             <p className="text-xs text-gray-400 dark:text-neutral-500">Optical Shop Management</p>
           </div>
-        </div>
+        </Link>
 
         <h2 className="text-xl font-semibold text-[#1a1a2e] dark:text-neutral-50">Welcome back</h2>
         <p className="mt-1 mb-6 text-sm text-gray-400 dark:text-neutral-500">Sign in to continue to the dashboard</p>

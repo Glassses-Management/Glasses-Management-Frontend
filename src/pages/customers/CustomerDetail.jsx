@@ -109,7 +109,7 @@ function CustomerDetail() {
   return (
     <div className="space-y-6">
       <nav className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
-        <Link to="/customers" className="hover:text-gray-700">
+        <Link to="/dashboard/customers" className="hover:text-gray-700">
           Customers
         </Link>
         <span aria-hidden="true">/</span>
@@ -149,7 +149,7 @@ function CustomerDetail() {
             <p className="mt-4 text-lg font-semibold text-gray-900">
               {latestProvider || 'No visits yet'}
             </p>
-            <Link to={`/customers/${customer.id}/care-history`} className={`mt-2 inline-block ${cardLinkClass}`}>
+            <Link to={`/dashboard/customers/${customer.id}/care-history`} className={`mt-2 inline-block ${cardLinkClass}`}>
               View Care History
             </Link>
           </div>
@@ -221,7 +221,7 @@ function CustomerDetail() {
             <CardHeader
               title="Dispensing Orders & Bespoke Frames"
               action={
-                <Link to={`/customers/${customer.id}/orders`} className={cardLinkClass}>
+                <Link to={`/dashboard/customers/${customer.id}/orders`} className={cardLinkClass}>
                   View Ordering History
                 </Link>
               }
@@ -253,7 +253,7 @@ function CustomerDetail() {
             <CardHeader
               title="Consultation & Exam Timeline"
               action={
-                <Link to={`/customers/${customer.id}/appointments/new`} className={cardLinkClass}>
+                <Link to={`/dashboard/customers/${customer.id}/appointments/new`} className={cardLinkClass}>
                   + Schedule New Visit
                 </Link>
               }
