@@ -45,7 +45,7 @@ function Avatar({ name, id }) {
 }
 
 const modalBackdrop = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'
-const modalCard = 'w-full max-w-md rounded-2xl bg-white p-6 shadow-xl'
+const modalCard = 'w-full max-w-md rounded-2xl bg-white p-6 shadow-xl transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800'
 
 function CustomerEditModal({ customer, onSave, onClose }) {
   const [form, setForm] = useState({
@@ -59,7 +59,7 @@ function CustomerEditModal({ customer, onSave, onClose }) {
   return (
     <div className={modalBackdrop} onClick={onClose}>
       <div className={modalCard} onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-gray-900">Update Customer</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-neutral-50">Update Customer</h3>
         <div className="mt-4 space-y-4">
           <Input label="Name" name="name" value={form.name} onChange={setField('name')} />
           <Input label="Phone" name="phone" value={form.phone} onChange={setField('phone')} />
@@ -79,9 +79,9 @@ function CustomerDeleteModal({ customer, onConfirm, onClose }) {
   return (
     <div className={modalBackdrop} onClick={onClose}>
       <div className={modalCard} onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-gray-900">Delete customer?</h3>
-        <p className="mt-2 text-sm text-gray-500">
-          This will remove <span className="font-medium text-gray-900">{customer.name}</span> from
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-neutral-50">Delete customer?</h3>
+        <p className="mt-2 text-sm text-gray-500 dark:text-neutral-400">
+          This will remove <span className="font-medium text-gray-900 dark:text-neutral-100">{customer.name}</span> from
           the registry. This action cannot be undone.
         </p>
         <div className="mt-6 flex justify-end gap-2">
@@ -163,8 +163,8 @@ function CustomerList({ onNavigate }) {
         <div className="flex items-center gap-3">
           <Avatar name={row.name} id={row.id} />
           <div>
-            <p className="font-medium text-gray-900">{row.name}</p>
-            <p className="text-xs text-gray-500">{deriveMemberId(row.id)}</p>
+            <p className="font-medium text-gray-900 dark:text-neutral-100">{row.name}</p>
+            <p className="text-xs text-gray-500 dark:text-neutral-400">{deriveMemberId(row.id)}</p>
           </div>
         </div>
       ),
@@ -174,13 +174,13 @@ function CustomerList({ onNavigate }) {
       header: 'Contact',
       render: (row) => (
         <div>
-          <p className="text-gray-900">{row.phone}</p>
-          <p className="text-xs text-gray-500">{row.email}</p>
+          <p className="text-gray-900 dark:text-neutral-100">{row.phone}</p>
+          <p className="text-xs text-gray-500 dark:text-neutral-400">{row.email}</p>
         </div>
       ),
     },
-    { key: 'careProvider', header: 'Vision Care Provider', render: (row) => <span className="text-gray-900">{row.careProvider || 'No visits yet'}</span> },
-    { key: 'createdAt', header: 'Registration Date', render: (row) => <span className="text-gray-900">{formatDate(row.createdAt)}</span> },
+    { key: 'careProvider', header: 'Vision Care Provider', render: (row) => <span className="text-gray-900 dark:text-neutral-100">{row.careProvider || 'No visits yet'}</span> },
+    { key: 'createdAt', header: 'Registration Date', render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.createdAt)}</span> },
     {
       key: 'latestOrderStatus',
       header: 'Latest Order Status',
@@ -188,7 +188,7 @@ function CustomerList({ onNavigate }) {
         row.latestOrderStatus ? (
           <Badge text={row.latestOrderStatus} variant={getVariantFromStatus(row.latestOrderStatus)} />
         ) : (
-          <span className="text-sm text-gray-500">No orders yet</span>
+          <span className="text-sm text-gray-500 dark:text-neutral-400">No orders yet</span>
         ),
     },
     {
@@ -223,10 +223,10 @@ function CustomerList({ onNavigate }) {
   ]
 
   const statCards = [
-    { label: 'Total Customers', value: summary.totalCustomers, trend: summary.trends.totalCustomers, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-violet-100 text-violet-600">{usersIcon}</span> },
-    { label: 'Appointments This Month', value: summary.totalAppointmentsThisMonth, trend: summary.trends.totalAppointmentsThisMonth, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-green-100 text-green-600">{calendarIcon}</span> },
-    { label: 'Total Active Orders', value: summary.totalActiveOrders, trend: summary.trends.totalActiveOrders, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-blue-100 text-blue-600">{clipboardIcon}</span> },
-    { label: 'Total Revenue', value: formatCurrency(summary.totalRevenue), trend: summary.trends.totalRevenue, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-amber-100 text-amber-600">{dollarIcon}</span> },
+    { label: 'Total Customers', value: summary.totalCustomers, trend: summary.trends.totalCustomers, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300">{usersIcon}</span> },
+    { label: 'Appointments This Month', value: summary.totalAppointmentsThisMonth, trend: summary.trends.totalAppointmentsThisMonth, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-300">{calendarIcon}</span> },
+    { label: 'Total Active Orders', value: summary.totalActiveOrders, trend: summary.trends.totalActiveOrders, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300">{clipboardIcon}</span> },
+    { label: 'Total Revenue', value: formatCurrency(summary.totalRevenue), trend: summary.trends.totalRevenue, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-300">{dollarIcon}</span> },
   ]
 
   const handleUpdate = (updated) => {
@@ -243,8 +243,8 @@ function CustomerList({ onNavigate }) {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Client Registry & Patients</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Client Registry & Patients</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
             Manage customers, their appointments, prescriptions, and orders.
           </p>
         </div>
@@ -269,7 +269,7 @@ function CustomerList({ onNavigate }) {
         />
       </div>
 
-      <div className="flex gap-6 border-b border-gray-200">
+      <div className="flex gap-6 border-b border-gray-200 dark:border-neutral-800">
         {TABS.map((tab) => (
           <button
             key={tab}
@@ -279,7 +279,7 @@ function CustomerList({ onNavigate }) {
               'pb-3 text-sm font-medium transition-colors',
               activeTab === tab
                 ? '-mb-px border-b-2 border-violet-600 text-violet-600'
-                : 'text-gray-500 hover:text-gray-700',
+                : 'text-gray-500 hover:text-gray-700 transition-colors duration-300 dark:text-neutral-400 dark:hover:text-neutral-100',
             )}
           >
             {tab}
@@ -314,7 +314,7 @@ function CustomerList({ onNavigate }) {
         </div>
         <button
           type="button"
-          className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+          className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-green-700"
         >
           Run Campaign
         </button>

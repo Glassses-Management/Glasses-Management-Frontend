@@ -46,12 +46,12 @@ function PageButton({ page, isCurrent, onClick }) {
       type="button"
       onClick={onClick}
       disabled={isCurrent}
-      className={cn(
-        'inline-flex size-8 items-center justify-center rounded-full text-sm font-medium transition-colors',
-        isCurrent
-          ? 'bg-violet-600 text-white'
-          : 'text-gray-600 hover:bg-gray-100',
-      )}
+className={cn(
+          'inline-flex size-8 items-center justify-center rounded-full text-sm font-medium transition-colors duration-300',
+          isCurrent
+            ? 'bg-violet-600 text-white'
+            : 'text-gray-600 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-white/10',
+        )}
     >
       {page}
     </button>
@@ -59,7 +59,7 @@ function PageButton({ page, isCurrent, onClick }) {
 }
 
 function Ellipsis() {
-  return <span className="inline-flex size-8 items-center justify-center text-sm text-gray-400">…</span>
+  return <span className="inline-flex size-8 items-center justify-center text-sm text-gray-400 dark:text-neutral-500">…</span>
 }
 
 function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageChange }) {
@@ -69,7 +69,7 @@ function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageC
 
   return (
     <nav className="flex items-center justify-between gap-4" aria-label="Pagination">
-      <p className="shrink-0 text-sm text-gray-500">
+      <p className="shrink-0 text-sm text-gray-500 dark:text-neutral-400">
         Showing {start}–{end} of {totalItems.toLocaleString()} records
       </p>
 
@@ -79,8 +79,8 @@ function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageC
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
           className={cn(
-            'inline-flex size-8 items-center justify-center rounded-full transition-colors',
-            currentPage <= 1 ? 'cursor-not-allowed text-gray-300' : 'text-gray-600 hover:bg-gray-100',
+            'inline-flex size-8 items-center justify-center rounded-full transition-colors duration-300',
+            currentPage <= 1 ? 'cursor-not-allowed text-gray-300 dark:text-neutral-600' : 'text-gray-600 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-white/10',
           )}
           aria-label="Previous page"
         >
@@ -105,8 +105,8 @@ function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageC
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
           className={cn(
-            'inline-flex size-8 items-center justify-center rounded-full transition-colors',
-            currentPage >= totalPages ? 'cursor-not-allowed text-gray-300' : 'text-gray-600 hover:bg-gray-100',
+            'inline-flex size-8 items-center justify-center rounded-full transition-colors duration-300',
+            currentPage >= totalPages ? 'cursor-not-allowed text-gray-300 dark:text-neutral-600' : 'text-gray-600 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-white/10',
           )}
           aria-label="Next page"
         >

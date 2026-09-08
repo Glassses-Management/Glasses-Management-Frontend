@@ -110,13 +110,13 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
             <Glasses size={18} className="text-white" />
           </div>
           {!collapsed && (
-            <span className="text-lg font-bold text-[#1a1a2e]">glasses-web</span>
+            <span className="text-lg font-bold text-[#1a1a2e] transition-colors duration-300 dark:text-neutral-50">glasses-web</span>
           )}
         </Link>
         <button
           type="button"
           onClick={handleCollapseToggle}
-          className="hidden rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100 md:block"
+          className="hidden rounded-lg p-1.5 text-gray-400 transition-colors duration-300 hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100 md:block"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <ChevronLeft
@@ -150,7 +150,7 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
       </nav>
 
       <div className={`border-t border-gray-100 p-3 dark:border-neutral-800 ${collapsed ? 'text-center' : ''}`}>
-        <div className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-gray-50 dark:hover:bg-white/5">
+        <div className="flex items-center gap-3 rounded-xl p-2 transition-colors duration-300 hover:bg-gray-50 dark:hover:bg-white/5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f]/20 font-semibold text-[#1a1a2e] dark:text-neutral-900">
             A
           </div>

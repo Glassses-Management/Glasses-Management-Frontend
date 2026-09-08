@@ -14,22 +14,22 @@ function OrderTable({ orders, onViewDetail }) {
         {
             key: 'id',
             header: 'Order ID',
-            render: (row) => <span className="font-medium text-gray-900">#{row.id}</span>,
+            render: (row) => <span className="font-medium text-gray-900 dark:text-neutral-100">#{row.id}</span>,
         },
         {
             key: 'customer',
             header: 'Customer',
             render: (row) => (
                 <div>
-                    <p className="font-medium text-gray-900">{row.customer.name}</p>
-                    <p className="text-xs text-gray-500">Customer #{row.customer.id}</p>
+                    <p className="font-medium text-gray-900 dark:text-neutral-100">{row.customer.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-neutral-400">Customer #{row.customer.id}</p>
                 </div>
             ),
         },
         {
             key: 'total',
             header: 'Total',
-            render: (row) => <span className="font-medium text-gray-900">{formatCurrency(row.total)}</span>,
+            render: (row) => <span className="font-medium text-gray-900 dark:text-neutral-100">{formatCurrency(row.total)}</span>,
         },
         {
             key: 'payment_status',
@@ -46,7 +46,7 @@ function OrderTable({ orders, onViewDetail }) {
         {
             key: 'order_date',
             header: 'Order Date',
-            render: (row) => <span className="text-gray-900">{formatDate(row.order_date)}</span>,
+            render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.order_date)}</span>,
         },
         {
             key: 'action',

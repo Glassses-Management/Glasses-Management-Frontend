@@ -8,7 +8,7 @@ export default function Header({ user, onToggleSidebar, onLogout }) {
         <button
           type="button"
           onClick={onToggleSidebar}
-          className="rounded-lg p-2 text-[#1a1a2e] transition-colors hover:bg-gray-100 dark:text-neutral-100 dark:hover:bg-white/10 md:hidden"
+          className="rounded-lg p-2 text-[#1a1a2e] transition-colors duration-300 hover:bg-gray-100 dark:text-neutral-100 dark:hover:bg-white/10 md:hidden"
           aria-label="Open sidebar"
         >
           <Menu size={20} />
@@ -21,7 +21,7 @@ export default function Header({ user, onToggleSidebar, onLogout }) {
 
         <button
           type="button"
-          className="relative rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100"
+          className="relative rounded-lg p-2 text-gray-400 transition-colors duration-300 hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100"
           aria-label="Notifications"
         >
           <Bell size={20} />
@@ -42,7 +42,7 @@ export default function Header({ user, onToggleSidebar, onLogout }) {
             <button
               type="button"
               onClick={onLogout}
-              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:text-neutral-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+              className="rounded-lg p-2 text-gray-400 transition-colors duration-300 hover:bg-red-50 hover:text-red-500 dark:text-neutral-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
               aria-label="Logout"
             >
               <svg

@@ -42,11 +42,11 @@ function StatsCard({ label, value, trend, icon, className = '' }) {
   const hasDownTrend = trend?.startsWith('-')
 
   return (
-    <div className={cn('rounded-2xl border border-gray-200 bg-white p-5', className)}>
+    <div className={cn('rounded-2xl border border-gray-200 bg-white p-5 transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]', className)}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm text-gray-500">{label}</p>
-          <p className="mt-1 text-[28px] font-semibold leading-tight text-gray-900">{value}</p>
+          <p className="text-sm text-gray-500 dark:text-neutral-400">{label}</p>
+          <p className="mt-1 text-[28px] font-semibold leading-tight text-gray-900 dark:text-neutral-50">{value}</p>
         </div>
         {icon && <div className="shrink-0 rounded-lg p-2">{icon}</div>}
       </div>
@@ -55,14 +55,14 @@ function StatsCard({ label, value, trend, icon, className = '' }) {
         <p
           className={cn(
             'mt-2 inline-flex items-center gap-1 text-sm font-medium',
-            hasUpTrend ? 'text-green-600' : 'text-red-600',
+            hasUpTrend ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400',
           )}
         >
           <TrendArrow up={hasUpTrend} />
           {trend}
         </p>
       )}
-      {trend && !hasUpTrend && !hasDownTrend && <p className="mt-2 text-sm text-gray-500">{trend}</p>}
+      {trend && !hasUpTrend && !hasDownTrend && <p className="mt-2 text-sm text-gray-500 dark:text-neutral-400">{trend}</p>}
     </div>
   )
 }

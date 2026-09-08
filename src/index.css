@@ -11,8 +11,7 @@ html.dark {
   background-color: #15151f;
 }
 html.theme-ready {
-  transition: background-color 150ms ease;
-  color-scheme: light;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 html.theme-ready.dark {
   color-scheme: dark;

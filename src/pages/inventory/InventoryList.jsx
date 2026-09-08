@@ -92,11 +92,11 @@ function InventoryList() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 text-gray-900 md:p-6">
+        <div className="min-h-screen p-4 text-gray-900 md:p-6 transition-colors duration-300 dark:text-neutral-100">
             <div className="mx-auto max-w-7xl space-y-6">
                 <div>
-                    <h1 className="text-2xl font-bold">Inventory</h1>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <h1 className="text-2xl font-bold dark:text-neutral-50">Inventory</h1>
+                    <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
                         Manage product stock levels across all branches.
                     </p>
                 </div>
@@ -121,7 +121,7 @@ function InventoryList() {
                 <InventoryTable products={paginatedProducts} />
 
                 <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-neutral-400">
                         Showing{' '}
                         {filtered.length === 0 ? 0 : (effectivePage - 1) * ITEMS_PER_PAGE + 1}–
                         {Math.min(effectivePage * ITEMS_PER_PAGE, filtered.length)} of {filtered.length} records
@@ -132,7 +132,7 @@ function InventoryList() {
                             type="button"
                             onClick={() => setCurrentPage((p) => p - 1)}
                             disabled={effectivePage <= 1}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-colors duration-300 hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300 dark:text-neutral-400 dark:hover:bg-white/10 dark:disabled:text-neutral-600"
                             aria-label="Previous page"
                         >
                             <ChevronLeft size={16} />
@@ -140,7 +140,7 @@ function InventoryList() {
 
                         {buildPageNumbers(effectivePage, totalPages).map((page, i) =>
                             page === '...' ? (
-                                <span key={`ellipsis-${i}`} className="inline-flex h-8 w-8 items-center justify-center text-sm text-gray-400">
+                                <span key={`ellipsis-${i}`} className="inline-flex h-8 w-8 items-center justify-center text-sm text-gray-400 dark:text-neutral-500">
                                     …
                                 </span>
                             ) : (
@@ -151,7 +151,7 @@ function InventoryList() {
                                     className={
                                         page === effectivePage
                                             ? 'inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-medium text-white'
-                                            : 'inline-flex h-8 w-8 items-center justify-center rounded-lg text-sm text-gray-600 transition-colors hover:bg-gray-100'
+                                            : 'inline-flex h-8 w-8 items-center justify-center rounded-lg text-sm text-gray-600 transition-colors duration-300 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-white/10'
                                     }
                                 >
                                     {page}
@@ -163,7 +163,7 @@ function InventoryList() {
                             type="button"
                             onClick={() => setCurrentPage((p) => p + 1)}
                             disabled={effectivePage >= totalPages}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-colors duration-300 hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300 dark:text-neutral-400 dark:hover:bg-white/10 dark:disabled:text-neutral-600"
                             aria-label="Next page"
                         >
                             <ChevronRight size={16} />

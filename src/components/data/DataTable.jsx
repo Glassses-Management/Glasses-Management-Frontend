@@ -3,12 +3,12 @@
 
 function DataTable({ columns, data, onRowClick }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
       <table className="w-full text-left text-sm">
         <thead>
-          <tr className="bg-gray-50">
+          <tr className="bg-gray-50 dark:bg-white/5">
             {columns.map((col) => (
-              <th key={col.key} className="px-5 py-4 text-xs font-medium uppercase tracking-wide text-gray-500">
+              <th key={col.key} className="px-5 py-4 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-500">
                 {col.header}
               </th>
             ))}
@@ -20,8 +20,8 @@ function DataTable({ columns, data, onRowClick }) {
               key={row.id ?? rowIndex}
               onClick={() => onRowClick && onRowClick(row)}
               className={
-                'cursor-pointer transition-colors hover:bg-gray-50' +
-                (rowIndex < data.length - 1 ? ' border-b border-gray-100' : '')
+                'cursor-pointer transition-colors duration-300 hover:bg-gray-50 dark:hover:bg-white/5' +
+                (rowIndex < data.length - 1 ? ' border-b border-gray-100 dark:border-neutral-800' : '')
               }
             >
               {columns.map((col) => (
@@ -33,7 +33,7 @@ function DataTable({ columns, data, onRowClick }) {
           ))}
           {data.length === 0 && (
             <tr>
-              <td colSpan={columns.length} className="px-5 py-10 text-center text-gray-500">
+              <td colSpan={columns.length} className="px-5 py-10 text-center text-gray-500 dark:text-neutral-400">
                 No records found
               </td>
             </tr>

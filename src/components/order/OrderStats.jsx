@@ -2,7 +2,7 @@ import StatsCard from '@/components/ui/StatsCard'
 
 function cardIcon({ tone }) {
     return (
-        <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${tone}`}>
+        <span className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors duration-300 ${tone}`}>
             <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="8" y="2" width="8" height="4" rx="1" />
                 <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
@@ -14,11 +14,11 @@ function cardIcon({ tone }) {
 
 function OrderStats({ stats }) {
     const cards = [
-        { label: 'Total Orders', value: stats.total, icon: cardIcon({ tone: 'bg-violet-100 text-violet-600' }) },
-        { label: 'Pending', value: stats.pending, icon: cardIcon({ tone: 'bg-amber-100 text-amber-600' }) },
-        { label: 'Processing', value: stats.processing, icon: cardIcon({ tone: 'bg-blue-100 text-blue-600' }) },
-        { label: 'Ready', value: stats.ready, icon: cardIcon({ tone: 'bg-cyan-100 text-cyan-600' }) },
-        { label: 'Completed', value: stats.completed, icon: cardIcon({ tone: 'bg-green-100 text-green-600' }) },
+        { label: 'Total Orders', value: stats.total, icon: cardIcon({ tone: 'bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300' }) },
+        { label: 'Pending', value: stats.pending, icon: cardIcon({ tone: 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-300' }) },
+        { label: 'Processing', value: stats.processing, icon: cardIcon({ tone: 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300' }) },
+        { label: 'Ready', value: stats.ready, icon: cardIcon({ tone: 'bg-cyan-100 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-300' }) },
+        { label: 'Completed', value: stats.completed, icon: cardIcon({ tone: 'bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-300' }) },
     ]
 
     return (
