@@ -1,14 +1,14 @@
 export const ROLES = {
-    ADMIN : 'ADMIN',
-    STAFF : 'STAFF',
-    OPTOMETRIST : 'OPTOMETRIST',
-    CUSTOMER : 'CUSTOMER'
+    ADMIN: 'ADMIN',
+    STAFF: 'STAFF',
+    OPTOMETRIST: 'OPTOMETRIST',
+    CUSTOMER: 'CUSTOMER'
 }
 
 export const STAFF_ROLES = [ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]
 
 export const hasRole = (user, role) => {
-    if(!user?.role){
+    if (!user?.role) {
         return false;
     }
     return String(user.role).toUpperCase() === String(role).toUpperCase();
