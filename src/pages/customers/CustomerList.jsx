@@ -11,10 +11,10 @@ import FilterBar from '@/components/data/FilterBar'
 import DataTable from '@/components/data/DataTable'
 import Pagination from '@/components/ui/Pagination'
 import Button from '@/components/ui/Button'
-import Input from '@/components/ui/Input'
 import Badge, { getVariantFromStatus } from '@/components/ui/Badge'
 import { usersIcon, calendarIcon, clipboardIcon, dollarIcon } from '@/components/ui/icons'
 import mockData from "@/mockData/mockCustomers.json";
+import { useCustomers } from '@/hook/UseCustomer'
 import { getInitials, getAvatarColors } from '@/utils/avatar'
 import { formatDate, deriveMemberId, formatCurrency } from '@/utils/format'
 
@@ -47,34 +47,6 @@ function Avatar({ name, id }) {
 const modalBackdrop = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'
 const modalCard = 'w-full max-w-md rounded-2xl bg-white p-6 shadow-xl'
 
-function CustomerEditModal({ customer, onSave, onClose }) {
-  const [form, setForm] = useState({
-    name: customer.name,
-    phone: customer.phone,
-    email: customer.email,
-    address: customer.address,
-  })
-  const setField = (field) => (event) => setForm((f) => ({ ...f, [field]: event.target.value }))
-
-  return (
-    <div className={modalBackdrop} onClick={onClose}>
-      <div className={modalCard} onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-gray-900">Update Customer</h3>
-        <div className="mt-4 space-y-4">
-          <Input label="Name" name="name" value={form.name} onChange={setField('name')} />
-          <Input label="Phone" name="phone" value={form.phone} onChange={setField('phone')} />
-          <Input label="Email" name="email" value={form.email} onChange={setField('email')} />
-          <Input label="Address" name="address" value={form.address} onChange={setField('address')} />
-        </div>
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => onSave({ ...customer, ...form })}>Save Changes</Button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function CustomerDeleteModal({ customer, onConfirm, onClose }) {
   return (
     <div className={modalBackdrop} onClick={onClose}>
@@ -96,19 +68,18 @@ function CustomerDeleteModal({ customer, onConfirm, onClose }) {
 function CustomerList() {
   const navigate = useNavigate()
   const { summary } = mockData
+  const { customers: customersData, deleteCustomer } = useCustomers()
 
   const [search, setSearch] = useState('')
   const [filters, setFilters] = useState({ provider: 'all', orderStatus: 'all' })
   const [activeTab, setActiveTab] = useState(TABS[0])
   const [currentPage, setCurrentPage] = useState(1)
-  const [customerList, setCustomerList] = useState(() => mockData.customers)
-  const [editing, setEditing] = useState(null)
   const [deleting, setDeleting] = useState(null)
 
   // Attach derived, display-only values to each customer.
   const customers = useMemo(
     () =>
-      customerList.map((customer) => {
+      customersData.map((customer) => {
         const appointments = [...(customer.appointments || [])].sort(
           (a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt),
         )
@@ -121,7 +92,7 @@ function CustomerList() {
           latestOrderStatus: orders[0]?.status || null,
         }
       }),
-    [customerList],
+    [customersData],
   )
 
   const providerOptions = useMemo(
@@ -200,7 +171,10 @@ function CustomerList() {
             variant="outline"
             size="sm"
             icon={<Pencil size={14} />}
-            onClick={() => setEditing(row)}
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate(`/customers/${row.id}/edit`)
+            }}
           >
             Update
           </Button>
@@ -223,19 +197,14 @@ function CustomerList() {
   ]
 
   const statCards = [
-    { label: 'Total Customers', value: summary.totalCustomers, trend: summary.trends.totalCustomers, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-violet-100 text-violet-600">{usersIcon}</span> },
+    { label: 'Total Customers', value: customers.length, trend: summary.trends.totalCustomers, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-violet-100 text-violet-600">{usersIcon}</span> },
     { label: 'Appointments This Month', value: summary.totalAppointmentsThisMonth, trend: summary.trends.totalAppointmentsThisMonth, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-green-100 text-green-600">{calendarIcon}</span> },
     { label: 'Total Active Orders', value: summary.totalActiveOrders, trend: summary.trends.totalActiveOrders, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-blue-100 text-blue-600">{clipboardIcon}</span> },
     { label: 'Total Revenue', value: formatCurrency(summary.totalRevenue), trend: summary.trends.totalRevenue, icon: <span className="flex size-9 items-center justify-center rounded-lg bg-amber-100 text-amber-600">{dollarIcon}</span> },
   ]
 
-  const handleUpdate = (updated) => {
-    setCustomerList((list) => list.map((c) => (c.id === updated.id ? updated : c)))
-    setEditing(null)
-  }
-
   const handleDelete = (customer) => {
-    setCustomerList((list) => list.filter((c) => c.id !== customer.id))
+    deleteCustomer(customer.id)
     setDeleting(null)
   }
 
@@ -319,15 +288,6 @@ function CustomerList() {
           Run Campaign
         </button>
       </div>
-
-      {editing && (
-        <CustomerEditModal
-          key={editing.id}
-          customer={editing}
-          onSave={handleUpdate}
-          onClose={() => setEditing(null)}
-        />
-      )}
 
       {deleting && (
         <CustomerDeleteModal

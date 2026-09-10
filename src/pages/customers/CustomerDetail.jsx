@@ -6,7 +6,7 @@ import { useParams, Link } from 'react-router-dom'
 import Button from '@/components/ui/Button'
 import Badge, { getVariantFromStatus } from '@/components/ui/Badge'
 import StatsCard from '@/components/ui/StatsCard'
-import mockData from "@/mockData/mockCustomers.json";
+import { useCustomers } from '@/hook/UseCustomer'
 import { getInitials, getAvatarColors } from '@/utils/avatar'
 import {
   deriveMemberId,
@@ -64,7 +64,8 @@ function CardHeader({ title, action }) {
 
 function CustomerDetail() {
   const { id } = useParams()
-  const customer = mockData.customers.find((c) => c.id === Number(id))
+  const { customers } = useCustomers()
+  const customer = customers.find((c) => c.id === Number(id))
 
   const appointments = useMemo(
     () =>

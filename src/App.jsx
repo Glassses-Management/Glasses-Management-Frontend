@@ -8,11 +8,13 @@ import LoginPage from '@/pages/auth/LoginPage'
 import RegisterPage from '@/pages/auth/RegisterPage'
 import CustomerList from '@/pages/customers/CustomerList'
 import CustomerDetail from '@/pages/customers/CustomerDetail'
+import CustomerForm from '@/pages/customers/CustomerForm'
 import InventoryList from '@/pages/inventory/InventoryList'
 import OrderList from '@/pages/orders/OrderList'
 import OrderDetail from '@/pages/orders/OrderDetail'
 import OrderCreate from '@/pages/orders/OrderCreate'
 import { AuthProvider } from '@/context/AuthContext.jsx'
+import { CustomerProvider } from '@/context/CustomerContext.jsx'
 import { ToastProvider } from '@/context/ToastContext.jsx'
 
 // Map each sidebar key to its URL path so navigation and active styling stay in sync.
@@ -39,7 +41,8 @@ function App() {
 
   return (
     <AuthProvider>
-      <ToastProvider>
+      <CustomerProvider>
+        <ToastProvider>
         <DashboardLayout activeRoute={activeRoute} onNavigate={(key) => navigate(NAV_PATH[key])}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -48,6 +51,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/customers" element={<CustomerList />} />
+            <Route path="/customers/new" element={<CustomerForm />} />
+            <Route path="/customers/:id/edit" element={<CustomerForm />} />
             <Route path="/customers/:id" element={<CustomerDetail />} />
             <Route path="/inventory" element={<InventoryList />} />
             <Route path="/orders" element={<OrderList />} />
@@ -57,7 +62,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </DashboardLayout>
-      </ToastProvider>
+        </ToastProvider>
+      </CustomerProvider>
     </AuthProvider>
   )
 }
