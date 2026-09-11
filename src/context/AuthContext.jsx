@@ -3,6 +3,21 @@ import { AuthContext } from "@/context/AuthContextStore";
 import { login as loginApi, getMe } from "@/api/authApi";
 import { registerCustomer as registerApi } from "@/api/customerApi";
 
+// Read the exp (expiry, in seconds) claim from a stored JWT without any library.
+// Returns a timestamp in ms, or null when the token is not a decodable JWT.
+function jwtExpiryMs(token) {
+    try {
+        const parts = token.split('.');
+        if (parts.length < 2) return null;
+        const base64Url = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(atob(base64Url));
+        return typeof payload.exp === 'number' ? payload.exp * 1000 : null;
+    }
+    catch {
+        return null;
+    }
+}
+
 export function AuthProvider({ children }){
     const [user, setUser] = useState(() => {
         try{
@@ -15,6 +30,8 @@ export function AuthProvider({ children }){
     })
     const [token, setToken] = useState(() => localStorage.getItem('token'))
     const [loading, setLoading] = useState(false);
+    // True while we verify a stored token on first load, so route guards wait.
+    const [checking, setChecking] = useState(() => Boolean(localStorage.getItem('token')));
 
     useEffect(() => {
         if(token){
@@ -31,6 +48,58 @@ export function AuthProvider({ children }){
             localStorage.removeItem('user');
         }
     }, [token, user])
+
+    // On first load: drop obviously-expired JWTs, then re-validate with the server.
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if(!storedToken){
+            setChecking(false);
+            return;
+        }
+
+        const expiresAt = jwtExpiryMs(storedToken);
+        if(expiresAt && Date.now() >= expiresAt){
+            setToken(null);
+            setUser(null);
+            setChecking(false);
+            return;
+        }
+
+        let cancelled = false;
+        const validate = async () => {
+            try{
+                const me = await getMe();
+                if(!cancelled){
+                    setUser(me);
+                }
+            }
+            catch(err){
+                // A 401 means the token is no longer accepted -> force re-login.
+                // Network/other errors keep the session so the app is not disruptive.
+                if(err?.response?.status === 401 && !cancelled){
+                    setToken(null);
+                    setUser(null);
+                }
+            }
+            finally{
+                if(!cancelled){
+                    setChecking(false);
+                }
+            }
+        };
+        validate();
+        return () => { cancelled = true; };
+    }, [])
+
+    // When any API call returns 401 (token expired mid-session), log out.
+    useEffect(() => {
+        const handleUnauthorized = () => {
+            setToken(null);
+            setUser(null);
+        };
+        window.addEventListener('auth:unauthorized', handleUnauthorized);
+        return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    }, [])
 
     const login = useCallback(async (identifier, password) => {
         const data = await loginApi(identifier, password);
@@ -94,7 +163,7 @@ export function AuthProvider({ children }){
         }
     }, [token, user]);
 
-    const value = {user, token, loading, login, register, logout, getUser}
+    const value = {user, token, loading, checking, login, register, logout, getUser}
 
     return <AuthContext.Provider value={value}>
         {children}

@@ -28,6 +28,8 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
+      // Notify AuthContext so the React state is cleared too (forces re-login).
+      window.dispatchEvent(new Event('auth:unauthorized'))
     }
     return Promise.reject(error)
   },
