@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import HomeHeader from '@/pages/public/HomeHeader'
 import HomeFooter from '@/pages/public/HomeFooter'
-import ProductImage, { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/ProductImage'
+import ProductCard from '@/components/product/ProductCard'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
-import { formatCurrency } from '@/utils/FormatCurrency'
 
 export default function PublicProductList() {
   const navigate = useNavigate()
@@ -74,8 +74,8 @@ export default function PublicProductList() {
         {loading ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
-                <div className="aspect-square rounded-t-2xl bg-neutral-200 dark:bg-neutral-700" />
+<div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
+                  <div className="h-48 w-full bg-neutral-200 dark:bg-neutral-700" />
                 <div className="space-y-3 p-4">
                   <div className="h-4 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700" />
                   <div className="h-3 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700" />
@@ -91,27 +91,12 @@ export default function PublicProductList() {
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {products.map((p) => (
-              <article
+              <ProductCard
                 key={p.id}
+                product={p}
+                imageSrc={images[p.id]}
                 onClick={() => navigate(`/products/${p.id}`)}
-                className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-neutral-800 dark:ring-neutral-700 dark:hover:shadow-neutral-900/50"
-              >
-                <ProductImage src={images[p.id]} alt={p.model} />
-                <div className="flex flex-1 flex-col p-4">
-                  <h3 className="font-serif text-lg text-neutral-900 dark:text-neutral-50">{p.model}</h3>
-                  <p className="line-clamp-2 text-sm text-neutral-500 dark:text-neutral-400">
-                    {[p.brand, p.material, p.color, p.category].filter(Boolean).join(' · ')}
-                  </p>
-                  <div className="mt-auto flex items-center justify-between pt-3">
-                    <span className="text-base font-semibold text-neutral-900 dark:text-neutral-50">
-                      {formatCurrency(p.sale_price)}
-                    </span>
-                    <span className="text-sm font-medium text-neutral-800 transition-colors group-hover:text-neutral-900 dark:text-neutral-300 dark:group-hover:text-white">
-                      View →
-                    </span>
-                  </div>
-                </div>
-              </article>
+              />
             ))}
           </div>
         )}

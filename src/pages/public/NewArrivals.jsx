@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProductImage, { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/ProductImage'
+import ProductCard from '@/components/product/ProductCard'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
-import { formatCurrency } from '@/utils/FormatCurrency'
 
 function NewArrivals() {
   const navigate = useNavigate()
@@ -78,29 +78,12 @@ function NewArrivals() {
       ) : (
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((p) => (
-            <article
+            <ProductCard
               key={p.id}
+              product={p}
+              imageSrc={images[p.id]}
               onClick={() => navigate(`/products/${p.id}`)}
-              className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-neutral-800 dark:ring-neutral-700 dark:hover:shadow-neutral-900/50"
-            >
-              <ProductImage src={images[p.id]} alt={p.model} />
-              <div className="flex flex-1 flex-col p-4">
-                <h3 className="font-serif text-lg text-neutral-900 dark:text-neutral-50">{p.model}</h3>
-                <p className="line-clamp-2 text-sm text-neutral-500 dark:text-neutral-400">
-                  {[p.material, p.color, p.category].filter(Boolean).join(' · ')}
-                </p>
-                <div className="mt-auto pt-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-base font-semibold text-neutral-900 dark:text-neutral-50">
-                      {formatCurrency(p.sale_price)}
-                    </span>
-                  </div>
-                  <span className="mt-4 block w-full rounded-full border border-neutral-300 py-2 text-center text-sm font-medium text-neutral-800 transition-colors duration-300 group-hover:border-neutral-900 group-hover:bg-neutral-900 group-hover:text-white dark:border-neutral-600 dark:text-neutral-300 dark:group-hover:border-neutral-100 dark:group-hover:bg-neutral-100 dark:group-hover:text-neutral-900">
-                    View / Details
-                  </span>
-                </div>
-              </div>
-            </article>
+            />
           ))}
         </div>
       )}
