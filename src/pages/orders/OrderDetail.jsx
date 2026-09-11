@@ -84,7 +84,7 @@ function OrderDetail() {
     return (
       <div className="rounded-2xl bg-white p-10 text-center shadow-sm dark:bg-[#1c1c28]">
         <p className="text-sm text-gray-500 dark:text-neutral-400">{error || `Order #${id} not found.`}</p>
-        <Link to="/orders" className="mt-4 inline-block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
+        <Link to="/dashboard/orders" className="mt-4 inline-block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
           Back to Orders
         </Link>
       </div>
@@ -116,7 +116,7 @@ function OrderDetail() {
   return (
     <div className="space-y-6">
       <nav className="flex items-center gap-2 text-sm text-gray-500">
-        <Link to="/orders" className="inline-flex items-center gap-1 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-white">
+        <Link to="/dashboard/orders" className="inline-flex items-center gap-1 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-white">
           <ArrowLeft size={16} />
           Orders
         </Link>

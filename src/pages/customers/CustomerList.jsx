@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useState } from 'react'
+// Client Registry & Patients — reads from the CustomerContext (mock data shape),
+// derives display-only values, and supports search + client-side pagination.
+
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
 import SearchBar from '@/components/data/SearchBar'
 import DataTable from '@/components/data/DataTable'
 import Pagination from '@/components/ui/Pagination'
 import Button from '@/components/ui/Button'
-import Input from '@/components/ui/Input'
-import { getCustomers, updateCustomer, deleteCustomer } from '@/api/customerApi'
+import { useCustomers } from '@/hook/UseCustomer'
 import { getInitials, getAvatarColors } from '@/utils/avatar'
 import { formatDate, deriveMemberId } from '@/utils/format'
-
-const cn = (...classes) => classes.filter(Boolean).join(' ')
 
 const ITEMS_PER_PAGE = 10
 
@@ -28,49 +28,6 @@ function Avatar({ name, id }) {
 
 const modalBackdrop = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'
 const modalCard = 'w-full max-w-md rounded-2xl bg-white p-6 shadow-xl transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800'
-
-function CustomerEditModal({ customer, onSave, onClose }) {
-  const [form, setForm] = useState({
-    name: customer.name,
-    phone: customer.phone,
-    email: customer.email,
-    address: customer.address,
-  })
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const setField = (field) => (event) => setForm((f) => ({ ...f, [field]: event.target.value }))
-
-  const handleSubmit = async () => {
-    setSaving(true)
-    setError('')
-    try {
-      await onSave({ ...customer, ...form })
-    } catch (err) {
-      const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to save changes.'
-      setError(msg)
-      setSaving(false)
-    }
-  }
-
-  return (
-    <div className={modalBackdrop} onClick={onClose}>
-      <div className={modalCard} onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-neutral-50">Update Customer</h3>
-        <div className="mt-4 space-y-4">
-          <Input label="Name" name="name" value={form.name} onChange={setField('name')} />
-          <Input label="Phone" name="phone" value={form.phone} onChange={setField('phone')} />
-          <Input label="Email" name="email" value={form.email} onChange={setField('email')} />
-          <Input label="Address" name="address" value={form.address} onChange={setField('address')} />
-        </div>
-        {error && <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>}
-        <div className="mt-6 flex justify-end gap-2">
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSubmit} disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 function CustomerDeleteModal({ customer, onConfirm, onClose }) {
   return (
@@ -92,32 +49,15 @@ function CustomerDeleteModal({ customer, onConfirm, onClose }) {
 
 function CustomerList({ onNavigate }) {
   const navigate = useNavigate()
+  const { customers: customersData, deleteCustomer } = useCustomers()
+
   const [search, setSearch] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [customers, setCustomers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [editing, setEditing] = useState(null)
   const [deleting, setDeleting] = useState(null)
-
-  const loadCustomers = async () => {
-    setLoading(true)
-    try {
-      const data = await getCustomers({ page: 0, size: 100, sort: 'id,desc' })
-      setCustomers(Array.isArray(data?.content) ? data.content : [])
-    } catch (err) {
-      console.error('CustomerList: failed to load customers:', err?.response?.status || err?.message || err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    loadCustomers()
-  }, [])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
-    return customers.filter((c) => {
+    return customersData.filter((c) => {
       return (
         !q ||
         c.name.toLowerCase().includes(q) ||
@@ -125,11 +65,12 @@ function CustomerList({ onNavigate }) {
         (c.email || '').toLowerCase().includes(q)
       )
     })
-  }, [customers, search])
+  }, [customersData, search])
 
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [search])
+  const goToPage = (page) => {
+    setCurrentPage(page)
+    setDeleting(null)
+  }
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
   const effectivePage = Math.min(currentPage, totalPages)
@@ -159,7 +100,7 @@ function CustomerList({ onNavigate }) {
         </div>
       ),
     },
-    { key: 'created_at', header: 'Registration Date', render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.created_at)}</span> },
+    { key: 'createdAt', header: 'Registration Date', render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.createdAt)}</span> },
     {
       key: 'actions',
       header: 'Actions',
@@ -169,7 +110,10 @@ function CustomerList({ onNavigate }) {
             variant="outline"
             size="sm"
             icon={<Pencil size={14} />}
-            onClick={() => setEditing(row)}
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate(`/dashboard/customers/${row.id}/edit`)
+            }}
           >
             Update
           </Button>
@@ -186,26 +130,9 @@ function CustomerList({ onNavigate }) {
     },
   ]
 
-  const handleUpdate = async (updated) => {
-    const saved = await updateCustomer(updated.id, {
-      name: updated.name,
-      phone: updated.phone,
-      email: updated.email,
-      address: updated.address,
-    })
-    setCustomers((list) => list.map((c) => (c.id === saved.id ? saved : c)))
-    setEditing(null)
-  }
-
-  const handleDelete = async (customer) => {
-    try {
-      await deleteCustomer(customer.id)
-      setCustomers((list) => list.filter((c) => c.id !== customer.id))
-      setDeleting(null)
-    } catch (err) {
-      console.error('CustomerList: failed to delete customer:', err?.response?.status || err?.message || err)
-      setDeleting(null)
-    }
+  const handleDelete = (customer) => {
+    deleteCustomer(customer.id)
+    setDeleting(null)
   }
 
   return (
@@ -225,36 +152,19 @@ function CustomerList({ onNavigate }) {
         </div>
       </div>
 
-      {loading ? (
-        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-[#1c1c28] dark:text-neutral-400">
-          Loading customers...
-        </div>
-      ) : (
-        <>
-          <DataTable
-            columns={columns}
-            data={paged}
-            onRowClick={(row) => onNavigate?.(`customers/${row.id}`)}
-          />
+      <DataTable
+        columns={columns}
+        data={paged}
+        onRowClick={(row) => onNavigate?.(`customers/${row.id}`)}
+      />
 
-          <Pagination
-            currentPage={effectivePage}
-            totalPages={totalPages}
-            totalItems={filtered.length}
-            itemsPerPage={ITEMS_PER_PAGE}
-            onPageChange={setCurrentPage}
-          />
-        </>
-      )}
-
-      {editing && (
-        <CustomerEditModal
-          key={editing.id}
-          customer={editing}
-          onSave={handleUpdate}
-          onClose={() => setEditing(null)}
-        />
-      )}
+      <Pagination
+        currentPage={effectivePage}
+        totalPages={totalPages}
+        totalItems={filtered.length}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={goToPage}
+      />
 
       {deleting && (
         <CustomerDeleteModal

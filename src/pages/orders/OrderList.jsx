@@ -84,7 +84,7 @@ function OrderList() {
   const effectivePage = Math.min(currentPage, totalPages)
   const paged = filtered.slice((effectivePage - 1) * ITEMS_PER_PAGE, effectivePage * ITEMS_PER_PAGE)
 
-  const handleViewDetail = (row) => navigate(`/orders/${row.id}`)
+  const handleViewDetail = (row) => navigate(`/dashboard/orders/${row.id}`)
 
   return (
     <div className="space-y-6">

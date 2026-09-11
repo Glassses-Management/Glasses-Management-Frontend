@@ -15,7 +15,7 @@ import ProductDetailPage from '@/pages/products/ProductDetailPage'
 
 import CustomerList from '@/pages/customers/CustomerList'
 import CustomerDetail from '@/pages/customers/CustomerDetail'
-
+import CustomerForm from '@/pages/customers/CustomerForm'
 import InventoryList from '@/pages/inventory/InventoryList'
 
 import OrderList from '@/pages/orders/OrderList'
@@ -30,6 +30,7 @@ import PublicProductDetail from '@/pages/public/PublicProductDetail'
 import NotFound from '@/pages/public/NotFound'
 
 import { AuthProvider } from '@/context/AuthContext.jsx'
+import { CustomerProvider } from '@/context/CustomerContext.jsx'
 import { ToastProvider } from '@/context/ToastContext.jsx'
 import { ThemeProvider } from '@/context/ThemeContext.jsx'
 
@@ -73,60 +74,70 @@ function DashboardRoutes() {
 
   return (
     <ProtectedRoute>
-      <DashboardLayout
-        activeRoute={resolveActiveRoute(pathname)}
-        onNavigate={handleNavigate}
-        user={user}
-        onLogout={handleLogout}
-      >
-        <Routes>
-          {/* Dashboard */}
-          <Route index element={<DashboardPage />} />
+      <CustomerProvider>
+        <DashboardLayout
+          activeRoute={resolveActiveRoute(pathname)}
+          onNavigate={handleNavigate}
+          user={user}
+          onLogout={handleLogout}
+        >
+          <Routes>
+            {/* Dashboard */}
+            <Route index element={<DashboardPage />} />
 
-          {/* Products */}
-          <Route
-            path="products"
-            element={<ProductListPage onNavigate={handleNavigate} />}
-          />
-          <Route
-            path="products/:id"
-            element={<ProductDetailPage />}
-          />
+            {/* Products */}
+            <Route
+              path="products"
+              element={<ProductListPage onNavigate={handleNavigate} />}
+            />
+            <Route
+              path="products/:id"
+              element={<ProductDetailPage />}
+            />
 
-          {/* Customers */}
-          <Route
-            path="customers"
-            element={<CustomerList onNavigate={handleNavigate} />}
-          />
-          <Route
-            path="customers/:id"
-            element={<CustomerDetail onNavigate={handleNavigate} />}
-          />
+            {/* Customers */}
+            <Route
+              path="customers"
+              element={<CustomerList onNavigate={handleNavigate} />}
+            />
+            <Route
+              path="customers/new"
+              element={<CustomerForm />}
+            />
+            <Route
+              path="customers/:id/edit"
+              element={<CustomerForm />}
+            />
+            <Route
+              path="customers/:id"
+              element={<CustomerDetail />}
+            />
 
-          {/* Inventory */}
-          <Route
-            path="inventory"
-            element={<InventoryList />}
-          />
+            {/* Inventory */}
+            <Route
+              path="inventory"
+              element={<InventoryList />}
+            />
 
-          {/* Orders */}
-          <Route
-            path="orders"
-            element={<OrderList />}
-          />
-          <Route
-            path="orders/new"
-            element={<OrderCreate />}
-          />
-          <Route
-            path="orders/:id"
-            element={<OrderDetail />}
-          />
+            {/* Orders */}
+            <Route
+              path="orders"
+              element={<OrderList />}
+            />
+            <Route
+              path="orders/new"
+              element={<OrderCreate />}
+            />
+            <Route
+              path="orders/:id"
+              element={<OrderDetail />}
+            />
 
-          {/* Unknown dashboard page */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </DashboardLayout>
+            {/* Unknown dashboard page */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </DashboardLayout>
+      </CustomerProvider>
     </ProtectedRoute>
   )
 }

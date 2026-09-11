@@ -71,13 +71,13 @@ function OrderCreate() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        navigate('/orders')
+        navigate('/dashboard/orders')
     }
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <nav className="flex items-center gap-2 text-sm text-gray-500">
-                <Link to="/orders" className="inline-flex items-center gap-1 hover:text-gray-700">
+                <Link to="/dashboard/orders" className="inline-flex items-center gap-1 hover:text-gray-700">
                     <ArrowLeft size={16} />
                     Orders
                 </Link>
@@ -294,7 +294,7 @@ function OrderCreate() {
             {/* Section 5: Submit */}
             <div className="flex items-center justify-end gap-3">
                 <Link
-                    to="/orders"
+                    to="/dashboard/orders"
                     className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
                 >
                     Cancel
