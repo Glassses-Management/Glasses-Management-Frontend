@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, Routes, Route } from 'react-router-dom'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import Home from '@/pages/public/Home'
-import About from '@/pages/public/About'
+import About from '@/pages/About'
 import Contact from '@/pages/public/Contact'
 import NotFound from '@/pages/public/NotFound'
 import LoginPage from '@/pages/auth/LoginPage'
@@ -43,25 +43,25 @@ function App() {
     <AuthProvider>
       <CustomerProvider>
         <ToastProvider>
-        <DashboardLayout activeRoute={activeRoute} onNavigate={(key) => navigate(NAV_PATH[key])}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/customers" element={<CustomerList />} />
-            <Route path="/customers/new" element={<CustomerForm />} />
-            <Route path="/customers/:id/edit" element={<CustomerForm />} />
-            <Route path="/customers/:id" element={<CustomerDetail />} />
-            <Route path="/inventory" element={<InventoryList />} />
-            <Route path="/orders" element={<OrderList />} />
-            <Route path="/orders/new" element={<OrderCreate />} />
-            <Route path="/orders/:id" element={<OrderDetail />} />
-            {/* "*" matches any path that didn't match a route above */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </DashboardLayout>
+          <DashboardLayout activeRoute={activeRoute} onNavigate={(key) => navigate(NAV_PATH[key])}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/customers" element={<CustomerList />} />
+              <Route path="/customers/new" element={<CustomerForm />} />
+              <Route path="/customers/:id/edit" element={<CustomerForm />} />
+              <Route path="/customers/:id" element={<CustomerDetail />} />
+              <Route path="/inventory" element={<InventoryList />} />
+              <Route path="/orders" element={<OrderList />} />
+              <Route path="/orders/new" element={<OrderCreate />} />
+              <Route path="/orders/:id" element={<OrderDetail />} />
+              {/* "*" matches any path that didn't match a route above */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </DashboardLayout>
         </ToastProvider>
       </CustomerProvider>
     </AuthProvider>
