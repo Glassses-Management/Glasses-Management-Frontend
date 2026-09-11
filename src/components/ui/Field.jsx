@@ -7,14 +7,14 @@ function Field({ label, icon: Icon, helper, required = false, ...inputProps }) {
     <div>
       <label
         htmlFor={inputProps.name}
-        className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-gray-700"
+        className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-neutral-300"
       >
-        <Icon size={14} className="text-gray-400" />
+        <Icon size={14} className="text-gray-400 dark:text-neutral-500" />
         {label}
         {required && <span className="text-red-500">*</span>}
       </label>
       <Input required={required} {...inputProps} />
-      {helper && <p className="mt-1.5 text-xs text-gray-400">{helper}</p>}
+      {helper && <p className="mt-1.5 text-xs text-gray-400 dark:text-neutral-500">{helper}</p>}
     </div>
   )
 }

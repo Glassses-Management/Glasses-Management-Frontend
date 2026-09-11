@@ -35,8 +35,8 @@ function CustomerForm() {
   if (isEdit && !existing) {
     return (
       <section className="space-y-4">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Customer not found</h1>
-        <p className="text-sm text-gray-500">No client matches id {id}.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-neutral-50">Customer not found</h1>
+        <p className="text-sm text-gray-500 dark:text-neutral-400">No client matches id {id}.</p>
         <Button variant="outline" onClick={() => navigate('/dashboard/customers')}>Back to Customers</Button>
       </section>
     )
@@ -89,18 +89,18 @@ function CustomerForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <nav className="flex items-center gap-2 text-sm text-gray-500">
-        <Link to="/dashboard/customers" className="group inline-flex items-center gap-1.5 font-medium transition-colors hover:text-gray-700">
+      <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-neutral-400">
+        <Link to="/dashboard/customers" className="group inline-flex items-center gap-1.5 font-medium transition-colors hover:text-gray-700 dark:hover:text-neutral-100">
           <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
           Customers
         </Link>
-        <span aria-hidden="true" className="text-gray-300">/</span>
-        <span className="font-medium text-gray-900">{pageTitle}</span>
+        <span aria-hidden="true" className="text-gray-300 dark:text-neutral-600">/</span>
+        <span className="font-medium text-gray-900 dark:text-neutral-50">{pageTitle}</span>
       </nav>
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">{pageTitle}</h1>
-        <p className="mt-1 text-sm text-gray-500">{pageSubtitle}</p>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-neutral-50">{pageTitle}</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">{pageSubtitle}</p>
       </div>
 
       <Card title="Contact Details">
@@ -108,11 +108,11 @@ function CustomerForm() {
           {isEdit ? (
             <Avatar name={existing.name} id={existing.id} />
           ) : (
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-300 bg-white text-gray-400">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-300 bg-white text-gray-400 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-500">
               <UserRound size={18} />
             </span>
           )}
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-neutral-400">
             {isEdit
               ? 'Review and update the client contact information.'
               : 'Start with the basics; clinical records can be added later.'}
@@ -127,9 +127,9 @@ function CustomerForm() {
         </div>
       </Card>
 
-      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md md:-mx-6 md:px-6 md:py-5">
+      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-[#1c1c28]/80 md:-mx-6 md:px-6 md:py-5">
         <div className="flex items-center justify-between gap-3">
-          <p className="hidden text-xs text-gray-400 sm:block">
+          <p className="hidden text-xs text-gray-400 dark:text-neutral-500 sm:block">
             {isEdit ? 'Changes apply immediately.' : 'New clients appear in the registry right away.'}
           </p>
           <div className="flex items-center gap-3">
