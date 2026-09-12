@@ -42,6 +42,7 @@ export const getVariantFromStatus = (status) => {
     case 'IN_PROGRESS':
       return 'info'
     case 'PENDING':
+    case 'PENDING_REVIEW':
     case 'UNPAID':
       return 'warning'
     case 'CANCELLED':

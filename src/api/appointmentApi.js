@@ -10,6 +10,16 @@ export const getAppointmentById = async (id) => {
   return data
 }
 
+export const getAppointmentsByCustomer = async (customerId) => {
+  const { data } = await axiosInstance.get(`/appointments/customer/${customerId}`)
+  return data
+}
+
+export const getAppointmentsByOptometrist = async (optometristId) => {
+  const { data } = await axiosInstance.get(`/appointments/optometrist/${optometristId}`)
+  return data
+}
+
 export const createAppointment = async (payload) => {
   const { data } = await axiosInstance.post('/appointments', payload)
   return data

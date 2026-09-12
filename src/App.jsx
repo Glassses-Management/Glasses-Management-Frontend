@@ -4,6 +4,8 @@ import { useAuth } from '@/hook/UseAuth'
 
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import RoleRoute from '@/components/auth/RoleRoute'
+import { ROLES } from '@/utils/Roles'
 
 import LoginPage from '@/pages/auth/LoginPage'
 import RegisterPage from '@/pages/auth/RegisterPage'
@@ -21,6 +23,12 @@ import InventoryList from '@/pages/inventory/InventoryList'
 import OrderList from '@/pages/orders/OrderList'
 import OrderDetail from '@/pages/orders/OrderDetail'
 import OrderCreate from '@/pages/orders/OrderCreate'
+
+import AppointmentListPage from '@/pages/appointments/AppointmentListPage'
+import AppointmentDetailPage from '@/pages/appointments/AppointmentDetailPage'
+import AppointmentFormPage from '@/pages/appointments/AppointmentFormPage'
+import OptometristCalendarPage from '@/pages/appointments/OptometristCalendarPage'
+import MyAppointmentPage from '@/pages/appointments/MyAppointmentPage'
 
 import Home from '@/pages/public/Home'
 import About from '@/pages/public/About'
@@ -41,6 +49,8 @@ const DASHBOARD_ROUTES = {
   customers: 'customers',
   inventory: 'inventory',
   orders: 'orders',
+  appointments: 'appointments',
+  'my-appointments': 'my-appointments',
 }
 
 
@@ -131,6 +141,28 @@ function DashboardRoutes() {
             <Route
               path="orders/:id"
               element={<OrderDetail />}
+            />
+
+            {/* Appointments */}
+            <Route
+              path="appointments"
+              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><AppointmentListPage /></RoleRoute>}
+            />
+            <Route
+              path="appointments/calendar"
+              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}><OptometristCalendarPage /></RoleRoute>}
+            />
+            <Route
+              path="appointments/:id"
+              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}><AppointmentDetailPage /></RoleRoute>}
+            />
+            <Route
+              path="appointments/:id/edit"
+              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><AppointmentFormPage /></RoleRoute>}
+            />
+            <Route
+              path="my-appointments"
+              element={<RoleRoute roles={[ROLES.CUSTOMER]}><MyAppointmentPage /></RoleRoute>}
             />
 
             {/* Unknown dashboard page */}

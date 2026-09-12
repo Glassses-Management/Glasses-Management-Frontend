@@ -2,7 +2,7 @@ import Input from '@/components/ui/Input'
 
 // Label row with a small icon + red asterisk, the Input itself, and optional
 // helper text. Keeps the form page clean by bundling repeated label markup.
-function Field({ label, icon: Icon, helper, required = false, ...inputProps }) {
+function Field({ label, icon: Icon, helper, required = false, children, ...inputProps }) {
   return (
     <div>
       <label
@@ -13,7 +13,7 @@ function Field({ label, icon: Icon, helper, required = false, ...inputProps }) {
         {label}
         {required && <span className="text-red-500">*</span>}
       </label>
-      <Input required={required} {...inputProps} />
+      {children || <Input required={required} {...inputProps} />}
       {helper && <p className="mt-1.5 text-xs text-gray-400 dark:text-neutral-500">{helper}</p>}
     </div>
   )
