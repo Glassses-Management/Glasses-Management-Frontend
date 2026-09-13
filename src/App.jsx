@@ -18,6 +18,9 @@ import ProductDetailPage from '@/pages/products/ProductDetailPage'
 import CustomerList from '@/pages/customers/CustomerList'
 import CustomerDetail from '@/pages/customers/CustomerDetail'
 import CustomerForm from '@/pages/customers/CustomerForm'
+import PrescriptionList from '@/pages/prescription/PrescriptionList'
+import PrescriptionForm from '@/pages/prescription/PrescriptionForm'
+import PrescriptionDetail from '@/pages/prescription/PrescriptionDetail'
 import InventoryList from '@/pages/inventory/InventoryList'
 
 import OrderList from '@/pages/orders/OrderList'
@@ -39,6 +42,7 @@ import NotFound from '@/pages/public/NotFound'
 
 import { AuthProvider } from '@/context/AuthContext.jsx'
 import { CustomerProvider } from '@/context/CustomerContext.jsx'
+import { PrescriptionProvider } from '@/context/PrescriptionContext.jsx'
 import { ToastProvider } from '@/context/ToastContext.jsx'
 import { ThemeProvider } from '@/context/ThemeContext.jsx'
 
@@ -50,6 +54,7 @@ const DASHBOARD_ROUTES = {
   inventory: 'inventory',
   orders: 'orders',
   appointments: 'appointments',
+  prescriptions: 'prescriptions',
   'my-appointments': 'my-appointments',
 }
 
@@ -85,90 +90,110 @@ function DashboardRoutes() {
   return (
     <ProtectedRoute>
       <CustomerProvider>
-        <DashboardLayout
-          activeRoute={resolveActiveRoute(pathname)}
-          onNavigate={handleNavigate}
-          user={user}
-          onLogout={handleLogout}
-        >
-          <Routes>
-            {/* Dashboard */}
-            <Route index element={<DashboardPage />} />
+        <PrescriptionProvider>
+          <DashboardLayout
+            activeRoute={resolveActiveRoute(pathname)}
+            onNavigate={handleNavigate}
+            user={user}
+            onLogout={handleLogout}
+          >
+            <Routes>
+              {/* Dashboard */}
+              <Route index element={<DashboardPage />} />
 
-            {/* Products */}
-            <Route
-              path="products"
-              element={<ProductListPage onNavigate={handleNavigate} />}
-            />
-            <Route
-              path="products/:id"
-              element={<ProductDetailPage />}
-            />
+              {/* Products */}
+              <Route
+                path="products"
+                element={<ProductListPage onNavigate={handleNavigate} />}
+              />
+              <Route
+                path="products/:id"
+                element={<ProductDetailPage />}
+              />
 
-            {/* Customers */}
-            <Route
-              path="customers"
-              element={<CustomerList onNavigate={handleNavigate} />}
-            />
-            <Route
-              path="customers/new"
-              element={<CustomerForm />}
-            />
-            <Route
-              path="customers/:id/edit"
-              element={<CustomerForm />}
-            />
-            <Route
-              path="customers/:id"
-              element={<CustomerDetail />}
-            />
+              {/* Customers */}
+              <Route
+                path="customers"
+                element={<CustomerList onNavigate={handleNavigate} />}
+              />
+              <Route
+                path="customers/new"
+                element={<CustomerForm />}
+              />
+              <Route
+                path="customers/:id/edit"
+                element={<CustomerForm />}
+              />
+              <Route
+                path="customers/:id"
+                element={<CustomerDetail />}
+              />
 
-            {/* Inventory */}
-            <Route
-              path="inventory"
-              element={<InventoryList />}
-            />
+              {/* Prescriptions */}
+              <Route
+                path="prescriptions"
+                element={<PrescriptionList onNavigate={handleNavigate} />}
+              />
+              <Route
+                path="prescriptions/new"
+                element={<PrescriptionForm />}
+              />
+              <Route
+                path="prescriptions/:id/edit"
+                element={<PrescriptionForm />}
+              />
+              <Route
+                path="prescriptions/:id"
+                element={<PrescriptionDetail />}
+              />
 
-            {/* Orders */}
-            <Route
-              path="orders"
-              element={<OrderList />}
-            />
-            <Route
-              path="orders/new"
-              element={<OrderCreate />}
-            />
-            <Route
-              path="orders/:id"
-              element={<OrderDetail />}
-            />
+              {/* Inventory */}
+              <Route
+                path="inventory"
+                element={<InventoryList />}
+              />
 
-            {/* Appointments */}
-            <Route
-              path="appointments"
-              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><AppointmentListPage /></RoleRoute>}
-            />
-            <Route
-              path="appointments/calendar"
-              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}><OptometristCalendarPage /></RoleRoute>}
-            />
-            <Route
-              path="appointments/:id"
-              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}><AppointmentDetailPage /></RoleRoute>}
-            />
-            <Route
-              path="appointments/:id/edit"
-              element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><AppointmentFormPage /></RoleRoute>}
-            />
-            <Route
-              path="my-appointments"
-              element={<RoleRoute roles={[ROLES.CUSTOMER]}><MyAppointmentPage /></RoleRoute>}
-            />
+              {/* Orders */}
+              <Route
+                path="orders"
+                element={<OrderList />}
+              />
+              <Route
+                path="orders/new"
+                element={<OrderCreate />}
+              />
+              <Route
+                path="orders/:id"
+                element={<OrderDetail />}
+              />
 
-            {/* Unknown dashboard page */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </DashboardLayout>
+              {/* Appointments */}
+              <Route
+                path="appointments"
+                element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><AppointmentListPage /></RoleRoute>}
+              />
+              <Route
+                path="appointments/calendar"
+                element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}><OptometristCalendarPage /></RoleRoute>}
+              />
+              <Route
+                path="appointments/:id"
+                element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}><AppointmentDetailPage /></RoleRoute>}
+              />
+              <Route
+                path="appointments/:id/edit"
+                element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><AppointmentFormPage /></RoleRoute>}
+              />
+              <Route
+                path="my-appointments"
+                element={<RoleRoute roles={[ROLES.CUSTOMER]}><MyAppointmentPage /></RoleRoute>}
+              />
+
+              {/* Unknown dashboard page */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </DashboardLayout>
+        </PrescriptionProvider>
       </CustomerProvider>
     </ProtectedRoute>
   )

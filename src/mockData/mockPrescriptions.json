@@ -1,0 +1,292 @@
+[
+  {
+    "id": 1,
+    "customerId": 1,
+    "doctorName": "Dr. Claire Lawson",
+    "dateIssued": "2025-06-20",
+    "items": [
+      {
+        "productId": 1,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "Single vision, both eyes",
+        "quantity": 2
+      }
+    ],
+    "status": "Active",
+    "notes": "Annual exam, mild myopia with astigmatism. Single vision lenses prescribed."
+  },
+  {
+    "id": 2,
+    "customerId": 2,
+    "doctorName": "Dr. Marcus Reed",
+    "dateIssued": "2025-05-12",
+    "items": [
+      {
+        "productId": 2,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 18,
+        "dosage": "Progressive corridor",
+        "quantity": 1
+      }
+    ],
+    "status": "Completed",
+    "notes": "Progressive lenses recommended for presbyopia; order already dispensed."
+  },
+  {
+    "id": 3,
+    "customerId": 3,
+    "doctorName": "Dr. Sofia Alvarez",
+    "dateIssued": "2025-07-02",
+    "items": [
+      {
+        "productId": 5,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "Reading, close work",
+        "quantity": 1
+      }
+    ],
+    "status": "Active",
+    "notes": "Hyperopia with presbyopia; reading pair recommended for near work."
+  },
+  {
+    "id": 4,
+    "customerId": 4,
+    "doctorName": "Dr. Sofia Alvarez",
+    "dateIssued": "2025-08-17",
+    "items": [
+      {
+        "productId": 4,
+        "dosage": "Contact lens backup",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "High index, thin lenses",
+        "quantity": 1
+      }
+    ],
+    "status": "Completed",
+    "notes": "High myopia; thin high-index lenses advised."
+  },
+  {
+    "id": 5,
+    "customerId": 5,
+    "doctorName": "Dr. Claire Lawson",
+    "dateIssued": "2025-04-09",
+    "items": [
+      {
+        "productId": 5,
+        "dosage": "Daily wear, spare pair",
+        "quantity": 2
+      }
+    ],
+    "status": "Expired",
+    "notes": "Bifocal add for presbyopia; expired at the review visit."
+  },
+  {
+    "id": 6,
+    "customerId": 6,
+    "doctorName": "Dr. Sofia Alvarez",
+    "dateIssued": "2025-09-14",
+    "items": [
+      {
+        "productId": 6,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 19,
+        "dosage": "Clip-on for outdoor",
+        "quantity": 1
+      }
+    ],
+    "status": "Active",
+    "notes": "Minimal correction; polarized clip-on recommended for outdoor glare."
+  },
+  {
+    "id": 7,
+    "customerId": 7,
+    "doctorName": "Dr. Marcus Reed",
+    "dateIssued": "2025-06-02",
+    "items": [
+      {
+        "productId": 7,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "Blue light, office use",
+        "quantity": 1
+      }
+    ],
+    "status": "Active",
+    "notes": "Computer vision syndrome; blue light blocking lenses suggested."
+  },
+  {
+    "id": 8,
+    "customerId": 8,
+    "doctorName": "Dr. Claire Lawson",
+    "dateIssued": "2025-07-19",
+    "items": [
+      {
+        "productId": 8,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "High index 1.74",
+        "quantity": 1
+      }
+    ],
+    "status": "Active",
+    "notes": "First-time eyeglasses, very high myopia; thinnest lenses recommended."
+  },
+  {
+    "id": 9,
+    "customerId": 9,
+    "doctorName": "Dr. Sofia Alvarez",
+    "dateIssued": "2025-08-05",
+    "items": [
+      {
+        "productId": 9,
+        "dosage": "Reading only",
+        "quantity": 1
+      }
+    ],
+    "status": "Expired",
+    "notes": "Reading glasses for presbyopia; replaced annually on exam."
+  },
+  {
+    "id": 10,
+    "customerId": 10,
+    "doctorName": "Dr. Marcus Reed",
+    "dateIssued": "2025-06-28",
+    "items": [
+      {
+        "productId": 11,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "Axis correction",
+        "quantity": 1
+      }
+    ],
+    "status": "Active",
+    "notes": "Significant astigmatism corrected on both eyes."
+  },
+  {
+    "id": 11,
+    "customerId": 11,
+    "doctorName": "Dr. Claire Lawson",
+    "dateIssued": "2025-09-09",
+    "items": [
+      {
+        "productId": 12,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 18,
+        "dosage": "High add bifocal",
+        "quantity": 1
+      }
+    ],
+    "status": "Completed",
+    "notes": "Strong reading aid fitted after cataract pre-op screening."
+  },
+  {
+    "id": 12,
+    "customerId": 12,
+    "doctorName": "Dr. Sofia Alvarez",
+    "dateIssued": "2025-07-25",
+    "items": [
+      {
+        "productId": 13,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "Single vision, both eyes",
+        "quantity": 2
+      }
+    ],
+    "status": "Active",
+    "notes": "Regular myopia correction."
+  },
+  {
+    "id": 13,
+    "customerId": 13,
+    "doctorName": "Dr. Claire Lawson",
+    "dateIssued": "2025-08-28",
+    "items": [
+      {
+        "productId": 14,
+        "dosage": "Office use",
+        "quantity": 1
+      },
+      {
+        "productId": 18,
+        "dosage": "Progressive office",
+        "quantity": 1
+      }
+    ],
+    "status": "Active",
+    "notes": "Progressives for desk work and long screen sessions."
+  },
+  {
+    "id": 14,
+    "customerId": 14,
+    "doctorName": "Dr. Marcus Reed",
+    "dateIssued": "2025-07-30",
+    "items": [
+      {
+        "productId": 15,
+        "dosage": "Sports wear",
+        "quantity": 1
+      },
+      {
+        "productId": 17,
+        "dosage": "Anti-glare",
+        "quantity": 1
+      }
+    ],
+    "status": "Completed",
+    "notes": "Sport wrap with polarized lenses already dispatched."
+  },
+  {
+    "id": 15,
+    "customerId": 15,
+    "doctorName": "Dr. Claire Lawson",
+    "dateIssued": "2025-08-21",
+    "items": [
+      {
+        "productId": 16,
+        "dosage": "Daily wear",
+        "quantity": 1
+      },
+      {
+        "productId": 20,
+        "dosage": "Lens care kit",
+        "quantity": 1
+      }
+    ],
+    "status": "Active",
+    "notes": "Moderate to high myopia; lens care kit included with order."
+  }
+]
