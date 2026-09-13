@@ -43,7 +43,7 @@ function FilterBar({ filters, onFilterChange, onClearAll, onAddNew }) {
             <button
               type="button"
               onClick={() => setOpenKey(isOpen ? null : filter.key)}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-300 dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-300 dark:hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-300 dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-300 dark:hover:bg-white/5"
             >
               <span>{selected ? selected.label : filter.label}</span>
               <ChevronDown />
