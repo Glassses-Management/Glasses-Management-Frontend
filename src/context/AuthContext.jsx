@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/context/AuthContextStore";
 import { login as loginApi, getMe } from "@/api/authApi";
 import { registerCustomer as registerApi } from "@/api/customerApi";
@@ -31,7 +31,23 @@ export function AuthProvider({ children }){
     const [token, setToken] = useState(() => localStorage.getItem('token'))
     const [loading, setLoading] = useState(false);
     // True while we verify a stored token on first load, so route guards wait.
-    const [checking, setChecking] = useState(() => Boolean(localStorage.getItem('token')));
+    // Starts as true only when a still-valid-looking token is stored.
+    const [checking, setChecking] = useState(() => {
+        const storedToken = localStorage.getItem('token');
+        if(!storedToken){
+            return false;
+        }
+        const expiresAt = jwtExpiryMs(storedToken);
+        return expiresAt ? Date.now() < expiresAt : true;
+    });
+
+    // Keep a stable reference to the latest user so getUser can fall back to it
+    // without depending on `user` (which would make the callback change identity
+    // and cause infinite refetch loops in effects that use getUser).
+    const userRef = useRef(user);
+    useEffect(() => {
+        userRef.current = user;
+    }, [user]);
 
     useEffect(() => {
         if(token){
@@ -53,20 +69,21 @@ export function AuthProvider({ children }){
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if(!storedToken){
-            setChecking(false);
             return;
         }
 
         const expiresAt = jwtExpiryMs(storedToken);
-        if(expiresAt && Date.now() >= expiresAt){
-            setToken(null);
-            setUser(null);
-            setChecking(false);
-            return;
-        }
-
         let cancelled = false;
+        // Run in a microtask so the state updates below are not synchronous
+        // within the effect body.
         const validate = async () => {
+            if(expiresAt && Date.now() >= expiresAt){
+                setToken(null);
+                setUser(null);
+                setChecking(false);
+                return;
+            }
+
             try{
                 const me = await getMe();
                 if(!cancelled){
@@ -87,7 +104,7 @@ export function AuthProvider({ children }){
                 }
             }
         };
-        validate();
+        void Promise.resolve().then(validate);
         return () => { cancelled = true; };
     }, [])
 
@@ -156,12 +173,12 @@ export function AuthProvider({ children }){
             return me;
         }
         catch{
-            return user;
+            return userRef.current;
         }
         finally{
             setLoading(false);
         }
-    }, [token, user]);
+    }, [token]);
 
     const value = {user, token, loading, checking, login, register, logout, getUser}
 

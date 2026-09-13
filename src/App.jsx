@@ -4,6 +4,7 @@ import { useAuth } from '@/hook/UseAuth'
 import { ROLES } from '@/utils/Roles'
 import UserListPage from '@/pages/users/UserListPage'
 import UserFormPage from '@/pages/users/UserFormPage'
+import ProfilePage from '@/pages/profile/ProfilePage'
 
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
@@ -39,6 +40,7 @@ import About from '@/pages/public/About'
 import Contact from '@/pages/public/Contact'
 import PublicProductList from '@/pages/public/PublicProductList'
 import PublicProductDetail from '@/pages/public/PublicProductDetail'
+import MyAccountPage from '@/pages/public/MyAccountPage'
 import NotFound from '@/pages/public/NotFound'
 
 import { AuthProvider } from '@/context/AuthContext.jsx'
@@ -56,6 +58,7 @@ const DASHBOARD_ROUTES = {
   appointments: 'appointments',
   'my-appointments': 'my-appointments',
   users: 'users',
+  profile: 'profile',
 }
 
 
@@ -155,6 +158,12 @@ function DashboardRoutes() {
               <Route path="new" element={<UserFormPage />} />
             </Route>
 
+            {/* Profile */}
+            <Route
+              path="profile"
+              element={<ProfilePage />}
+            />
+
             {/* Orders */}
             <Route
               path="orders"
@@ -218,6 +227,16 @@ function App() {
             {/* Authentication */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+
+            {/* Public account (logged-in customers & staff) */}
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <MyAccountPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Protected dashboard */}
             <Route

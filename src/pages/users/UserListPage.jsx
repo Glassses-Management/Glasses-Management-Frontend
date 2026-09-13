@@ -1,12 +1,15 @@
-import { useEffect, useState, useCallback } from 'react'
-import { Search, Users, Pencil, Trash2, Mail, User, Phone, Lock } from 'lucide-react'
+import { useEffect, useState, useCallback, useRef } from 'react'
+import { Search, Users, Pencil, Trash2, Mail, User, Phone, Lock, Camera } from 'lucide-react'
 import { getUsers, deleteUser, updateUser, createUser } from '@/api/userApi'
+import { getAttachmentsByUser, uploadAttachment } from '@/api/attachmentApi'
+import { pickImage } from '@/components/product/ProductImage'
 import { useDebouce } from '@/hook/UseDebounce'
 import { usePagination } from '@/hook/UsePagination'
 import { useToast } from '@/hook/UseToast'
 import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
 import Button from '@/components/ui/Button'
+import Spinner from '@/components/ui/Spinner'
 import { formatDate } from '@/utils/FormatDate'
 
 const PAGE_SIZE = 10
@@ -19,9 +22,13 @@ const ROLES = [
 
 export default function UserListPage({ onNavigate }) {
   const [users, setUsers] = useState([])
+  const [avatars, setAvatars] = useState({})
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [deleteError, setDeleteError] = useState('')
+  const [editAvatar, setEditAvatar] = useState('')
+  const [avatarUploading, setAvatarUploading] = useState(false)
+  const editAvatarInputRef = useRef(null)
   const [deleting, setDeleting] = useState(null)
   const [editing, setEditing] = useState(null)
   const [creating, setCreating] = useState(false)
@@ -32,7 +39,7 @@ export default function UserListPage({ onNavigate }) {
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', role: '' })
   const [errors, setErrors] = useState({})
-  const [createForm, setCreateForm] = useState({ name: '', email: '', password: '', confirmPassword: '', role: '' })
+  const [createForm, setCreateForm] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '', role: '' })
   const [createErrors, setCreateErrors] = useState({})
 
   const debouncedSearch = useDebouce(search)
@@ -69,6 +76,26 @@ export default function UserListPage({ onNavigate }) {
     return () => { cancelled = true }
   }, [page, debouncedSearch, fetchUsers])
 
+  useEffect(() => {
+    if (users.length === 0) return
+    let cancelled = false
+    const loadAvatars = async () => {
+      const entries = await Promise.all(
+        users.map(async (u) => {
+          try {
+            const atts = await getAttachmentsByUser(u.id)
+            return [u.id, pickImage(atts)?.filePath || '']
+          } catch {
+            return [u.id, '']
+          }
+        }),
+      )
+      if (!cancelled) setAvatars(Object.fromEntries(entries))
+    }
+    loadAvatars()
+    return () => { cancelled = true }
+  }, [users])
+
   const refresh = async () => {
     setLoading(true)
     try {
@@ -104,6 +131,7 @@ export default function UserListPage({ onNavigate }) {
   const handleEditOpen = (user) => {
     setEditing(user)
     setEditError('')
+    setEditAvatar(avatars[user.id] || '')
     setForm({ name: user.name || '', email: user.email || '', phone: user.phone || '', role: user.role?.name || user.role?.role || user.role || '' })
     setErrors({})
   }
@@ -111,8 +139,29 @@ export default function UserListPage({ onNavigate }) {
   const handleEditClose = () => {
     setEditing(null)
     setEditError('')
+    setEditAvatar('')
     setForm({ name: '', email: '', phone: '', role: '' })
     setErrors({})
+  }
+
+  const handleEditAvatarChange = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !editing) return
+    setAvatarUploading(true)
+    try {
+      await uploadAttachment({ file, userId: editing.id })
+      const atts = await getAttachmentsByUser(editing.id)
+      const path = pickImage(atts)?.filePath || ''
+      setEditAvatar(path)
+      setAvatars((prev) => ({ ...prev, [editing.id]: path }))
+      toastSuccess('Profile picture updated successfully.')
+    } catch (err) {
+      const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to upload picture'
+      toastError(msg)
+    } finally {
+      setAvatarUploading(false)
+    }
   }
 
   const handleEditSave = async () => {
@@ -141,13 +190,13 @@ export default function UserListPage({ onNavigate }) {
 
   const handleCreateOpen = () => {
     setCreating(true)
-    setCreateForm({ name: '', email: '', password: '', confirmPassword: '', role: '' })
+    setCreateForm({ name: '', email: '', phone: '', password: '', confirmPassword: '', role: '' })
     setCreateErrors({})
   }
 
   const handleCreateClose = () => {
     setCreating(false)
-    setCreateForm({ name: '', email: '', password: '', confirmPassword: '', role: '' })
+    setCreateForm({ name: '', email: '', phone: '', password: '', confirmPassword: '', role: '' })
     setCreateErrors({})
   }
 
@@ -155,6 +204,7 @@ export default function UserListPage({ onNavigate }) {
     const nextErrors = {
       name: (createForm.name.trim() ? '' : 'Name is required'),
       email: (!createForm.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(createForm.email) ? 'Enter a valid email' : ''),
+      phone: (createForm.phone.trim() && /^[0-9+\-\s()]{7,15}$/.test(createForm.phone.trim()) ? '' : 'Enter a valid phone number'),
       password: (createForm.password.length < 6 ? 'Password must be at least 6 characters' : ''),
       confirmPassword: (createForm.confirmPassword !== createForm.password ? 'Passwords do not match' : ''),
       role: (createForm.role ? '' : 'Please select a role'),
@@ -163,7 +213,7 @@ export default function UserListPage({ onNavigate }) {
     if (Object.values(nextErrors).some((e) => e)) return
 
     try {
-      await createUser({ userName: createForm.name, email: createForm.email, role: createForm.role, password_hash: createForm.password })
+      await createUser({ userName: createForm.name.trim(), email: createForm.email, phone: createForm.phone.trim(), role: createForm.role, password_hash: createForm.password })
       toastSuccess('User created successfully.')
       handleCreateClose()
       refresh()
@@ -254,9 +304,13 @@ export default function UserListPage({ onNavigate }) {
                     <td className="px-5 py-3 font-medium text-[#1a1a2e] dark:text-neutral-50">#{u.id}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f]/20 font-semibold text-[#1a1a2e] dark:text-neutral-900">
-                          {getInitials(u.name)}
-                        </div>
+                        {avatars[u.id] ? (
+                          <img src={avatars[u.id]} alt={`${u.name}'s profile picture`} className="h-9 w-9 shrink-0 rounded-full object-cover" />
+                        ) : (
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f]/20 font-semibold text-[#1a1a2e] dark:text-neutral-900">
+                            {getInitials(u.name)}
+                          </div>
+                        )}
                         <span className="font-medium text-[#1a1a2e] dark:text-neutral-50">{u.name}</span>
                       </div>
                     </td>
@@ -271,24 +325,34 @@ export default function UserListPage({ onNavigate }) {
                         {getRoleLabel(u)}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-gray-500 dark:text-neutral-400">{formatDate(u.createdAt)}</td>
+                    <td className="px-5 py-3 text-gray-500 dark:text-neutral-400">{formatDate(u.created_at || u.createdAt || u.date_created || u.registeredAt)}</td>
                     <td className="px-5 py-3 text-right">
                       <div className="inline-flex gap-2" onClick={(e) => e.stopPropagation()}>
                         <button
                           type="button"
                           onClick={(e) => { e.stopPropagation(); handleEditOpen(u) }}
-                          className="group inline-flex items-center gap-1.5 rounded-lg bg-blue-500/10 px-3 py-1.5 text-xs font-medium text-blue-600 transition-all duration-300 hover:bg-blue-500/20 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-500/15 dark:hover:text-blue-300"
+                          title="Edit user"
+                          aria-label="Edit user"
+                          className="group relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-blue-500/10 dark:bg-blue-400/10"
                         >
-                          <Pencil size={13} className="transition-transform duration-300 group-hover:scale-110" />
-                          Edit
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0 translate-y-full rounded-full bg-blue-600 transition-transform duration-300 ease-out group-hover:translate-y-0"
+                          />
+                          <Pencil size={14} className="relative z-10 text-blue-600 transition-colors duration-300 group-hover:text-white dark:text-blue-400" />
                         </button>
                         <button
                           type="button"
                           onClick={(e) => { e.stopPropagation(); setDeleting(u.id) }}
-                          className="group inline-flex items-center gap-1.5 rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-600 transition-all duration-300 hover:bg-red-500/20 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-500/15 dark:hover:text-red-300"
+                          title="Delete user"
+                          aria-label="Delete user"
+                          className="group relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-red-500/10 dark:bg-red-400/10"
                         >
-                          <Trash2 size={13} className="transition-transform duration-300 group-hover:scale-110" />
-                          Delete
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0 translate-y-full rounded-full bg-red-600 transition-transform duration-300 ease-out group-hover:translate-y-0"
+                          />
+                          <Trash2 size={14} className="relative z-10 text-red-600 transition-colors duration-300 group-hover:text-white dark:text-red-400" />
                         </button>
                       </div>
                     </td>
@@ -321,9 +385,30 @@ export default function UserListPage({ onNavigate }) {
             {/* Gradient Header */}
             <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-r from-[#8fa88f] to-[#6b8f6b] px-6 py-5 text-white">
               <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-xl font-bold backdrop-blur-sm">
-                  {editing.name?.charAt(0)?.toUpperCase() || '?'}
-                </div>
+                <input
+                  ref={editAvatarInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/gif"
+                  className="hidden"
+                  onChange={handleEditAvatarChange}
+                />
+                <button
+                  type="button"
+                  onClick={() => editAvatarInputRef.current?.click()}
+                  disabled={avatarUploading}
+                  title="Change profile picture"
+                  aria-label="Change profile picture"
+                  className="group relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/20 text-xl font-bold backdrop-blur-sm transition-all duration-300 hover:bg-white/30"
+                >
+                  {editAvatar ? (
+                    <img src={editAvatar} alt="Profile picture" className="h-14 w-14 rounded-full object-cover" />
+                  ) : (
+                    editing.name?.charAt(0)?.toUpperCase() || '?'
+                  )}
+                  <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    {avatarUploading ? <Spinner size="sm" color="current" /> : <Camera size={16} />}
+                  </span>
+                </button>
                 <div>
                   <h3 className="text-lg font-bold leading-tight">{editing.name}</h3>
                   <p className="text-sm opacity-80">{editing.email}</p>
@@ -398,16 +483,19 @@ export default function UserListPage({ onNavigate }) {
                 <Field label="Full Name" icon={User} name="createName" required value={createForm.name} onChange={(e) => setCreateForm((prev) => ({ ...prev, name: e.target.value }))} error={createErrors.name} placeholder="John Doe" />
                 <Field label="Email" icon={Mail} name="createEmail" type="email" required value={createForm.email} onChange={(e) => setCreateForm((prev) => ({ ...prev, email: e.target.value }))} error={createErrors.email} placeholder="john@example.com" />
               </div>
-              <Select
-                label="Role"
-                name="createRole"
-                required
-                options={ROLES}
-                value={createForm.role}
-                onChange={(e) => setCreateForm((prev) => ({ ...prev, role: e.target.value }))}
-                error={createErrors.role}
-                placeholder="Select a role..."
-              />
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <Field label="Phone" icon={Phone} name="createPhone" required value={createForm.phone} onChange={(e) => setCreateForm((prev) => ({ ...prev, phone: e.target.value }))} error={createErrors.phone} placeholder="012 345 678" />
+                <Select
+                  label="Role"
+                  name="createRole"
+                  required
+                  options={ROLES}
+                  value={createForm.role}
+                  onChange={(e) => setCreateForm((prev) => ({ ...prev, role: e.target.value }))}
+                  error={createErrors.role}
+                  placeholder="Select a role..."
+                />
+              </div>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <Field label="Password" icon={Lock} name="createPassword" type="password" required value={createForm.password} onChange={(e) => setCreateForm((prev) => ({ ...prev, password: e.target.value }))} error={createErrors.password} placeholder="••••••••" helper="Minimum 6 characters." />
                 <Field label="Confirm Password" icon={Lock} name="createConfirmPassword" type="password" required value={createForm.confirmPassword} onChange={(e) => setCreateForm((prev) => ({ ...prev, confirmPassword: e.target.value }))} error={createErrors.confirmPassword} placeholder="••••••••" />

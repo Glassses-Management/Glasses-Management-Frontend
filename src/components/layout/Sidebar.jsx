@@ -9,6 +9,7 @@ import {
   CalendarClock,
   FileText,
   Send,
+  UserRound,
   ChevronLeft,
 } from 'lucide-react'
 
@@ -40,6 +41,10 @@ const NAV_SECTIONS = [
   {
     label: 'Access',
     items: [{ key: 'users', label: 'Users', icon: Users }],
+  },
+  {
+    label: 'Account',
+    items: [{ key: 'profile', label: 'My Profile', icon: UserRound }],
   },
 ]
 
