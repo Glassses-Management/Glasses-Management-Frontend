@@ -1,7 +1,23 @@
 import { Bell, LogOut, Menu } from 'lucide-react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 
-export default function Header({ user, onToggleSidebar, onLogout }) {
+const PAGE_TITLES = {
+  dashboard: 'Dashboard',
+  customers: 'Customers',
+  products: 'Products',
+  inventory: 'Inventory',
+  orders: 'Orders',
+  appointments: 'Appointments',
+  prescriptions: 'Prescriptions',
+  requests: 'Requests',
+  users: 'Users',
+  profile: 'My Profile',
+}
+
+export default function Header({ user, onToggleSidebar, onLogout, activeRoute }) {
+  const title = PAGE_TITLES[activeRoute] || 'Optical Shop'
+  const role = typeof user?.role === 'string' ? user.role : user?.role?.name || 'Administrator'
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28] md:px-6">
       <div className="flex items-center gap-3">
@@ -13,10 +29,10 @@ export default function Header({ user, onToggleSidebar, onLogout }) {
         >
           <Menu size={20} />
         </button>
-        <h1 className="text-lg font-semibold text-[#1a1a2e] dark:text-neutral-50">Optical Shop</h1>
+        <h1 className="text-lg font-semibold text-[#1a1a2e] dark:text-neutral-50">{title}</h1>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <ThemeToggle />
 
         <button
@@ -28,24 +44,27 @@ export default function Header({ user, onToggleSidebar, onLogout }) {
           <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#8fa88f]" />
         </button>
 
-        <div className="flex items-center gap-3 border-l border-gray-200 pl-3 dark:border-neutral-700">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#8fa88f]/20 font-semibold text-[#1a1a2e] dark:text-neutral-900">
-            {user?.name?.charAt(0) || 'A'}
-          </div>
-          <div className="hidden text-left sm:block">
-            <p className="text-sm font-medium leading-tight text-[#1a1a2e] dark:text-neutral-50">
-              {user?.name || 'Admin'}
-            </p>
-            <p className="text-xs text-gray-400 dark:text-neutral-500">{user?.role || 'Administrator'}</p>
+        <div className="ml-1 flex items-center gap-2 border-l border-gray-200 pl-3 dark:border-neutral-700">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f] text-sm font-semibold text-white">
+              {(user?.name || 'A').charAt(0).toUpperCase()}
+            </div>
+            <div className="hidden text-left sm:block">
+              <p className="text-sm font-medium leading-tight text-[#1a1a2e] dark:text-neutral-50">
+                {user?.name || 'Admin'}
+              </p>
+              <p className="text-xs text-gray-400 dark:text-neutral-500">{role}</p>
+            </div>
           </div>
           {onLogout && (
             <button
               type="button"
               onClick={onLogout}
-              className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3.5 py-1.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
+              title="Logout"
+              aria-label="Logout"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors duration-300 hover:bg-red-50 hover:text-red-600 dark:text-neutral-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
             >
-              <LogOut size={15} />
-              Logout
+              <LogOut size={17} />
             </button>
           )}
         </div>
