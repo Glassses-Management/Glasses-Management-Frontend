@@ -1,11 +1,13 @@
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { Routes, Route, Outlet, useNavigate, useLocation } from 'react-router-dom'
 
 import { useAuth } from '@/hook/UseAuth'
+import { ROLES } from '@/utils/Roles'
+import UserListPage from '@/pages/users/UserListPage'
+import UserFormPage from '@/pages/users/UserFormPage'
 
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import RoleRoute from '@/components/auth/RoleRoute'
-import { ROLES } from '@/utils/Roles'
 
 import LoginPage from '@/pages/auth/LoginPage'
 import RegisterPage from '@/pages/auth/RegisterPage'
@@ -53,6 +55,7 @@ const DASHBOARD_ROUTES = {
   orders: 'orders',
   appointments: 'appointments',
   'my-appointments': 'my-appointments',
+  users: 'users',
 }
 
 
@@ -133,11 +136,24 @@ function DashboardRoutes() {
               element={<CustomerDetail />}
             />
 
-            {/* Inventory */}
+             {/* Inventory */}
             <Route
               path="inventory"
               element={<InventoryList />}
             />
+
+            {/* Users (Admin only) */}
+            <Route
+              path="users"
+              element={
+                <RoleRoute roles={[ROLES.ADMIN]}>
+                  <Outlet />
+                </RoleRoute>
+              }
+            >
+              <Route index element={<UserListPage />} />
+              <Route path="new" element={<UserFormPage />} />
+            </Route>
 
             {/* Orders */}
             <Route
