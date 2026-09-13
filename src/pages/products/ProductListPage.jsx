@@ -3,7 +3,6 @@ import { Search, Glasses, Plus, Pencil, Trash2 } from 'lucide-react'
 import { getProducts, deleteProduct } from '@/api/productApi'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { useDebouce } from '@/hook/UseDebounce'
-import ProductForm from '@/pages/products/ProductForm'
 import Button from '@/components/ui/Button'
 
 const PAGE_SIZE = 10
@@ -14,8 +13,6 @@ export default function ProductListPage({ onNavigate }) {
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
-  const [formOpen, setFormOpen] = useState(false)
-  const [editing, setEditing] = useState(null)
   const [deleting, setDeleting] = useState(null)
   const [deleteError, setDeleteError] = useState('')
 
@@ -91,7 +88,7 @@ export default function ProductListPage({ onNavigate }) {
         </div>
         <Button
           icon={<Plus size={18} />}
-          onClick={() => { setEditing(null); setFormOpen(true) }}
+          onClick={() => onNavigate?.('products/add')}
         >
           Add Product
         </Button>
@@ -161,9 +158,9 @@ export default function ProductListPage({ onNavigate }) {
                           variant="outline"
                           size="sm"
                           icon={<Pencil size={14} />}
-                          onClick={(e) => { e.stopPropagation(); setEditing(p); setFormOpen(true) }}
+                          onClick={(e) => { e.stopPropagation(); onNavigate?.(`products/edit/${p.id}`) }}
                         >
-                          Update
+                          Edit
                         </Button>
                         <Button
                           variant="danger"
@@ -209,14 +206,6 @@ export default function ProductListPage({ onNavigate }) {
           </div>
         )}
       </div>
-
-      {formOpen && (
-        <ProductForm
-          product={editing}
-          onClose={() => { setFormOpen(false); setEditing(null) }}
-          onSaved={() => { setFormOpen(false); setEditing(null); refresh() }}
-        />
-      )}
 
       {deleting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

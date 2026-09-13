@@ -14,6 +14,8 @@ import DashboardPage from '@/pages/DashboardPage'
 
 import ProductListPage from '@/pages/products/ProductListPage'
 import ProductDetailPage from '@/pages/products/ProductDetailPage'
+import ProductCreatePage from '@/pages/products/ProductCreatePage'
+import ProductEditPage from '@/pages/products/ProductEditPage'
 
 import CustomerList from '@/pages/customers/CustomerList'
 import CustomerDetail from '@/pages/customers/CustomerDetail'
@@ -99,6 +101,14 @@ function DashboardRoutes() {
             <Route
               path="products"
               element={<ProductListPage onNavigate={handleNavigate} />}
+            />
+            <Route
+              path="products/add"
+              element={<ProductCreatePage />}
+            />
+            <Route
+              path="products/edit/:id"
+              element={<ProductEditPage />}
             />
             <Route
               path="products/:id"

@@ -15,7 +15,7 @@ export function pickImage(attachments) {
 
 export function GlassesFallback({ className = '' }) {
   return (
-    <div className={`flex h-48 w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800/80 ${className}`}>
+    <div className={`flex items-center justify-center bg-neutral-100 dark:bg-neutral-800/80 ${className}`}>
       <svg
         className="h-16 w-16 text-neutral-300 transition-colors dark:text-neutral-600"
         viewBox="0 0 24 24"
@@ -34,6 +34,9 @@ export function GlassesFallback({ className = '' }) {
   )
 }
 
+// When a sizing class (aspect-* or h-*) is passed, the image stretches to fill
+// the whole container (used on the product detail page). Without one it keeps
+// the old fixed-height thumbnail look used by ProductCard.
 function ProductImage({ src, alt, className = '' }) {
   const [failed, setFailed] = useState(false)
   const [prevSrc, setPrevSrc] = useState(src)
@@ -44,17 +47,18 @@ function ProductImage({ src, alt, className = '' }) {
   }
 
   const showFallback = !src || failed
+  const fillsContainer = /\baspect-|\bh-\d/.test(className)
 
   return (
-    <div className={`relative w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800/80 ${className}`}>
+    <div className={`relative w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800/80 ${fillsContainer ? '' : 'h-48'} ${className}`}>
       {showFallback ? (
-        <GlassesFallback />
+        <GlassesFallback className={`${fillsContainer ? 'absolute inset-0' : 'h-48 w-full'}`} />
       ) : (
         <img
           src={src}
           alt={alt || ''}
           onError={() => setFailed(true)}
-className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className={`object-cover transition-transform duration-300 group-hover:scale-105 ${fillsContainer ? 'absolute inset-0 h-full w-full' : 'h-48 w-full'}`}
         />
       )}
     </div>
