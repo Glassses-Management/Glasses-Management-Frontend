@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Search, Glasses, Plus, Pencil, Trash2 } from 'lucide-react'
 import { getProducts, deleteProduct } from '@/api/productApi'
 import { formatCurrency } from '@/utils/FormatCurrency'
@@ -21,27 +21,20 @@ export default function ProductListPage({ onNavigate }) {
 
   const debouncedSearch = useDebouce(search)
 
-  const prevSearchRef = useRef(debouncedSearch)
-
-  const fetchProducts = useCallback(async (currentPage) => {
+  const fetchProducts = useCallback(async (currentPage, searchTerm) => {
     const params = { page: currentPage, size: PAGE_SIZE, sort: 'id,desc' }
-    if (debouncedSearch?.trim()) {
-      params.search = debouncedSearch.trim()
+    if (searchTerm?.trim()) {
+      params.search = searchTerm.trim()
     }
     return getProducts(params)
-  }, [debouncedSearch])
+  }, [])
 
   useEffect(() => {
     let cancelled = false
     const load = async () => {
-      if (prevSearchRef.current !== debouncedSearch) {
-        prevSearchRef.current = debouncedSearch
-        setPage(0)
-        return
-      }
       setLoading(true)
       try {
-        const data = await fetchProducts(page)
+        const data = await fetchProducts(page, debouncedSearch)
         if (cancelled) return
         setProducts(data?.content || [])
         setTotalPages(data?.totalPages || 0)
@@ -58,7 +51,7 @@ export default function ProductListPage({ onNavigate }) {
   const refresh = async () => {
     setLoading(true)
     try {
-      const data = await fetchProducts(page)
+      const data = await fetchProducts(page, debouncedSearch)
       setProducts(data?.content || [])
       setTotalPages(data?.totalPages || 0)
       if (data?.content?.length === 0 && page > 0) {

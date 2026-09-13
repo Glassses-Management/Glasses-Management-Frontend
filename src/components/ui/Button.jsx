@@ -1,3 +1,5 @@
+import Spinner from '@/components/ui/Spinner'
+
 // join class names, ignoring falsy values so callers can conditionally pass classes
 function cn(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -45,12 +47,7 @@ function Button({
         className,
       )}
     >
-      {loading && (
-        <span
-          className="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-          aria-hidden="true"
-        />
-      )}
+{loading && <Spinner size="sm" color="current" aria-hidden="true" />}
       {!loading && icon}
       {children}
     </button>

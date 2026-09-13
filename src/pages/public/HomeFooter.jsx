@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
 const SHOWROOMS = [
-  { city: 'SoHo', addr: '214 Mercer Street, New York, NY', phone: '(212) 555-0148' },
-  { city: 'Tribeca', addr: '8 Harrison Street, New York, NY', phone: '(212) 555-0173' },
-  { city: 'Greenwich', addr: '444 Greenwich Avenue, Greenwich, CT', phone: '(203) 555-0192' },
+  { city: 'Phnom Penh', addr: 'Monivong Boulevard, Phnom Penh, Cambodia', phone: '(023) 555-0148' },
+  { city: 'Toul Kork', addr: 'Russian Federation Boulevard, Phnom Penh, Cambodia', phone: '(023) 555-0173' },
+  { city: 'Siem Reap', addr: 'Charles de Gaulle Boulevard, Siem Reap, Cambodia', phone: '(063) 555-0192' },
 ]
 
 const LEGAL = ['HIPAA Compliance', 'Prescription Verification', 'Lens Warranty', 'Privacy Policy']

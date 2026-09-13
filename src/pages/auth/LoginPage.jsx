@@ -44,7 +44,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f5f6fb] px-4 transition-colors duration-300 dark:bg-[#111118]">
+    <div className="flex min-h-screen items-center justify-center bg-[#faf7f2] px-4 transition-colors duration-300 dark:bg-[#111118]">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800">
         <Link to="/" className="mb-6 flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1a2e] text-white">

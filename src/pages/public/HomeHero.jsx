@@ -44,7 +44,7 @@ function HomeHero() {
 
         <div className="mt-8 flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
           <span className="text-amber-500" aria-hidden="true">★★★★★</span>
-          <span className="font-medium text-neutral-800 dark:text-neutral-200">4.9/5</span>
+          <span className="font-medium text-neutral-800 dark:text-neutral-200">4.9</span>
           <span>· 2,300+ verified reviews</span>
         </div>
       </div>
