@@ -1,22 +1,47 @@
 import { useCallback, useEffect, useState } from "react";
 import { CustomerContext } from "@/context/CustomerContextStore";
-import mockCustomers from "@/mockData/mockCustomers.json";
+import { getCustomers, createCustomer as createCustomerApi, updateCustomer as updateCustomerApi, deleteCustomer as deleteCustomerApi } from "@/api/customerApi";
 
-// Single source of truth for customer data. Seeded from the mock JSON, written
-// to localStorage like AuthContext does for the user, so edits/creates/deletes
-// survive a page reload. Every page reads the same list through useCustomers().
 const STORAGE_KEY = "customers";
 
 export function CustomerProvider({ children }) {
     const [customers, setCustomers] = useState(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : mockCustomers.customers;
+            return stored ? JSON.parse(stored) : [];
         }
         catch {
-            return mockCustomers.customers;
+            return [];
         }
     });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        const load = async () => {
+            try {
+                const data = await getCustomers();
+                const list = data.content || data;
+                if (!cancelled) {
+                    setCustomers(list);
+                    setError(null);
+                }
+            }
+            catch (err) {
+                if (!cancelled) {
+                    setError(err?.message || 'Failed to load customers');
+                }
+            }
+            finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        };
+        void load();
+        return () => { cancelled = true; };
+    }, []);
 
     useEffect(() => {
         try {
@@ -27,19 +52,24 @@ export function CustomerProvider({ children }) {
         }
     }, [customers]);
 
-    const addCustomer = useCallback((customer) => {
-        setCustomers((prev) => [...prev, customer]);
+    const addCustomer = useCallback(async (customer) => {
+        const created = await createCustomerApi(customer);
+        setCustomers((prev) => [...prev, created]);
+        return created;
     }, []);
 
-    const updateCustomer = useCallback((updated) => {
-        setCustomers((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+    const updateCustomer = useCallback(async (id, updated) => {
+        const data = await updateCustomerApi(id, updated);
+        setCustomers((prev) => prev.map((c) => (c.id === id ? data : c)));
+        return data;
     }, []);
 
-    const deleteCustomer = useCallback((id) => {
+    const deleteCustomer = useCallback(async (id) => {
+        await deleteCustomerApi(id);
         setCustomers((prev) => prev.filter((c) => c.id !== id));
     }, []);
 
-    const value = { customers, addCustomer, updateCustomer, deleteCustomer };
+    const value = { customers, loading, error, addCustomer, updateCustomer, deleteCustomer };
 
     return (
         <CustomerContext.Provider value={value}>

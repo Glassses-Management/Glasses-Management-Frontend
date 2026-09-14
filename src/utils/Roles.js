@@ -11,7 +11,8 @@ export const hasRole = (user, role) => {
     if (!user?.role) {
         return false;
     }
-    return String(user.role).toUpperCase() === String(role).toUpperCase();
+    const userRole = String(user.role).toUpperCase().replace(/^ROLE_/, '');
+    return userRole === String(role).toUpperCase();
 }
 
 export const isStaff = (user) => STAFF_ROLES.some((role) => hasRole(user, role));

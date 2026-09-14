@@ -38,6 +38,11 @@ import AppointmentFormPage from '@/pages/appointments/AppointmentFormPage'
 import OptometristCalendarPage from '@/pages/appointments/OptometristCalendarPage'
 import MyAppointmentPage from '@/pages/appointments/MyAppointmentPage'
 
+import RequestListPage from '@/pages/requests/RequestListPage'
+import RequestEntryPage from '@/pages/requests/RequestEntryPage'
+import EyeExamRequestPage from '@/pages/requests/EyeExamRequestPage'
+import ProductRequestPage from '@/pages/requests/ProductRequestPage'
+
 import Home from '@/pages/public/Home'
 import About from '@/pages/public/About'
 import Contact from '@/pages/public/Contact'
@@ -61,6 +66,7 @@ const DASHBOARD_ROUTES = {
   orders: 'orders',
   appointments: 'appointments',
   prescriptions: 'prescriptions',
+  requests: 'requests',
   'my-appointments': 'my-appointments',
   users: 'users',
   profile: 'profile',
@@ -200,6 +206,24 @@ function DashboardRoutes() {
               <Route
                 path="prescriptions/:id"
                 element={<PrescriptionDetail />}
+              />
+
+              {/* Requests */}
+              <Route
+                path="requests"
+                element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><RequestListPage /></RoleRoute>}
+              />
+              <Route
+                path="requests/new"
+                element={<RoleRoute roles={[ROLES.CUSTOMER]}><RequestEntryPage /></RoleRoute>}
+              />
+              <Route
+                path="requests/exam"
+                element={<RoleRoute roles={[ROLES.CUSTOMER]}><EyeExamRequestPage /></RoleRoute>}
+              />
+              <Route
+                path="requests/product"
+                element={<RoleRoute roles={[ROLES.CUSTOMER]}><ProductRequestPage /></RoleRoute>}
               />
 
               {/* Appointments */}

@@ -1,6 +1,3 @@
-// Prescription registry — reads from the PrescriptionContext (mock data),
-// resolves customer names from CustomerContext, and supports search + pagination.
-
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Eye, Pencil } from 'lucide-react'
@@ -8,19 +5,12 @@ import SearchBar from '@/components/data/SearchBar'
 import DataTable from '@/components/data/DataTable'
 import Pagination from '@/components/ui/Pagination'
 import Button from '@/components/ui/Button'
-import Badge from '@/components/ui/Badge'
 import { usePrescriptions } from '@/hook/UsePrescription'
 import { useCustomers } from '@/hook/UseCustomer'
 import { getInitials, getAvatarColors } from '@/utils/avatar'
 import { formatDate } from '@/utils/format'
 
 const ITEMS_PER_PAGE = 10
-
-const STATUS_VARIANT = {
-    Active: 'success',
-    Completed: 'info',
-    Expired: 'neutral',
-}
 
 function Avatar({ name, id }) {
     const { bg, text } = getAvatarColors(id)
@@ -38,7 +28,7 @@ const prescriptionId = (id) => `RX-${String(id).padStart(5, '0')}`
 
 function PrescriptionList({ onNavigate }) {
     const navigate = useNavigate()
-    const { prescriptions } = usePrescriptions()
+    const { prescriptions, loading, error } = usePrescriptions()
     const { customers } = useCustomers()
 
     const [search, setSearch] = useState('')
@@ -49,13 +39,13 @@ function PrescriptionList({ onNavigate }) {
     const filtered = useMemo(() => {
         const q = search.trim().toLowerCase()
         return prescriptions.filter((p) => {
-            const name = customerById.get(p.customerId)?.name || ''
+            const name = customerById.get(p.customer_id)?.name || ''
             return (
                 !q ||
                 String(p.id).includes(q) ||
                 name.toLowerCase().includes(q) ||
-                (p.doctorName || '').toLowerCase().includes(q) ||
-                (p.status || '').toLowerCase().includes(q)
+                (p.prescription_date || '').toLowerCase().includes(q) ||
+                (p.notes || '').toLowerCase().includes(q)
             )
         })
     }, [prescriptions, customerById, search])
@@ -78,29 +68,24 @@ function PrescriptionList({ onNavigate }) {
             key: 'customer',
             header: 'Customer',
             render: (row) => {
-                const customer = customerById.get(row.customerId)
+                const customer = customerById.get(row.customer_id)
                 return (
                     <div className="flex items-center gap-3">
-                        <Avatar name={customer?.name || '?'} id={row.customerId} />
+                        <Avatar name={customer?.name || '?'} id={row.customer_id} />
                         <p className="font-medium text-gray-900 dark:text-neutral-100">{customer?.name || '—'}</p>
                     </div>
                 )
             },
         },
         {
-            key: 'doctorName',
-            header: 'Doctor',
-            render: (row) => <span className="text-gray-900 dark:text-neutral-100">{row.doctorName || '—'}</span>,
+            key: 'prescription_date',
+            header: 'Date',
+            render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.prescription_date)}</span>,
         },
         {
-            key: 'dateIssued',
-            header: 'Date Issued',
-            render: (row) => <span className="text-gray-900 dark:text-neutral-100">{formatDate(row.dateIssued)}</span>,
-        },
-        {
-            key: 'status',
-            header: 'Status',
-            render: (row) => <Badge text={row.status} variant={STATUS_VARIANT[row.status] || 'neutral'} />,
+            key: 'od_sphere',
+            header: 'OD/OS',
+            render: (row) => <span className="text-gray-900 dark:text-neutral-100">{row.od_sphere ?? '—'}/{row.os_sphere ?? '—'}</span>,
         },
         {
             key: 'actions',
@@ -134,15 +119,38 @@ function PrescriptionList({ onNavigate }) {
         },
     ]
 
+    if (loading) {
+        return (
+            <div className="space-y-6">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Prescriptions</h1>
+                <div className="flex items-center justify-center py-20 text-gray-500 dark:text-neutral-400">
+                    Loading prescriptions...
+                </div>
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className="space-y-6">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Prescriptions</h1>
+                <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+                    {error}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Prescriptions</h1>
                     <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
-                        Manage eyewear prescriptions and their dispensing items.
+                        Manage eyewear prescriptions and their lens parameters.
                     </p>
                 </div>
+                <Button onClick={() => navigate('/dashboard/prescriptions/new')}>+ New Prescription</Button>
             </div>
 
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
@@ -153,7 +161,7 @@ function PrescriptionList({ onNavigate }) {
                             setSearch(value)
                             setCurrentPage(1)
                         }}
-                        placeholder="Search by customer, doctor, or RX ID..."
+                        placeholder="Search by customer, date, or RX ID..."
                     />
                 </div>
             </div>
