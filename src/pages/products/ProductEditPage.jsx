@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, SearchX } from 'lucide-react'
-import ProductForm from '@/components/product/ProductForm'
+import ProductForm from '@/components/form/ProductForm'
 import { getProductById } from '@/api/productApi'
 import { getAttachmentsByProduct } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'

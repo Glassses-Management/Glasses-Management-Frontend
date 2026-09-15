@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { email, phone } from '@/utils/Validators'
@@ -8,6 +8,9 @@ export default function RegisterPage() {
   const { register } = useAuth()
   const { error: toastError } = useToast()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const redirectTo = location.state?.from?.pathname || null
 
   const [form, setForm] = useState({
     name: '',
@@ -42,7 +45,7 @@ export default function RegisterPage() {
     setSubmitting(true)
     try {
       await register(form)
-      navigate('/')
+      navigate(redirectTo || '/account', { replace: true })
     } catch (err) {
       const data = err?.response?.data
       let msg =
@@ -140,7 +143,7 @@ export default function RegisterPage() {
               name="date_of_birth"
               value={form.date_of_birth}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-[#8fa88f]"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
             />
           </div>
 

@@ -11,6 +11,7 @@ import {
   Send,
   UserRound,
   ChevronLeft,
+  Stethoscope,
 } from 'lucide-react'
 
 const NAV_SECTIONS = [
@@ -31,7 +32,16 @@ const NAV_SECTIONS = [
   },
   {
     label: 'Service',
-    items: [{ key: 'requests', label: 'Requests', icon: Send }],
+    items: [
+      { key: 'requests', label: 'Requests', icon: Send },
+    ],
+  },
+  {
+    label: 'Staff',
+    items: [
+      { key: 'staff', label: 'Staff Portal', icon: Users },
+      { key: 'optometrist', label: 'Optometrist', icon: Stethoscope },
+    ],
   },
   {
     label: 'Account',

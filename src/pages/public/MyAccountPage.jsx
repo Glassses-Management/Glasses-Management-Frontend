@@ -10,6 +10,7 @@ import Input from '@/components/ui/Input'
 import AvatarUploadSection from '@/pages/profile/AvatarUploadSection'
 import ProfileEditModal from '@/pages/profile/ProfileEditModal'
 import ChangePasswordModal from '@/pages/profile/ChangePasswordModal'
+import MyRequestsSection from '@/pages/profile/MyRequestsSection'
 import { getOrders } from '@/api/orderApi'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { formatDate } from '@/utils/FormatDate'
@@ -186,6 +187,9 @@ function MyAccountPage() {
                     Change Password
                   </Button>
                 </section>
+
+                {/* My Requests */}
+                <MyRequestsSection />
               </div>
             </div>
 

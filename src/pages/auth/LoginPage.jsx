@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hook/UseAuth'
 import { hasRole, ROLES } from '@/utils/Roles'
 
 export default function LoginPage() {
   const { login } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const redirectTo = location.state?.from?.pathname || null
 
   const [form, setForm] = useState({ identifier: '', password: '' })
   const [submitting, setSubmitting] = useState(false)
@@ -29,12 +32,11 @@ export default function LoginPage() {
     setSubmitting(true)
     try {
       const identifier = form.identifier.trim()
-      console.info(`LoginPage: attempting login with identifier="${identifier}" passwordLength=${form.password.length}`)
       const user = await login(identifier, form.password)
       if (hasRole(user, ROLES.CUSTOMER)) {
-        navigate('/')
+        navigate(redirectTo || '/account', { replace: true })
       } else {
-        navigate('/dashboard')
+        navigate('/dashboard', { replace: true })
       }
     } catch {
       setServerError('Invalid email or password. Please try again.')
@@ -62,7 +64,7 @@ export default function LoginPage() {
         </Link>
 
         <h2 className="text-xl font-semibold text-[#1a1a2e] dark:text-neutral-50">Welcome back</h2>
-        <p className="mt-1 mb-6 text-sm text-gray-400 dark:text-neutral-500">Sign in to continue to the dashboard</p>
+        <p className="mt-1 mb-6 text-sm text-gray-400 dark:text-neutral-500">Sign in to continue</p>
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {serverError && (
@@ -108,7 +110,7 @@ export default function LoginPage() {
 
         <p className="mt-6 text-center text-sm text-gray-400 dark:text-neutral-500">
           New customer?{' '}
-          <Link to="/register" className="font-medium text-[#8fa88f] hover:underline">
+          <Link to="/register" state={location.state} className="font-medium text-[#8fa88f] hover:underline">
             Create an account
           </Link>
         </p>

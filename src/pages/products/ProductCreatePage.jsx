@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import ProductForm from '@/components/product/ProductForm'
+import ProductForm from '@/components/form/ProductForm'
 
 export default function ProductCreatePage() {
   const navigate = useNavigate()

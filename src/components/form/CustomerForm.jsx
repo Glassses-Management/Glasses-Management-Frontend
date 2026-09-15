@@ -23,11 +23,13 @@ function CustomerForm() {
 
   useEffect(() => {
     if (existing) {
-      setForm({
-        name: existing.name,
-        phone: existing.phone,
-        email: existing.email,
-        address: existing.address,
+      void Promise.resolve().then(() => {
+        setForm({
+          name: existing.name,
+          phone: existing.phone,
+          email: existing.email,
+          address: existing.address,
+        })
       })
     }
   }, [existing])

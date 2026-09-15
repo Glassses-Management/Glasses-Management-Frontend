@@ -8,14 +8,7 @@ import { composeValidators, required } from '@/utils/Validators'
 import { useToast } from '@/hook/UseToast'
 import { createAppointment, updateAppointment } from '@/api/appointmentApi'
 
-function toDateTimeLocal(iso) {
-  if (!iso) return ''
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return iso.slice(0, 16)
-  return d.toISOString().slice(0, 16)
-}
-
-function AppointmentForm({ product, onClose, onSaved }) {
+const AppointmentForm = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { success: toastSuccess } = useToast()
@@ -62,7 +55,6 @@ function AppointmentForm({ product, onClose, onSaved }) {
         await createAppointment(payload)
         toastSuccess('Appointment created successfully.')
       }
-      onSaved?.()
       navigate('/dashboard/appointments')
     } catch (err) {
       const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to save appointment'

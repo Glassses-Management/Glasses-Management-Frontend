@@ -1,17 +1,24 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hook/UseAuth'
+import { hasRole } from '@/utils/Roles'
 
-export default function ProtectedRoute({ children }) {
-  const { token, checking } = useAuth()
+export default function ProtectedRoute({ children, allowedRoles }) {
+  const { token, checking, user } = useAuth()
+  const location = useLocation()
 
-  // Wait for the stored token to be validated against /auth/me on first load,
-  // so an expired session is redirected to /login instead of briefly flashing.
   if (checking) {
     return null
   }
 
   if (!token) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  if (allowedRoles && allowedRoles.length > 0 && user) {
+    const allowed = allowedRoles.some((role) => hasRole(user, role))
+    if (!allowed) {
+      return <Navigate to="/" replace />
+    }
   }
 
   return children
