@@ -24,7 +24,7 @@ import CustomerList from '@/pages/customers/CustomerList'
 import CustomerDetail from '@/pages/customers/CustomerDetail'
 import CustomerForm from '@/components/form/CustomerForm'
 import PrescriptionList from '@/pages/prescription/PrescriptionList'
-import PrescriptionForm from '@/components/form/PrescriptionForm'
+import PrescriptionForm from '@/pages/prescription/PrescriptionForm'
 import PrescriptionDetail from '@/pages/prescription/PrescriptionDetail'
 import InventoryList from '@/pages/inventory/InventoryList'
 

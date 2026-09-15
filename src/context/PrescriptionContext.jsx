@@ -1,51 +1,29 @@
 import { useCallback, useEffect, useState } from "react";
 import { PrescriptionContext } from "@/context/PrescriptionContextStore";
-import {
-  getPrescriptions,
-  createPrescription as createPrescriptionApi,
-  updatePrescription as updatePrescriptionApi,
-  deletePrescription as deletePrescriptionApi,
-} from "@/api/prescriptionApi";
+import prescriptionData from "@/mockData/mockPrescriptions.json";
 
 const STORAGE_KEY = "prescriptions";
+
+// Legacy localStorage entries may hold the old API shape (customer_id, od_sphere,
+// ...). If they do, ignore them and start from the seeded mock data instead.
+const hasMockShape = (list) =>
+    Array.isArray(list) &&
+    list.length > 0 &&
+    list.every((p) => p && Object.prototype.hasOwnProperty.call(p, "customerId"));
 
 export function PrescriptionProvider({ children }) {
     const [prescriptions, setPrescriptions] = useState(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
+            const parsed = stored ? JSON.parse(stored) : null;
+            return hasMockShape(parsed) ? parsed : prescriptionData;
         }
         catch {
-            return [];
+            return prescriptionData;
         }
     });
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        let cancelled = false;
-        const load = async () => {
-            try {
-                const data = await getPrescriptions();
-                if (!cancelled) {
-                    setPrescriptions(data);
-                    setError(null);
-                }
-            }
-            catch (err) {
-                if (!cancelled) {
-                    setError(err?.message || 'Failed to load prescriptions');
-                }
-            }
-            finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
-            }
-        };
-        void load();
-        return () => { cancelled = true; };
-    }, []);
+    const loading = false;
+    const error = null;
 
     useEffect(() => {
         try {
@@ -56,20 +34,17 @@ export function PrescriptionProvider({ children }) {
         }
     }, [prescriptions]);
 
-    const addPrescription = useCallback(async (prescription) => {
-        const created = await createPrescriptionApi(prescription);
-        setPrescriptions((prev) => [...prev, created]);
-        return created;
+    const addPrescription = useCallback((prescription) => {
+        setPrescriptions((prev) => [...prev, prescription]);
+        return prescription;
     }, []);
 
-    const updatePrescription = useCallback(async (id, updated) => {
-        const data = await updatePrescriptionApi(id, updated);
-        setPrescriptions((prev) => prev.map((p) => (p.id === id ? data : p)));
-        return data;
+    const updatePrescription = useCallback((id, updated) => {
+        setPrescriptions((prev) => prev.map((p) => (p.id === id ? updated : p)));
+        return updated;
     }, []);
 
-    const deletePrescription = useCallback(async (id) => {
-        await deletePrescriptionApi(id);
+    const deletePrescription = useCallback((id) => {
         setPrescriptions((prev) => prev.filter((p) => p.id !== id));
     }, []);
 
