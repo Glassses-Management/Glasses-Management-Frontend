@@ -94,18 +94,20 @@ export default function RequestListPage() {
     ]
   }, [requests])
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    return requests.filter((r) => {
-      const matchesStatus = statusFilter === 'all' || r.status === statusFilter
-      const matchesQuery =
-        !q ||
-        String(r.customer_name || '').toLowerCase().includes(q) ||
-        typeLabel(r.type).toLowerCase().includes(q) ||
-        String(r.notes || '').toLowerCase().includes(q)
-      return matchesStatus && matchesQuery
-    })
-  }, [requests, query, statusFilter])
+const filtered = useMemo(() => {
+    	const q = query.trim().toLowerCase()
+    	const result = requests.filter((r) => {
+	      const matchesStatus = statusFilter === 'all' || r.status === statusFilter
+	      const matchesQuery =
+	        !q ||
+	        String(r.customer_name || '').toLowerCase().includes(q) ||
+	        typeLabel(r.type).toLowerCase().includes(q) ||
+	        String(r.notes || '').toLowerCase().includes(q)
+	      return matchesStatus && matchesQuery
+	    })
+    	result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    	return result
+    }, [requests, query, statusFilter])
 
   const pendingCount = requests.filter((r) => r.status === 'PENDING').length
   const approvedCount = requests.filter((r) => r.status === 'APPROVED').length
