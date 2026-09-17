@@ -56,7 +56,7 @@ export default function PublicProductList() {
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
               Our Optical Collection
             </p>
-            <h1 className="font-serif text-4xl text-neutral-900 dark:text-neutral-50">Products</h1>
+            <h1 className="font-sans font-semibold text-4xl text-neutral-900 dark:text-neutral-50">Products</h1>
           </div>
 
           <div className="relative max-w-sm md:w-72">

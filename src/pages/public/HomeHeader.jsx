@@ -9,7 +9,7 @@ import CustomerRequestModal from '@/components/request/CustomerRequestModal'
 const NAV_LINKS = [
   { label: 'Frames', href: '/products' },
   { label: 'Sunglasses', href: '/products' },
-  { label: 'Lenses & Exams', href: '#craft' },
+  { label: 'Eye Exams', href: '#craft' },
   { label: 'About', href: '/about' },
 ]
 
@@ -42,9 +42,8 @@ export default function HomeHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-[#faf7f2]/90 backdrop-blur transition-colors duration-300 dark:border-neutral-800 dark:bg-[#111118]/90">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 md:px-6">
-        <a href="/" className="flex items-baseline gap-1 font-serif text-xl tracking-tight text-neutral-900 dark:text-neutral-50">
-          Atelier <span className="italic">Lunetterie</span>
-          <span className="hidden pl-2 text-[10px] tracking-widest text-neutral-400 dark:text-neutral-600 sm:inline">EST. 1988</span>
+        <a href="/" className="flex items-baseline gap-1 font-sans font-semibold text-xl tracking-tight text-neutral-900 dark:text-neutral-50">
+          Optic <span className="italic">Shop</span>
         </a>
 
         <nav className="hidden items-center gap-7 text-sm text-neutral-600 dark:text-neutral-400 lg:flex">

@@ -120,7 +120,7 @@ function MyAccountPage() {
 
       <section className="mx-auto max-w-5xl px-4 py-10 md:px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6f8a6f]">My Account</p>
-        <h1 className="mt-3 font-serif text-4xl text-neutral-900 dark:text-neutral-50 md:text-5xl">
+        <h1 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 dark:text-neutral-50 md:text-5xl">
           Your <span className="italic">Details</span>
         </h1>
         <div className="mt-4 h-[3px] w-12 rounded-full bg-[#8fa88f]" />

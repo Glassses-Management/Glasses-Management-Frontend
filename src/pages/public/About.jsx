@@ -41,14 +41,14 @@ function About() {
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#6f8a6f]">
             Our Story
           </p>
-          <h1 className="font-serif text-5xl leading-[1.05] text-neutral-900 md:text-6xl dark:text-neutral-50">
-            About Atelier
+          <h1 className="font-sans font-semibold text-5xl leading-[1.05] text-neutral-900 md:text-6xl dark:text-neutral-50">
+            About
             <br />
-            <span className="italic">Lunetterie.</span>
+            <span className="italic">Optic Shop.</span>
           </h1>
           <div className="mt-4 h-[3px] w-12 rounded-full bg-[#8fa88f]" />
           <p className="mt-6 max-w-md text-neutral-600 dark:text-neutral-400">
-            Atelier Lunetterie is a vision care system designed like a boutique — every
+            Optic Shop is a vision care system designed like a boutique — every
             customer, appointment, prescription, and order gathered in one warm, well-kept
             place, so your eye care feels personal and effortless from first fitting to final
             pickup.
@@ -72,14 +72,14 @@ function About() {
         <div className="mx-auto w-full max-w-md">
           <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-[#f7f5f0] shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-neutral-800 dark:ring-neutral-700">
             {imageError ? (
-              <div className="flex h-full w-full items-center justify-center font-serif text-lg text-[#a89f91]">
-                Atelier Lunetterie
+              <div className="flex h-full w-full items-center justify-center font-sans font-semibold text-lg text-[#a89f91]">
+Optic Shop
               </div>
             ) : (
               <>
                 <img
                   src={SHOP_PHOTO}
-                  alt="Inside the Atelier Lunetterie boutique"
+                  alt="Inside the Optic Shop boutique"
                   onError={() => setImageError(true)}
                   style={{ filter: 'saturate(0.35) brightness(1.03)' }}
                   className="h-full w-full object-cover"
@@ -100,7 +100,7 @@ function About() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6f8a6f]">
             Our Services
           </p>
-          <h2 className="mt-3 font-serif text-4xl text-neutral-900 md:text-5xl dark:text-neutral-50">
+          <h2 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 md:text-5xl dark:text-neutral-50">
             What We Do
           </h2>
           <div className="mt-4 h-[3px] w-12 rounded-full bg-[#8fa88f]" />
@@ -113,7 +113,7 @@ function About() {
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#8fa88f]/15 text-[#6f8a6f]">
                   <service.icon className="h-6 w-6" strokeWidth={1.8} />
                 </div>
-                <h3 className="font-serif text-lg text-[#6f8a6f]">{service.title}</h3>
+                <h3 className="font-sans font-semibold text-lg text-[#6f8a6f]">{service.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
                   {service.description}
                 </p>
@@ -131,7 +131,7 @@ function About() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6f8a6f]">
                 Who We Serve
               </p>
-              <h2 className="mt-3 font-serif text-4xl text-neutral-900 dark:text-neutral-50">
+              <h2 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 dark:text-neutral-50">
                 Who It's For
               </h2>
               <div className="mt-4 h-[3px] w-12 rounded-full bg-[#8fa88f]" />

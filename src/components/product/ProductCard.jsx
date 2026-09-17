@@ -26,7 +26,7 @@ function ProductCard({ product, imageSrc, onClick }) {
         </p>
 
         <h3
-          className="mt-1 line-clamp-1 font-serif text-lg font-medium text-neutral-900 transition-colors group-hover:text-neutral-700 dark:text-neutral-50 dark:group-hover:text-neutral-200"
+          className="mt-1 line-clamp-1 font-sans font-medium text-lg font-medium text-neutral-900 transition-colors group-hover:text-neutral-700 dark:text-neutral-50 dark:group-hover:text-neutral-200"
           title={product.model}
         >
           {product.model}

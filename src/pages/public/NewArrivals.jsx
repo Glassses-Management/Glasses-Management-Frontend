@@ -44,10 +44,10 @@ function NewArrivals() {
     <section id="frames" className="mx-auto max-w-6xl px-4 pt-4 pb-16 md:px-6">
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
-            Spring/Summer 2025 · New Optical Arrivals
-          </p>
-          <h2 className="font-serif text-4xl text-neutral-900 dark:text-neutral-50">New Arrivals</h2>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
+              New Optical Arrivals
+            </p>
+          <h2 className="font-sans font-semibold text-4xl text-neutral-900 dark:text-neutral-50">New Arrivals</h2>
         </div>
         <button
           type="button"

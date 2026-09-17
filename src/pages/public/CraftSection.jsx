@@ -24,7 +24,7 @@ function CraftSection() {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
             Science Meets Artisanal Craft
           </p>
-          <h2 className="font-serif text-4xl text-white md:text-5xl">
+          <h2 className="font-sans font-semibold text-4xl text-white md:text-5xl">
             Measured by machine.
             <br />
             <span className="italic">Finished by hand.</span>
@@ -39,7 +39,7 @@ function CraftSection() {
                   {f.icon}
                 </svg>
               </div>
-              <h3 className="font-serif text-xl text-white">{f.title}</h3>
+              <h3 className="font-sans font-semibold text-xl text-white">{f.title}</h3>
               <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-neutral-400">{f.text}</p>
               <a href="/about" className="mt-4 inline-block text-sm font-medium text-[#a9c0a9] transition-opacity hover:opacity-80">
                 Learn more →
@@ -50,7 +50,7 @@ function CraftSection() {
 
         <div className="mt-14 flex flex-col items-center justify-between gap-6 rounded-3xl bg-white/5 p-8 ring-1 ring-white/10 md:flex-row md:p-10">
           <div className="max-w-xl text-center md:text-left">
-            <h3 className="font-serif text-2xl text-white">Complimentary fit consultation</h3>
+            <h3 className="font-sans font-semibold text-2xl text-white">Complimentary fit consultation</h3>
             <p className="mt-2 text-sm text-neutral-400">
               First visit is on us — and most major vision insurance plans are accepted in-house.
             </p>

@@ -123,7 +123,7 @@ export default function PublicProductDetail() {
                   {product.category || 'Eyewear'}
                 </p>
               </div>
-              <h1 className="mt-4 font-serif text-3xl leading-[1.1] tracking-tight text-neutral-900 md:text-4xl dark:text-neutral-50">
+              <h1 className="mt-4 font-sans font-semibold text-3xl leading-[1.1] tracking-tight text-neutral-900 md:text-4xl dark:text-neutral-50">
                 {product.model}
               </h1>
               <p className="mt-2.5 text-base text-neutral-500 dark:text-neutral-400">{product.brand}</p>
