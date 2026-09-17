@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
 import { ArrowLeft, UserRound } from 'lucide-react'
 import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
@@ -14,6 +14,7 @@ import { getOptometrists } from '@/api/userApi'
 function PrescriptionForm() {
     const { id } = useParams()
     const navigate = useNavigate()
+    const location = useLocation()
     const { success: toastSuccess, error: toastError } = useToast()
     const { prescriptions, addPrescription, updatePrescription } = usePrescriptions()
     const { customers } = useCustomers()
@@ -145,24 +146,26 @@ function PrescriptionForm() {
             prescription_date: form.prescription_date,
         }
 
-        try {
-            if (isEdit) {
-                const updated = { ...existing, ...payload }
-                await updatePrescription(existing.id, updated)
-                toastSuccess('Prescription updated successfully.')
-                navigate(`/dashboard/prescriptions/${existing.id}`)
-            } else {
-                await addPrescription(payload)
-                toastSuccess('Prescription created successfully.')
-                navigate('/dashboard/prescriptions')
-            }
-        }
+                try {
+                    if (isEdit) {
+                        const updated = { ...existing, ...payload }
+                        await updatePrescription(existing.id, updated)
+                        toastSuccess('Prescription updated successfully.')
+                        navigate(`/dashboard/prescriptions/${existing.id}`)
+                    } else {
+                        await addPrescription(payload)
+                        toastSuccess('Prescription created successfully.')
+                        const from = location.state?.from || '/dashboard/prescriptions'
+                        navigate(from)
+                    }
+                }
         catch {
             toastError('Failed to save prescription.')
         }
     }
 
-    const goBack = isEdit ? `/dashboard/prescriptions/${existing.id}` : '/dashboard/prescriptions'
+    const fromPath = location.state?.from || '/dashboard/prescriptions'
+    const goBack = isEdit ? `/dashboard/prescriptions/${existing.id}` : fromPath
     const pageTitle = isEdit ? 'Edit Prescription' : 'New Prescription'
 
     return (

@@ -1,7 +1,7 @@
 import axiosInstance from '@/api/axiosInstance'
 
-export const getInventories = async () => {
-  const { data } = await axiosInstance.get('/inventories')
+export const getInventories = async (params) => {
+  const { data } = await axiosInstance.get('/inventories', { params })
   return data
 }
 

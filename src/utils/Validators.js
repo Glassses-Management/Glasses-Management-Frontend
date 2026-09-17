@@ -46,3 +46,11 @@ export const composeValidators = (...validators) => (value) => {
   }
   return ''
 }
+
+export const number = (value) =>
+  value && isNaN(Number(value)) ? 'Must be a number' : ''
+
+export const minValue = (min) => (value) =>
+  value !== '' && value !== null && value !== undefined && Number(value) < min
+    ? `Must be at least ${min}`
+    : ''

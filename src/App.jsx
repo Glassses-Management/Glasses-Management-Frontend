@@ -27,6 +27,7 @@ import PrescriptionList from '@/pages/prescription/PrescriptionList'
 import PrescriptionForm from '@/components/form/PrescriptionForm'
 import PrescriptionDetail from '@/pages/prescription/PrescriptionDetail'
 import InventoryList from '@/pages/inventory/InventoryList'
+import InventoryForm from '@/components/form/InventoryForm'
 
 import OrderList from '@/pages/orders/OrderList'
 import OrderDetail from '@/pages/orders/OrderDetail'
@@ -123,7 +124,18 @@ function DashboardRoutes() {
         <Route path="customers/:id/edit" element={<CustomerForm />} />
         <Route path="customers/:id" element={<CustomerDetail />} />
 
-        <Route path="inventory" element={<InventoryList />} />
+        <Route
+          path="inventory"
+          element={
+            <RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}>
+              <Outlet />
+            </RoleRoute>
+          }
+        >
+          <Route index element={<InventoryList />} />
+          <Route path="new" element={<InventoryForm />} />
+          <Route path=":id/edit" element={<InventoryForm />} />
+        </Route>
 
         <Route
           path="users"

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Search, Plus, Trash2 } from 'lucide-react'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { ArrowLeft, Search, Plus, Trash2, AlertCircle } from 'lucide-react'
 import { formatCurrency, formatDate } from '@/utils/format'
 import customerData from '@/mockData/mockCustomers.json'
 import inventoryData from '@/mockData/mockInventory.json'
@@ -32,6 +32,7 @@ function newRow() {
 
 function OrderCreate() {
     const navigate = useNavigate()
+    const location = useLocation()
     const customers = customerData.customers
     const products = inventoryData.items
 
@@ -141,11 +142,27 @@ function OrderCreate() {
             </Section>
 
             {/* Section 2: Prescription Selection */}
-            <Section title="Prescription Selection" description="Choose a valid prescription for this customer.">
+            <Section title="Prescription Selection" description="Choose a valid prescription for this customer, or create a new one.">
                 {!selectedCustomer ? (
                     <p className="text-sm text-gray-400">Select a customer first to see their prescriptions.</p>
                 ) : selectedCustomer.prescriptions.length === 0 ? (
-                    <p className="text-sm text-gray-400">This customer has no prescriptions on record.</p>
+                    <div className="flex flex-col items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-6 dark:border-red-500/30 dark:bg-red-500/10">
+                        <AlertCircle size={24} className="text-red-500" />
+                        <p className="text-sm font-medium text-red-700 dark:text-red-300">
+                            {selectedCustomer.name} has no prescriptions on record.
+                        </p>
+                        <p className="text-sm text-red-500 dark:text-red-400">
+                            A prescription is required before placing an order.
+                        </p>
+                        <Link
+                            to="/dashboard/prescriptions/new"
+                            state={{ from: '/dashboard/orders/new' }}
+                            className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                        >
+                            <Plus size={16} />
+                            Create Prescription
+                        </Link>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                         {selectedCustomer.prescriptions.map((p) => (

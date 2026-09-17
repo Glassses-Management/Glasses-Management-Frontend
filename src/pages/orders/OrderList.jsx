@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Plus } from 'lucide-react'
 import Pagination from '@/components/ui/Pagination'
 import OrderStats from '@/components/order/OrderStats'
 import OrderFilter from '@/components/order/OrderFilter'
 import OrderTable from '@/components/order/OrderTable'
 import { getOrders } from '@/api/orderApi'
+import Button from '@/components/ui/Button'
 
 const ITEMS_PER_PAGE = 10
 
@@ -86,13 +88,18 @@ function OrderList() {
 
   const handleViewDetail = (row) => navigate(`/dashboard/orders/${row.id}`)
 
+  const handleAdd = () => navigate('/dashboard/orders/new')
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Orders</h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
-          Track dispensing orders, payments, and status.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Orders</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
+            Track dispensing orders, payments, and status.
+          </p>
+        </div>
+        <Button icon={<Plus size={18} />} onClick={handleAdd}>Add Order</Button>
       </div>
 
       <OrderStats stats={stats} />
