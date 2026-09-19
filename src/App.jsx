@@ -48,7 +48,7 @@ import About from '@/pages/public/About'
 import Contact from '@/pages/public/Contact'
 import PublicProductList from '@/pages/public/PublicProductList'
 import PublicProductDetail from '@/pages/public/PublicProductDetail'
-import MyAccountPage from '@/pages/public/MyAccountPage'
+import PatientAccountPage from '@/pages/public/account/PatientAccountPage'
 import CartPage from '@/pages/public/CartPage'
 import CustomerRequestPage from '@/pages/public/CustomerRequestPage'
 import NotFound from '@/pages/public/NotFound'
@@ -231,7 +231,7 @@ function App() {
                   path="/account"
                   element={
                     <ProtectedRoute>
-                      <MyAccountPage />
+                      <PatientAccountPage />
                     </ProtectedRoute>
                   }
                 />
