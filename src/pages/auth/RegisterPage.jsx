@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Glasses } from 'lucide-react'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { email, phone } from '@/utils/Validators'
@@ -67,12 +68,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800">
         <Link to="/" className="mb-6 flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1a2e] text-white">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="6" cy="15" r="4" />
-              <circle cx="18" cy="15" r="4" />
-              <path d="M14 15a2 2 0 0 0-4 0" />
-              <path d="M2.5 13L5 7c.7-1.3 2-2 3.5-2h7c1.5 0 2.8.7 3.5 2l2.5 6" />
-            </svg>
+            <Glasses size={20} />
           </div>
           <div>
             <h1 className="text-lg font-bold text-[#1a1a2e] dark:text-neutral-50">Optic Shop</h1>

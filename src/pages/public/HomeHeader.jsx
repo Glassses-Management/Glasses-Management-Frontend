@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { LogOut, Menu, X } from 'lucide-react'
 import { useAuth } from '@/hook/UseAuth'
 import { useCart } from '@/hook/UseCart'
 import { hasRole, ROLES } from '@/utils/Roles'
@@ -87,11 +88,7 @@ export default function HomeHeader() {
                 onClick={handleLogout}
                 className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <path d="M16 17l5-5-5-5" />
-                  <path d="M21 12H9" />
-                </svg>
+                <LogOut size={15} />
                 Logout
               </button>
             </>
@@ -111,9 +108,7 @@ export default function HomeHeader() {
           className="rounded-lg p-2 text-neutral-700 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/10 lg:hidden"
           aria-label="Toggle menu"
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-          </svg>
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
@@ -154,11 +149,7 @@ export default function HomeHeader() {
                   onClick={() => { handleLogout(); setOpen(false) }}
                   className="inline-flex w-full items-center justify-center gap-1.5 rounded-full py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
                 >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <path d="M16 17l5-5-5-5" />
-                    <path d="M21 12H9" />
-                  </svg>
+                  <LogOut size={15} />
                   Logout
                 </button>
               </>
