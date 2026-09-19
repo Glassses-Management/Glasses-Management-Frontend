@@ -1,112 +1,106 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { pickImage } from '@/components/product/ProductImage'
-import CustomerRequestModal from '@/components/request/CustomerRequestModal'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, CreditCard, Glasses, Server, ShieldCheck } from 'lucide-react'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
+import { pickImage } from '@/components/product/ProductImage'
+import { formatCurrency } from '@/utils/FormatCurrency'
 
-const FEATURE_PILLS = [
-  'Precision Fitting',
-  'UV Protection',
-  'Frame Adjustments',
+const TRUST = [
+  { icon: ShieldCheck, label: 'Board Certified Optometrists' },
+  { icon: Server, label: 'Spring Boot REST Synced Inventory' },
+  { icon: CreditCard, label: 'HSA/FSA Accepted' },
 ]
 
+const formatPrice = (value) => formatCurrency(value)
+
+function HeroFallbackArt() {
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-mist dark:bg-[#15261F]">
+      <Glasses size={72} strokeWidth={1} className="text-leaf dark:text-forest" />
+    </div>
+  )
+}
+
 export default function HomeHero() {
-  const navigate = useNavigate()
   const [featuredProduct, setFeaturedProduct] = useState(null)
   const [featuredImage, setFeaturedImage] = useState('')
   const [imageError, setImageError] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
     const load = async () => {
       try {
-        const page = await getPublicProducts({ page: 0, size: 1, sort: 'createdAt,desc' })
+        const page = await getPublicProducts({ page: 0, size: 24, sort: 'createdAt,desc' })
         if (cancelled) return
-        const products = page?.content || []
-        if (products.length > 0) {
-          setFeaturedProduct(products[0])
-        }
+        const items = page?.content || []
+        if (items.length === 0) return
+        const chosen = items[Math.floor(Math.random() * items.length)]
+        if (cancelled) return
+        setFeaturedProduct(chosen)
+        const atts = await getPublicAttachmentsByProduct(chosen.id).catch(() => [])
+        const img = pickImage(atts)
+        if (!cancelled && img?.filePath) setFeaturedImage(img.filePath)
       } catch {
-        // silently fail — hero will show fallback
+        // silently fail — the illustration art stays visible
       }
     }
     void load()
     return () => { cancelled = true }
   }, [])
 
-  useEffect(() => {
-    if (!featuredProduct) return
-    let cancelled = false
-    const loadImage = async () => {
-      try {
-        const atts = await getPublicAttachmentsByProduct(featuredProduct.id)
-        if (!cancelled) {
-          const img = pickImage(atts)
-          if (img?.filePath) setFeaturedImage(img.filePath)
-        }
-      } catch {
-        // silently fail
-      }
-    }
-    void loadImage()
-    return () => { cancelled = true }
-  }, [featuredProduct])
+  const inStock = featuredProduct?.quantity == null ? true : Number(featuredProduct.quantity) > 0
 
   return (
-    <>
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-8 pb-6 md:px-6 md:pt-14 md:pb-8 lg:grid-cols-2 lg:gap-12">
+    <section className="bg-white py-14 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 md:px-6 lg:grid-cols-2">
+        {/* Copy */}
         <div>
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
-            Couture Optical Eyewear · Est. 1988
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
+            <span className="size-2 rounded-full bg-forest dark:bg-leaf" />
+            Clinically Verified Precision Optics
           </p>
-          <h1 className="font-sans font-semibold text-4xl leading-[1.05] text-neutral-900 md:text-5xl dark:text-neutral-50">
-            Precision Optics.
-            <br />
-            <span className="italic">Timeless Design.</span>
+
+          <h1 className="mt-5 font-sans text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl">
+            <span className="block text-ink dark:text-neutral-50">See Better.</span>
+            <span className="block text-forest dark:text-leaf">Look Better.</span>
           </h1>
-          <p className="mt-5 max-w-md text-neutral-600 dark:text-neutral-400">
-            Handcrafted frames and medical-grade lenses, fitted and aligned by our
-            optometrists so every pair feels effortless from the first wear.
+
+          <p className="mt-5 max-w-md text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
+            Handcrafted titanium and acetate frames, doctor-led eye exams and in-house lens
+            coatings — fitted and aligned for a lifetime of clarity.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="/products"
-              className="inline-flex items-center justify-center rounded-full bg-[#8fa88f] px-6 py-3 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90"
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-forest-deep"
             >
-              Explore Collection
-            </a>
-            <button
-              type="button"
-              onClick={() => setModalOpen(true)}
-              className="rounded-full border border-neutral-300 bg-transparent px-6 py-3 text-sm font-medium text-neutral-800 transition-colors hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-white/5"
+              Explore the Catalog
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-full border border-edge bg-white px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-forest hover:text-forest dark:border-neutral-700 dark:bg-transparent dark:text-neutral-200 dark:hover:text-leaf"
             >
               Request an Eye Exam
-            </button>
+            </Link>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-2.5 text-sm text-neutral-500 dark:text-neutral-400">
-            <span className="inline-flex items-center gap-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              Trusted optical care since 1988
-            </span>
+          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
+            {TRUST.map(({ icon: Icon, label }) => (
+              <span key={label} className="inline-flex items-center gap-2 text-xs font-medium text-neutral-600 dark:text-neutral-300">
+                <Icon size={15} className="text-forest dark:text-leaf" />
+                {label}
+              </span>
+            ))}
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-xs sm:max-w-md">
-          <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-[#f7f5f0] shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-neutral-800 dark:ring-neutral-700">
+        {/* Hero image + floating product card */}
+        <div className="relative">
+          <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-edge dark:bg-[#15261F] dark:ring-neutral-800">
             {imageError || !featuredImage ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#a89f91" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="6" cy="15" r="4" />
-                  <circle cx="18" cy="15" r="4" />
-                  <path d="M14 15a2 2 0 0 0-4 0" />
-                  <path d="M2.5 13L5 7c.7-1.3 2-2 3.5-2h7c1.5 0 2.8.7 3.5 2l2.5 6" />
-                </svg>
-              </div>
+              <HeroFallbackArt />
             ) : (
               <img
                 src={featuredImage}
@@ -115,55 +109,36 @@ export default function HomeHero() {
                 className="h-full w-full object-cover"
               />
             )}
-
-            <div className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-medium text-neutral-700 shadow-sm dark:bg-neutral-900/90 dark:text-neutral-300">
-              Featured
-            </div>
           </div>
 
-          <div
-            className="absolute bottom-4 right-4 w-52 cursor-pointer overflow-hidden rounded-2xl bg-white p-4 shadow-xl ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-neutral-800 dark:ring-neutral-700"
-            onClick={() => featuredProduct && navigate(`/products/${featuredProduct.id}`)}
-            onKeyDown={(e) => { if (e.key === 'Enter' && featuredProduct) navigate(`/products/${featuredProduct.id}`) }}
-            role="link"
-            tabIndex={featuredProduct ? 0 : -1}
-            aria-label={featuredProduct ? `View ${featuredProduct.model} details` : undefined}
-          >
-            {featuredProduct ? (
-              <>
-                <p className="text-[11px] uppercase tracking-wide text-neutral-400">
-                  {featuredProduct.category || 'Eyewear'}
-                </p>
-                <p className="mt-1 truncate font-sans font-semibold text-base text-neutral-900 dark:text-neutral-50">
-                  {featuredProduct.model}
-                </p>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">
-                    {featuredProduct.sale_price != null ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(Number(featuredProduct.sale_price)) : ''}
-                  </span>
-                  <span className="text-xs font-medium text-[#8fa88f] transition-colors group-hover:text-[#6f8a6f]">
-                    View Details →
-                  </span>
-                </div>
-              </>
-            ) : (
-              <div className="flex items-center justify-center py-2">
-                <span className="text-sm text-neutral-400">Loading featured frame…</span>
+          {featuredProduct && (
+            <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-xl bg-white p-3 pr-4 shadow-xl ring-1 ring-edge sm:right-auto sm:pr-3 dark:bg-[#15261F] dark:ring-neutral-800">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-mist dark:bg-[#1E332B]">
+                {featuredImage && !imageError ? (
+                  <img src={featuredImage} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <Glasses size={22} className="text-leaf" />
+                )}
               </div>
-            )}
-          </div>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-ink dark:text-neutral-50">{featuredProduct.model}</p>
+                <p className="text-sm font-bold text-forest dark:text-leaf">{formatPrice(featuredProduct.sale_price)}</p>
+                <p className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
+                  <span className={`mr-1 inline-block size-1.5 rounded-full align-middle ${inStock ? 'bg-forest dark:bg-leaf' : 'bg-amber-500'}`} />
+                  {inStock ? 'In Stock' : 'Low Stock'}
+                </p>
+              </div>
+              <Link
+                to={`/products/${featuredProduct.id}`}
+                className="ml-auto flex size-10 shrink-0 items-center justify-center rounded-full bg-forest text-white transition-colors hover:bg-forest-deep dark:bg-leaf dark:text-forest dark:hover:opacity-90"
+                aria-label={`View ${featuredProduct.model}`}
+              >
+                <ArrowRight size={17} />
+              </Link>
+            </div>
+          )}
         </div>
-
-        <div className="flex flex-wrap justify-start gap-2.5 lg:col-span-2 lg:justify-center">
-          {FEATURE_PILLS.map((b) => (
-            <span key={b} className="rounded-full border border-neutral-300 bg-white px-4 py-2 text-xs font-medium text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
-              {b}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <CustomerRequestModal open={modalOpen} onClose={() => setModalOpen(false)} />
-    </>
+      </div>
+    </section>
   )
 }

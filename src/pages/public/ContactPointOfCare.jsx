@@ -8,7 +8,7 @@ const POINTS = [
     href: 'tel:+855235550148',
     description: 'Eye examinations, prescription updates and pre-surgical checks with our optometrists.',
     hours: 'Mon–Sat · 8 AM – 6 PM',
-    statusClass: 'text-[#8fa88f] bg-[#8fa88f]',
+    statusClass: 'text-leaf bg-leaf',
     cta: 'Book an Exam',
     primary: true,
   },
@@ -51,7 +51,7 @@ export default function ContactPointOfCare() {
   return (
     <section className="py-16 md:py-20">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
           Choose Your Point of Care
         </p>
         <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
@@ -65,15 +65,15 @@ export default function ContactPointOfCare() {
           {POINTS.map(({ icon: Icon, title, detail, href, description, hours, statusClass, cta, primary }) => (
             <div
               key={title}
-              className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800"
+              className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-700 dark:bg-[#16271F]"
             >
-              <span className="flex size-11 items-center justify-center rounded-full bg-[#8fa88f]/15 text-[#6f8a6f]">
+              <span className="flex size-11 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
                 <Icon size={20} />
               </span>
               <h3 className="mt-4 font-sans text-base font-semibold text-neutral-900 dark:text-neutral-100">{title}</h3>
               <a
                 href={href}
-                className="mt-1 text-sm font-medium text-[#6f8a6f] transition-colors hover:text-[#8fa88f] hover:underline dark:text-[#a9c0a9]"
+                className="mt-1 text-sm font-medium text-forest transition-colors hover:text-forest-deep hover:underline dark:text-leaf"
               >
                 {detail}
               </a>
@@ -88,8 +88,8 @@ export default function ContactPointOfCare() {
                 type="button"
                 className={
                   primary
-                    ? 'mt-4 inline-flex items-center justify-center gap-1.5 rounded-full bg-[#8fa88f] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#6f8a6f]'
-                    : 'mt-4 inline-flex items-center justify-center gap-1.5 rounded-full border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-white/5'
+                    ? 'mt-4 inline-flex items-center justify-center gap-1.5 rounded-full bg-forest px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-forest-deep'
+                    : 'mt-4 inline-flex items-center justify-center gap-1.5 rounded-full border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-leaf dark:hover:text-leaf'
                 }
               >
                 {cta}

@@ -56,14 +56,14 @@ export default function PublicProductDetail() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#111118] dark:text-neutral-200">
+    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       <HomeHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
         <button
           type="button"
           onClick={() => navigate('/products')}
-          className="mb-10 inline-flex items-center gap-2 text-sm text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+          className="mb-10 inline-flex items-center gap-2 text-sm text-neutral-600 transition-colors hover:text-forest dark:text-neutral-400 dark:hover:text-leaf"
         >
           <ArrowLeft size={16} /> Back to products
         </button>
@@ -71,7 +71,7 @@ export default function PublicProductDetail() {
         {loading ? (
           <div className="grid gap-12 lg:grid-cols-2">
             <div className="mx-auto w-full max-w-md">
-              <div className="aspect-[4/3] w-full animate-pulse rounded-[2rem] bg-[#f1ece2] dark:bg-neutral-800/50" />
+              <div className="aspect-[4/3] w-full animate-pulse rounded-[2rem] bg-mist dark:bg-[#16271F]" />
             </div>
             <div className="space-y-5 py-4">
               <div className="h-4 w-24 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800" />
@@ -84,7 +84,7 @@ export default function PublicProductDetail() {
         ) : !product ? (
           <div className="py-16 text-center">
             <p className="text-neutral-500 dark:text-neutral-400">Product not found.</p>
-            <Link to="/products" className="mt-4 inline-block text-sm font-medium text-neutral-900 underline dark:text-white">
+            <Link to="/products" className="mt-4 inline-block text-sm font-medium text-forest underline dark:text-leaf">
               Back to products
             </Link>
           </div>
@@ -93,7 +93,7 @@ export default function PublicProductDetail() {
             {/* Image column */}
             <div className="md:sticky md:top-24 max-h-[calc(100vh-6rem)] overflow-hidden">
               <div className="mx-auto w-full max-w-md pb-6">
-                <div className="rounded-[2rem] bg-[#f1ece2] p-0 ring-1 ring-neutral-200/60 dark:bg-neutral-800/50 dark:ring-neutral-700/60">
+                <div className="rounded-[2rem] bg-mist p-0 ring-1 ring-neutral-200/60 dark:bg-[#16271F] dark:ring-neutral-800">
                   <ProductImage src={images[active]} alt={product.model} className="aspect-[4/3] w-full overflow-hidden rounded-3xl" />
                 </div>
                 {images.length > 1 && (
@@ -106,7 +106,7 @@ export default function PublicProductDetail() {
                         aria-label={`View image ${i + 1}`}
                         className={`h-24 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
                           active === i
-                            ? 'border-neutral-900 opacity-100 dark:border-neutral-100'
+                            ? 'border-forest opacity-100 dark:border-leaf'
                             : 'border-neutral-200 opacity-70 hover:opacity-100 dark:border-neutral-700'
                         }`}
                       >
@@ -122,7 +122,7 @@ export default function PublicProductDetail() {
             <div className="flex flex-col pt-2 lg:pt-2">
               <div className="flex items-center gap-3">
                 <span className="h-px w-8 bg-neutral-300 dark:bg-neutral-600" />
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-forest dark:text-leaf">
                   {product.category || 'Eyewear'}
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default function PublicProductDetail() {
                     addItem(product, qty)
                     toastSuccess(`${product.model} added to cart.`)
                   }}
-                  className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
+                  className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-forest-deep dark:bg-leaf dark:text-forest dark:hover:opacity-90"
                 >
                   <ShoppingCart size={16} />
                   Add to Cart
@@ -197,7 +197,7 @@ export default function PublicProductDetail() {
               </div>
 
               {!token && (
-                <div className="mt-6 flex flex-col gap-4 rounded-3xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-700 dark:bg-neutral-800">
+                <div className="mt-6 flex flex-col gap-4 rounded-3xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-700 dark:bg-[#16271F]">
                   <div>
                     <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Ordering as a guest?</p>
                     <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
@@ -207,13 +207,13 @@ export default function PublicProductDetail() {
                   <div className="flex flex-wrap gap-3">
                     <Link
                       to="/cart"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-neutral-100"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-leaf dark:hover:text-leaf"
                     >
                       View Cart <ArrowRight size={16} />
                     </Link>
                     <Link
                       to="/login"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-forest-deep dark:bg-leaf dark:text-forest dark:hover:opacity-90"
                     >
                       Sign In <ArrowRight size={16} />
                     </Link>

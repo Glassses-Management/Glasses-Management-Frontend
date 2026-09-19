@@ -35,12 +35,12 @@ function DetailRow({ icon: Icon, label, value }) {
   const hasValue = Boolean(value)
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-400 dark:bg-white/5 dark:text-neutral-500">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
         <Icon size={16} />
       </span>
       <div className="min-w-0">
         <p className="text-xs text-gray-400 dark:text-neutral-500">{label}</p>
-        <p className={`truncate text-sm font-medium ${hasValue ? 'text-[#1a1a2e] dark:text-neutral-100' : 'text-gray-300 dark:text-neutral-600'}`}>
+        <p className={`truncate text-sm font-medium ${hasValue ? 'text-ink dark:text-neutral-100' : 'text-gray-300 dark:text-neutral-600'}`}>
           {value || '—'}
         </p>
       </div>
@@ -115,20 +115,20 @@ function MyAccountPage() {
   const memberSince = formatDate(profile?.created_at || profile?.createdAt || profile?.date_created)
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#111118] dark:text-neutral-200">
+    <div className="min-h-screen bg-white text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       <HomeHeader />
 
       <section className="mx-auto max-w-5xl px-4 py-10 md:px-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6f8a6f]">My Account</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">My Account</p>
         <h1 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 dark:text-neutral-50 md:text-5xl">
           Your <span className="italic">Details</span>
         </h1>
-        <div className="mt-4 h-[3px] w-12 rounded-full bg-[#8fa88f]" />
+        <div className="mt-4 h-[3px] w-12 rounded-full bg-forest" />
 
         {loading ? (
           <div className="mt-8 space-y-5">
             {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-10 animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800" />
+              <div key={i} className="h-10 animate-pulse rounded-lg bg-gray-100 dark:bg-[#16271F]" />
             ))}
           </div>
         ) : loadError ? (
@@ -150,7 +150,7 @@ function MyAccountPage() {
                 <section className="py-5">
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Name</p>
+                      <p className="text-sm font-semibold text-ink dark:text-neutral-100">Name</p>
                       <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Your display name and contact info</p>
                     </div>
                     <Button variant="outline" size="sm" icon={<Pencil size={14} />} onClick={() => setInfoOpen(true)}>
@@ -165,7 +165,7 @@ function MyAccountPage() {
 
                 {/* Account details */}
                 <section className="py-5">
-                  <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Account Details</p>
+                  <p className="text-sm font-semibold text-ink dark:text-neutral-100">Account Details</p>
                   <p className="mt-0.5 mb-4 text-xs text-gray-400 dark:text-neutral-500">Role, contact and membership info</p>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <DetailRow icon={Shield} label="Role" value={toLabel(role)} />
@@ -178,7 +178,7 @@ function MyAccountPage() {
                 {/* Password */}
                 <section className="flex flex-wrap items-start justify-between gap-4 py-5">
                   <div>
-                    <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Password</p>
+                    <p className="text-sm font-semibold text-ink dark:text-neutral-100">Password</p>
                     <p className="mt-1 text-xs text-gray-400 dark:text-neutral-500">
                       Log in with your password instead of using temporary login codes
                     </p>
@@ -197,9 +197,9 @@ function MyAccountPage() {
             {customerId && (
               <aside className="lg:order-2 lg:col-span-1">
                 <div className="lg:sticky lg:top-6">
-                  <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+                  <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]">
                     <div className="mb-3 flex items-center justify-between gap-2">
-                      <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Order History</p>
+                      <p className="text-sm font-semibold text-ink dark:text-neutral-100">Order History</p>
                       {orderTotal > 0 && (
                         <span className="rounded-full bg-gray-50 px-2.5 py-0.5 text-xs font-medium text-gray-500 dark:bg-white/5 dark:text-neutral-400">
                           {orderTotal} total
@@ -222,13 +222,13 @@ function MyAccountPage() {
                         {orders.map((order) => (
                           <div key={order.id} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
                             <div className="min-w-0">
-                              <p className="truncate text-sm font-medium text-[#1a1a2e] dark:text-neutral-100">Order #{order.id}</p>
+                              <p className="truncate text-sm font-medium text-ink dark:text-neutral-100">Order #{order.id}</p>
                               <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">
                                 {formatDate(order.order_date || order.created_at)}
                               </p>
                             </div>
                             <div className="flex shrink-0 flex-col items-end gap-1">
-                              <span className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">
+                              <span className="text-sm font-semibold text-ink dark:text-neutral-100">
                                 {formatCurrency(order.total)}
                               </span>
                               <Badge text={order.status} />

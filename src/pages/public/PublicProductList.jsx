@@ -179,7 +179,7 @@ export default function PublicProductList() {
   )
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#111118] dark:text-neutral-200">
+    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       <HomeHeader />
 
       <CatalogHeader totalCount={catalog.length} shownCount={filtered.length} />
@@ -201,7 +201,7 @@ export default function PublicProductList() {
               onClick={() => setDrawerOpen(false)}
             />
             <div
-              className={`absolute inset-y-0 left-0 w-[85%] max-w-sm overflow-y-auto bg-[#faf7f2] p-4 shadow-xl transition-transform duration-300 dark:bg-[#111118] ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
+              className={`absolute inset-y-0 left-0 w-[85%] max-w-sm overflow-y-auto bg-white p-4 shadow-xl transition-transform duration-300 dark:bg-[#0E1A15] ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
             >
               <div className="mb-3 flex items-center justify-between">
                 <p className="font-sans font-semibold text-neutral-900 dark:text-neutral-50">Filters</p>
@@ -234,25 +234,25 @@ export default function PublicProductList() {
             {loading ? (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-800">
-                    <div className="aspect-[4/3] rounded-2xl bg-neutral-200 dark:bg-neutral-700" />
+                  <div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-[#16271F]">
+                    <div className="aspect-[4/3] rounded-2xl bg-neutral-200 dark:bg-[#1E332B]" />
                     <div className="space-y-3 p-4">
-                      <div className="h-3 w-1/3 rounded bg-neutral-200 dark:bg-neutral-700" />
-                      <div className="h-4 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700" />
-                      <div className="h-3 w-1/4 rounded bg-neutral-200 dark:bg-neutral-700" />
+                      <div className="h-3 w-1/3 rounded bg-neutral-200 dark:bg-[#1E332B]" />
+                      <div className="h-4 w-2/3 rounded bg-neutral-200 dark:bg-[#1E332B]" />
+                      <div className="h-3 w-1/4 rounded bg-neutral-200 dark:bg-[#1E332B]" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : visible.length === 0 ? (
-              <div className="flex flex-col items-center rounded-2xl border border-dashed border-neutral-300 bg-white/60 py-20 text-center dark:border-neutral-700 dark:bg-neutral-800/40">
-                <SearchX size={36} className="text-[#8fa88f]" />
+              <div className="flex flex-col items-center rounded-2xl border border-dashed border-neutral-300 bg-white/60 py-20 text-center dark:border-neutral-700 dark:bg-[#16271F]/40">
+                <SearchX size={36} className="text-forest dark:text-leaf" />
                 <p className="mt-4 font-sans font-semibold text-neutral-900 dark:text-neutral-100">No frames match</p>
                 <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Try removing a filter or two.</p>
                 <button
                   type="button"
                   onClick={clearAll}
-                  className="mt-5 rounded-full bg-[#8fa88f] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#6f8a6f]"
+                  className="mt-5 rounded-full bg-forest px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-forest-deep"
                 >
                   Clear all filters
                 </button>
@@ -274,7 +274,7 @@ export default function PublicProductList() {
                     <button
                       type="button"
                       onClick={() => setVisibleCount((v) => v + PAGE_SIZE)}
-                      className="rounded-full bg-[#8fa88f] px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-[#6f8a6f]"
+                      className="rounded-full bg-forest px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-forest-deep"
                     >
                       Load more frames
                     </button>

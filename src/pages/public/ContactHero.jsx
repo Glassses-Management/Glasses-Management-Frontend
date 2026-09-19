@@ -33,8 +33,8 @@ function HeroArt() {
     <svg viewBox="0 0 560 420" className="h-full w-full" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylised optical clinic illustration">
       <defs>
         <linearGradient id="contactHeroGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#F6F3EC" />
-          <stop offset="1" stopColor="#E9E3D7" />
+          <stop offset="0" stopColor="#F1F5F2" />
+          <stop offset="1" stopColor="#E3ECE6" />
         </linearGradient>
       </defs>
       <rect width="560" height="420" fill="url(#contactHeroGrad)" />
@@ -42,24 +42,24 @@ function HeroArt() {
       <circle cx="60" cy="380" r="110" fill="#FFFFFF" opacity="0.4" />
 
       {/* lenses */}
-      <circle cx="205" cy="215" r="80" fill="#FFFFFF" opacity="0.55" stroke="#8fa88f" strokeWidth="7" />
-      <circle cx="355" cy="215" r="80" fill="#FFFFFF" opacity="0.55" stroke="#8fa88f" strokeWidth="7" />
+      <circle cx="205" cy="215" r="80" fill="#FFFFFF" opacity="0.55" stroke="#8FC0A5" strokeWidth="7" />
+      <circle cx="355" cy="215" r="80" fill="#FFFFFF" opacity="0.55" stroke="#8FC0A5" strokeWidth="7" />
       {/* lens highlights */}
       <path d="M170 185 a55 55 0 0 1 30 -25" fill="none" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
       <path d="M320 185 a55 55 0 0 1 30 -25" fill="none" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" />
       {/* bridge + temples */}
-      <path d="M285 208 h -10" stroke="#8fa88f" strokeWidth="7" strokeLinecap="round" />
-      <path d="M125 208 L 72 168" stroke="#8fa88f" strokeWidth="7" strokeLinecap="round" />
-      <path d="M435 208 L 488 168" stroke="#8fa88f" strokeWidth="7" strokeLinecap="round" />
+      <path d="M285 208 h -10" stroke="#8FC0A5" strokeWidth="7" strokeLinecap="round" />
+      <path d="M125 208 L 72 168" stroke="#8FC0A5" strokeWidth="7" strokeLinecap="round" />
+      <path d="M435 208 L 488 168" stroke="#8FC0A5" strokeWidth="7" strokeLinecap="round" />
 
       {/* scan ring */}
-      <circle cx="280" cy="215" r="128" fill="none" stroke="#8fa88f" strokeWidth="1.5" strokeDasharray="5 8" opacity="0.45" />
-      <path d="M280 215 m -4 0 a4 4 0 1 1 8 0 a4 4 0 1 1 -8 0" fill="#8fa88f" />
+      <circle cx="280" cy="215" r="128" fill="none" stroke="#8FC0A5" strokeWidth="1.5" strokeDasharray="5 8" opacity="0.45" />
+      <path d="M280 215 m -4 0 a4 4 0 1 1 8 0 a4 4 0 1 1 -8 0" fill="#8FC0A5" />
 
       {/* decorative refractions */}
-      <path d="M180 300 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" fill="#6f8a6f" />
-      <path d="M405 315 l2.5 6.5 6.5 2.5 -6.5 2.5 -2.5 6.5 -2.5 -6.5 -6.5 -2.5 6.5 -2.5z" fill="#6f8a6f" opacity="0.85" />
-      <path d="M470 250 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#6f8a6f" opacity="0.6" />
+      <path d="M180 300 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" fill="#1B3B2F" />
+      <path d="M405 315 l2.5 6.5 6.5 2.5 -6.5 2.5 -2.5 6.5 -2.5 -6.5 -6.5 -2.5 6.5 -2.5z" fill="#1B3B2F" opacity="0.85" />
+      <path d="M470 250 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#1B3B2F" opacity="0.6" />
     </svg>
   )
 }
@@ -69,7 +69,7 @@ const formatPrice = (value) =>
 
 function Eyebrow({ children }) {
   return (
-    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
+    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
       {children}
     </p>
   )
@@ -108,7 +108,7 @@ export default function ContactHero() {
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
-          <Link to="/" className="transition-colors hover:text-neutral-900 dark:hover:text-neutral-100">Home</Link>
+          <Link to="/" className="transition-colors hover:text-forest dark:hover:text-leaf">Home</Link>
           <ChevronRight size={14} className="text-neutral-300 dark:text-neutral-600" />
           <span className="text-neutral-900 dark:text-neutral-100">Contact &amp; Clinic Concierge</span>
         </nav>
@@ -120,7 +120,7 @@ export default function ContactHero() {
               key={label}
               className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-1.5 text-xs font-medium text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
             >
-              <Icon size={14} className="text-[#8fa88f]" />
+              <Icon size={14} className="text-forest dark:text-leaf" />
               {label}
             </span>
           ))}
@@ -132,7 +132,7 @@ export default function ContactHero() {
             <Eyebrow>Contact &amp; Clinic Concierge</Eyebrow>
             <h1 className="mt-4 font-sans font-semibold text-4xl leading-[1.05] text-neutral-900 md:text-5xl dark:text-neutral-50">
               Personal eyecare and a truly{' '}
-              <span className="italic underline decoration-[#8fa88f]/50 decoration-4 underline-offset-4">bespoke dispensary</span>
+              <span className="italic underline decoration-leaf/70 decoration-4 underline-offset-4">bespoke dispensary</span>
             </h1>
             <p className="mt-5 max-w-xl text-neutral-600 dark:text-neutral-400">
               Book a consultation, ask our dispensary about lens and frame fittings, or have your eyewear
@@ -141,14 +141,14 @@ export default function ContactHero() {
             </p>
             <a
               href="#inquiry"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#8fa88f] px-6 py-3 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-forest-deep"
             >
               Talk to our concierge
             </a>
           </div>
 
           <div className="relative mx-auto w-full max-w-xs sm:max-w-md">
-            <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-[#f7f5f0] shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-neutral-800 dark:ring-neutral-700">
+            <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-[#15261F] dark:ring-neutral-800">
               {imageError || !featuredImage ? (
                 <HeroArt />
               ) : (
@@ -166,7 +166,7 @@ export default function ContactHero() {
             </div>
 
             <div
-              className="absolute bottom-4 right-4 w-56 cursor-pointer overflow-hidden rounded-2xl bg-white p-4 shadow-xl ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-neutral-800 dark:ring-neutral-700"
+              className="absolute bottom-4 right-4 w-56 cursor-pointer overflow-hidden rounded-2xl bg-white p-4 shadow-xl ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-[#15261F] dark:ring-neutral-800"
               onClick={() => featuredProduct && navigate(`/products/${featuredProduct.id}`)}
               onKeyDown={(e) => { if (e.key === 'Enter' && featuredProduct) navigate(`/products/${featuredProduct.id}`) }}
               role="link"
@@ -185,7 +185,7 @@ export default function ContactHero() {
                     <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">
                       {featuredProduct.sale_price != null ? formatPrice(featuredProduct.sale_price) : ''}
                     </span>
-                    <span className="text-xs font-medium text-[#8fa88f]">View Details →</span>
+                    <span className="text-xs font-medium text-forest dark:text-leaf">View Details →</span>
                   </div>
                 </>
               ) : (
@@ -201,7 +201,7 @@ export default function ContactHero() {
         <div className="mt-14 grid gap-8 border-t border-neutral-200 pt-8 sm:grid-cols-3 dark:border-neutral-800">
           {TRUST.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex items-start gap-3">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#8fa88f]/15 text-[#6f8a6f]">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
                 <Icon size={18} />
               </span>
               <div>

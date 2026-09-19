@@ -22,7 +22,7 @@ function FilterGroup({ label, openByDefault = false, badge, children }) {
         <span className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
           {label}
           {badge != null && badge > 0 && (
-            <span className="rounded-full bg-[#8fa88f]/15 px-2 py-0.5 text-[11px] font-semibold text-[#6f8a6f]">{badge}</span>
+            <span className="rounded-full bg-forest/10 px-2 py-0.5 text-[11px] font-semibold text-forest dark:bg-leaf/10 dark:text-leaf">{badge}</span>
           )}
         </span>
         <ChevronDown
@@ -43,7 +43,7 @@ function CheckRow({ label, count, checked, onChange }) {
           type="checkbox"
           checked={checked}
           onChange={onChange}
-          className="size-4 rounded accent-[#8fa88f]"
+          className="size-4 rounded accent-forest dark:accent-leaf"
         />
         {label}
       </span>
@@ -120,8 +120,8 @@ export default function CatalogFilterGroups({
                 aria-pressed={active}
                 className={`flex flex-col items-center gap-1 rounded-xl border px-2 py-3 text-xs font-medium transition-colors ${
                   active
-                    ? 'border-[#8fa88f] bg-[#8fa88f]/15 text-[#6f8a6f]'
-                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-[#8fa88f]/50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300'
+                    ? 'border-forest bg-forest/10 text-forest'
+                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-forest/50 dark:border-neutral-700 dark:bg-[#0E1A15] dark:text-neutral-300 dark:hover:border-leaf/50'
                 }`}
               >
                 <Icon size={18} />

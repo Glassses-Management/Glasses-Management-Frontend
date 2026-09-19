@@ -6,12 +6,12 @@ const STATS = [
   { icon: ShieldCheck, label: '10-day lens guarantee' },
 ]
 
-// Dark band matching CraftSection on the home page.
+// Forest band matching the home page's brand panel.
 export default function ContactPromoBanner() {
   return (
-    <section className="bg-neutral-900 text-white transition-colors duration-300 dark:bg-[#0a0a12]">
+    <section className="bg-forest text-white transition-colors duration-300 dark:bg-forest-deep">
       <div className="mx-auto max-w-5xl px-4 py-16 text-center md:px-6 md:py-20">
-        <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-white/10 text-[#8fa88f]">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-white/10 text-leaf">
           <ScanEye size={26} />
         </span>
         <h2 className="mt-6 font-sans font-semibold text-3xl text-white md:text-4xl">
@@ -28,7 +28,7 @@ export default function ContactPromoBanner() {
               key={label}
               className="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-1.5 text-xs font-medium text-white"
             >
-              <Icon size={14} className="text-[#8fa88f]" />
+              <Icon size={14} className="text-leaf" />
               {label}
             </span>
           ))}
@@ -36,7 +36,7 @@ export default function ContactPromoBanner() {
 
         <a
           href="#inquiry"
-          className="mt-9 inline-flex items-center gap-2 rounded-full bg-[#8fa88f] px-6 py-3 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90"
+          className="mt-9 inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-medium text-forest shadow-sm transition-opacity hover:opacity-90"
         >
           Start your inquiry
         </a>

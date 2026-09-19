@@ -37,11 +37,11 @@ export default function ContactFaq() {
     <section className="py-16 md:py-20">
       <div className="mx-auto max-w-3xl px-4 md:px-6">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Quick Answers</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">Quick Answers</p>
           <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
             Frequently asked questions
           </h2>
-          <div className="mx-auto mt-5 h-[3px] w-12 rounded-full bg-[#8fa88f]" />
+          <div className="mx-auto mt-5 h-[3px] w-12 rounded-full bg-forest" />
         </div>
 
         <div className="mt-10 space-y-3">
@@ -50,7 +50,7 @@ export default function ContactFaq() {
             return (
               <div
                 key={q}
-                className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 dark:border-neutral-700 dark:bg-neutral-800"
+                className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 dark:border-neutral-700 dark:bg-[#16271F]"
               >
                 <button
                   type="button"
@@ -61,7 +61,7 @@ export default function ContactFaq() {
                   <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 md:text-base">{q}</span>
                   <ChevronDown
                     size={18}
-                    className={`shrink-0 text-[#6f8a6f] transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+                    className={`shrink-0 text-forest transition-transform duration-300 dark:text-leaf ${open ? 'rotate-180' : ''}`}
                   />
                 </button>
                 {open && (

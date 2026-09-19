@@ -112,16 +112,16 @@ export function applySort(items, sort) {
 // Small deterministic storefront sample so the catalog and its facets render
 // something meaningful even before the backend has seeded products.
 export const DEMO_FRAMES = [
-  { id: -101, model: 'Monarch Lite', brand: 'Norda', category: 'Optical', material: 'Titanium', color: 'Matte Black', size: 'Round 52', sale_price: 320, quantity: 8, rating: 4.8, reviewCount: 42, badge: 'BEST SELLER' },
-  { id: -102, model: 'Venture Classic', brand: 'Meraki', category: 'Sun', material: 'Acetate', color: 'Tortoise', size: 'Square 50', sale_price: 240, quantity: 5, rating: 4.6, reviewCount: 28 },
-  { id: -103, model: 'Aurelin Thin', brand: 'Norda', category: 'Optical', material: 'Titanium', color: 'Gunmetal', size: 'Rectangular 54', sale_price: 410, quantity: 3, rating: 4.9, reviewCount: 51, badge: 'NEW' },
-  { id: -104, model: 'Skyline Pilot', brand: 'Ferra', category: 'Sun', material: 'Stainless Steel', color: 'Gold', size: 'Aviator 58', sale_price: 275, quantity: 0, rating: 4.4, reviewCount: 19 },
-  { id: -105, model: 'Muse Cat-Eye', brand: 'Forme', category: 'Optical', material: 'Acetate', color: 'Crystal Rose', size: 'Cat-Eye 50', sale_price: 190, quantity: 12, rating: 4.7, reviewCount: 33 },
-  { id: -106, model: 'Studio Wide', brand: 'Ferra', category: 'Optical', material: 'Acetate', color: 'Havana', size: 'Oversized 56', sale_price: 260, quantity: 7, rating: 4.5, reviewCount: 22 },
-  { id: -107, model: 'Prism Reader', brand: 'Meraki', category: 'Reading', material: 'Titanium', color: 'Silver', size: 'Rectangular 48', sale_price: 150, quantity: 25, rating: 4.3, reviewCount: 15 },
-  { id: -108, model: 'Trail Sport', brand: 'Forme', category: 'Sport', material: 'Polyamide', color: 'Neon', size: 'Round 46', sale_price: 120, quantity: 9, rating: 4.2, reviewCount: 11 },
-  { id: -109, model: 'Regal Aviator', brand: 'Norda', category: 'Sun', material: 'Acetate', color: 'Black Onyx', size: 'Aviator 60', sale_price: 300, quantity: 0, rating: 4.6, reviewCount: 27 },
-  { id: -110, model: 'Cradle Flex', brand: 'Meraki', category: 'Optical', material: 'TR90', color: 'Navy', size: 'Square 52', sale_price: 175, quantity: 14, rating: 4.4, reviewCount: 18 },
+  { id: -101, model: 'Monarch Lite', brand: 'Norda', category: 'Optical', material: 'Titanium', color: 'Matte Black', size: 'Round 52', sale_price: 320, quantity: 8, rating: 4.8, reviewCount: 42, badge: 'BEST SELLER', gender: 'men' },
+  { id: -102, model: 'Venture Classic', brand: 'Meraki', category: 'Sun', material: 'Acetate', color: 'Tortoise', size: 'Square 50', sale_price: 240, quantity: 5, rating: 4.6, reviewCount: 28, gender: 'unisex' },
+  { id: -103, model: 'Aurelin Thin', brand: 'Norda', category: 'Optical', material: 'Titanium', color: 'Gunmetal', size: 'Rectangular 54', sale_price: 410, quantity: 3, rating: 4.9, reviewCount: 51, badge: 'NEW', gender: 'men' },
+  { id: -104, model: 'Skyline Pilot', brand: 'Ferra', category: 'Sun', material: 'Stainless Steel', color: 'Gold', size: 'Aviator 58', sale_price: 275, quantity: 0, rating: 4.4, reviewCount: 19, gender: 'women' },
+  { id: -105, model: 'Muse Cat-Eye', brand: 'Forme', category: 'Optical', material: 'Acetate', color: 'Crystal Rose', size: 'Cat-Eye 50', sale_price: 190, quantity: 12, rating: 4.7, reviewCount: 33, gender: 'women' },
+  { id: -106, model: 'Studio Wide', brand: 'Ferra', category: 'Optical', material: 'Acetate', color: 'Havana', size: 'Oversized 56', sale_price: 260, quantity: 7, rating: 4.5, reviewCount: 22, gender: 'unisex' },
+  { id: -107, model: 'Prism Reader', brand: 'Meraki', category: 'Reading', material: 'Titanium', color: 'Silver', size: 'Rectangular 48', sale_price: 150, quantity: 25, rating: 4.3, reviewCount: 15, gender: 'unisex' },
+  { id: -108, model: 'Trail Sport', brand: 'Forme', category: 'Sport', material: 'Polyamide', color: 'Neon', size: 'Round 46', sale_price: 120, quantity: 9, rating: 4.2, reviewCount: 11, gender: 'unisex' },
+  { id: -109, model: 'Regal Aviator', brand: 'Norda', category: 'Sun', material: 'Acetate', color: 'Black Onyx', size: 'Aviator 60', sale_price: 300, quantity: 0, rating: 4.6, reviewCount: 27, gender: 'unisex' },
+  { id: -110, model: 'Cradle Flex', brand: 'Meraki', category: 'Optical', material: 'TR90', color: 'Navy', size: 'Square 52', sale_price: 175, quantity: 14, rating: 4.4, reviewCount: 18, gender: 'men' },
 ]
 
 // Fallback fill used only when the backend returned nothing at all.

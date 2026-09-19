@@ -41,7 +41,7 @@ export default function HomeHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-[#faf7f2]/90 backdrop-blur transition-colors duration-300 dark:border-neutral-800 dark:bg-[#111118]/90">
+    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/90 backdrop-blur transition-colors duration-300 dark:border-neutral-800 dark:bg-[#0E1A15]/90">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 md:px-6">
         <a href="/" className="flex items-baseline gap-1 font-sans font-semibold text-xl tracking-tight text-neutral-900 dark:text-neutral-50">
           Optic <span className="italic">Shop</span>
@@ -55,7 +55,7 @@ export default function HomeHeader() {
               className="group relative font-sans font-medium tracking-wide text-neutral-700 transition-colors duration-200 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
             >
               {link.label}
-              <span className="absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-[#8fa88f] transition-transform duration-300 group-hover:scale-x-100" />
+              <span className="absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-forest transition-transform duration-300 group-hover:scale-x-100 dark:bg-leaf" />
             </a>
           ))}
         </nav>
@@ -67,7 +67,7 @@ export default function HomeHeader() {
             <button
               type="button"
               onClick={handleDashboard}
-              className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-neutral-100"
+              className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-leaf dark:hover:text-leaf"
             >
               Dashboard
             </button>
@@ -75,7 +75,7 @@ export default function HomeHeader() {
           <button
             type="button"
             onClick={handleRequestClick}
-            className="rounded-full bg-[#8fa88f] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#6f8a6f]"
+            className="rounded-full bg-forest px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-forest-deep"
           >
             Request
           </button>
@@ -98,7 +98,7 @@ export default function HomeHeader() {
           ) : (
             <Link
               to="/login"
-              className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-neutral-100"
+              className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-leaf dark:hover:text-leaf"
             >
               Sign In
             </Link>
@@ -118,20 +118,20 @@ export default function HomeHeader() {
       </div>
 
       {open && (
-        <nav className="flex flex-col border-t border-neutral-200 bg-[#faf7f2] px-4 py-3 dark:border-neutral-800 dark:bg-[#111118] lg:hidden">
+        <nav className="flex flex-col border-t border-neutral-200 bg-white px-4 py-3 dark:border-neutral-800 dark:bg-[#0E1A15] lg:hidden">
           {NAV_LINKS.map((link) => (
             <a key={link.label} href={link.href} className="border-b border-neutral-100 py-3 text-sm text-neutral-700 dark:border-neutral-800 dark:text-neutral-400">
               {link.label}
             </a>
           ))}
           <div className="flex flex-col gap-2 py-4">
-            <Link to="/cart" onClick={() => setOpen(false)} className="w-full rounded-full border border-neutral-300 py-2.5 text-center text-sm font-medium text-neutral-800 transition-colors hover:bg-neutral-900 hover:text-white dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-100 dark:hover:text-neutral-900">
+            <Link to="/cart" onClick={() => setOpen(false)} className="w-full rounded-full border border-neutral-300 py-2.5 text-center text-sm font-medium text-neutral-800 transition-colors hover:border-forest hover:bg-forest hover:text-white dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-100 dark:hover:text-neutral-900">
               View Cart ({count})
             </Link>
             <button
               type="button"
               onClick={() => { handleRequestClick(); setOpen(false) }}
-              className="w-full rounded-full bg-[#8fa88f] py-2.5 text-center text-sm font-semibold text-white"
+              className="w-full rounded-full bg-forest py-2.5 text-center text-sm font-semibold text-white"
             >
               Request
             </button>
@@ -163,7 +163,7 @@ export default function HomeHeader() {
                 </button>
               </>
             ) : (
-              <Link to="/login" onClick={() => setOpen(false)} className="w-full rounded-full border border-neutral-300 py-2.5 text-center text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 hover:bg-neutral-900 hover:text-white dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-neutral-100 dark:hover:bg-neutral-100 dark:hover:text-neutral-900">
+              <Link to="/login" onClick={() => setOpen(false)} className="w-full rounded-full border border-neutral-300 py-2.5 text-center text-sm font-medium text-neutral-800 transition-colors hover:border-forest hover:bg-forest hover:text-white dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-leaf dark:hover:bg-leaf dark:hover:text-forest">
                 Sign In
               </Link>
             )}

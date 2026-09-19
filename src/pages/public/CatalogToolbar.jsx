@@ -17,7 +17,7 @@ function ViewToggle({ view, onChange }) {
       onClick={() => onChange(target)}
       className={`inline-flex size-9 items-center justify-center rounded-lg transition-colors ${
         view === target
-          ? 'bg-[#8fa88f]/15 text-[#6f8a6f]'
+          ? 'bg-forest/10 text-forest'
           : 'text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-white/5 dark:hover:text-neutral-300'
       }`}
     >
@@ -52,7 +52,7 @@ export default function CatalogToolbar({
           </span>{' '}
           of <span className="font-semibold text-neutral-900 dark:text-neutral-100">{total}</span> frames
         </p>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#8fa88f]/10 px-2.5 py-1 text-[11px] font-medium text-[#6f8a6f]">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/10 px-2.5 py-1 text-[11px] font-medium text-forest dark:bg-leaf/10 dark:text-leaf">
           <RefreshCw size={11} />
           Live · just synced
         </span>
@@ -62,7 +62,7 @@ export default function CatalogToolbar({
         <button
           type="button"
           onClick={onOpenFilters}
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 lg:hidden"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:bg-[#16271F] dark:text-neutral-300 dark:hover:border-leaf dark:hover:text-leaf lg:hidden"
         >
           <SlidersHorizontal size={15} />
           Filters
@@ -73,7 +73,7 @@ export default function CatalogToolbar({
             value={sort}
             onChange={(e) => onSortChange(e.target.value)}
             aria-label="Sort products"
-            className="appearance-none rounded-full border border-neutral-300 bg-white py-2 pl-4 pr-9 text-sm font-medium text-neutral-700 outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:focus:border-[#8fa88f]"
+            className="appearance-none rounded-full border border-neutral-300 bg-white py-2 pl-4 pr-9 text-sm font-medium text-neutral-700 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#16271F] dark:text-neutral-300 dark:focus:border-leaf"
           >
             {SORTS.map(({ value, label }) => (
               <option key={value} value={value}>{label}</option>

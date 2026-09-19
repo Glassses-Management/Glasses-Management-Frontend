@@ -20,7 +20,7 @@ function cn(...classes) {
 function SectionHeader({ icon: Icon, title, required }) {
   return (
     <div className="mb-4 flex items-center gap-2.5">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#8fa88f]/15 text-[#6f8a6f]">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
         <Icon size={16} strokeWidth={2} />
       </span>
       <h2 className="font-sans text-base font-semibold text-neutral-900 dark:text-neutral-50">
@@ -34,7 +34,7 @@ function SectionHeader({ icon: Icon, title, required }) {
 function InfoRow({ icon: Icon, label, value }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#8fa88f]/15 text-[#6f8a6f]">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
         <Icon size={16} />
       </span>
       <div className="min-w-0">
@@ -46,12 +46,12 @@ function InfoRow({ icon: Icon, label, value }) {
 }
 
 const cardClass =
-  'rounded-2xl bg-white p-5 shadow-sm ring-1 ring-neutral-200/70 sm:p-6 dark:bg-neutral-800/60 dark:ring-neutral-700/70'
+  'rounded-2xl bg-white p-5 shadow-sm ring-1 ring-neutral-200/70 sm:p-6 dark:bg-[#16271F]/60 dark:ring-neutral-800'
 
 function GuestPrompt({ from }) {
   return (
-    <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-neutral-800/60 dark:ring-neutral-700/70">
-      <span className="flex size-14 items-center justify-center rounded-full bg-[#8fa88f]/15 text-[#6f8a6f]">
+    <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800">
+      <span className="flex size-14 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
         <Lock size={24} strokeWidth={1.8} />
       </span>
       <h2 className="mt-5 font-sans text-xl font-semibold text-neutral-900 dark:text-neutral-50">
@@ -64,13 +64,13 @@ function GuestPrompt({ from }) {
         <Link
           to="/login"
           state={{ from }}
-          className="rounded-full bg-[#8fa88f] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#6f8a6f]"
+          className="rounded-full bg-forest px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-forest-deep"
         >
           Sign In
         </Link>
         <Link
           to="/register"
-          className="rounded-full border border-neutral-300 px-6 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 dark:border-neutral-600 dark:text-neutral-200"
+          className="rounded-full border border-neutral-300 px-6 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-leaf dark:hover:text-leaf"
         >
           Create an account
         </Link>
@@ -210,15 +210,15 @@ export default function CustomerRequestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#111118] dark:text-neutral-200">
+    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       <HomeHeader />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-12">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6f8a6f]">New Request</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">New Request</p>
         <h1 className="mt-3 font-sans font-semibold text-4xl leading-tight text-neutral-900 dark:text-neutral-50 md:text-5xl">
           Submit Optical <span className="italic">Service</span> or Product Request
         </h1>
-        <div className="mt-4 h-[3px] w-12 rounded-full bg-[#8fa88f]" />
+        <div className="mt-4 h-[3px] w-12 rounded-full bg-forest" />
         <p className="mt-5 max-w-2xl text-neutral-600 dark:text-neutral-400">
           Tell us what you need and our optical team will review your request and contact you with the next steps.
         </p>
@@ -226,8 +226,8 @@ export default function CustomerRequestPage() {
         {!isAuthenticated ? (
           <GuestPrompt from={location} />
         ) : submitted ? (
-          <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-neutral-800/60 dark:ring-neutral-700/70">
-            <span className="flex size-16 items-center justify-center rounded-full bg-[#8fa88f]/15 text-[#6f8a6f] ring-8 ring-[#8fa88f]/10">
+          <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800">
+            <span className="flex size-16 items-center justify-center rounded-full bg-forest/10 text-forest ring-8 ring-forest/10 dark:bg-leaf/10 dark:text-leaf dark:ring-leaf/10">
               <Check size={30} strokeWidth={2.5} />
             </span>
             <h2 className="mt-6 font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
@@ -237,14 +237,14 @@ export default function CustomerRequestPage() {
               Your request has been sent to our optical team. You can track its status from your requests.
             </p>
             {submitted.id != null && (
-              <p className="mt-2 rounded-full bg-[#8fa88f]/10 px-3 py-1 text-xs font-medium text-[#6f8a6f]">
+              <p className="mt-2 rounded-full bg-forest/10 px-3 py-1 text-xs font-medium text-forest dark:bg-leaf/10 dark:text-leaf">
                 Request #{submitted.id}
               </p>
             )}
             <div className="mt-7 flex flex-wrap justify-center gap-3">
               <Link
                 to="/account"
-                className="rounded-full bg-[#8fa88f] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#6f8a6f]"
+                className="rounded-full bg-forest px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-forest-deep"
               >
                 View My Requests
               </Link>
@@ -274,7 +274,7 @@ export default function CustomerRequestPage() {
                   <SectionHeader icon={User} title="Customer Information" />
                   <Link
                     to="/account"
-                    className="text-sm font-medium text-[#6f8a6f] transition-colors hover:text-[#55705a]"
+                    className="text-sm font-medium text-forest transition-colors hover:text-forest-deep dark:text-leaf"
                   >
                     Update information
                   </Link>
@@ -348,7 +348,7 @@ export default function CustomerRequestPage() {
                       setConfirmed(e.target.checked)
                       setErrors((prev) => ({ ...prev, confirmed: undefined }))
                     }}
-                    className="mt-0.5 size-4 shrink-0 rounded border-neutral-300 accent-[#6f8a6f]"
+                    className="mt-0.5 size-4 shrink-0 rounded border-neutral-300 accent-forest dark:accent-leaf"
                   />
                   <span>
                     <span className="block text-sm font-medium text-neutral-800 dark:text-neutral-200">
@@ -381,7 +381,7 @@ export default function CustomerRequestPage() {
                   type="submit"
                   size="lg"
                   loading={submitting}
-                  className="w-full !rounded-full !bg-[#8fa88f] hover:!bg-[#6f8a6f] sm:w-auto"
+                  className="w-full !rounded-full !bg-forest hover:!bg-forest-deep dark:!bg-leaf dark:!text-forest dark:hover:!opacity-90 sm:w-auto"
                 >
                   {!submitting && <Send size={16} />}
                   Submit Request

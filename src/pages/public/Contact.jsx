@@ -9,7 +9,7 @@ import ContactFaq from '@/pages/public/ContactFaq'
 
 function Contact() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#111118] dark:text-neutral-200">
+    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       <HomeHeader />
       <main>
         <ContactHero />

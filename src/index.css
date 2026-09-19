@@ -2,6 +2,16 @@
 
 @theme {
   --font-sans: 'DM Sans', sans-serif;
+
+  /* Brand palette — source of truth, reused by every page.
+     Map: bg-/text-/border-{token} utilities are generated automatically. */
+  --color-forest: #1b3b2f;      /* primary deep forest green */
+  --color-forest-deep: #16302a; /* hover / darker surfaces */
+  --color-leaf: #8fc0a5;        /* soft sage accent on dark green */
+  --color-ink: #0f172a;         /* headings: dark slate */
+  --color-mist: #f1f5f2;        /* light gray-green section background */
+  --color-mist-soft: #f7f9f8;   /* alternating lighter section background */
+  --color-edge: #e5e7eb;        /* thin gray card / divider borders */
 }
 
 /* Class-based dark mode (Tailwind v4): `.dark` on <html> activates `dark:` variants. */

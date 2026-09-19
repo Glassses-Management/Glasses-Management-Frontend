@@ -6,7 +6,7 @@ const RANGE_CLASS = [
   '[&::-webkit-slider-thumb]:rounded-full',
   '[&::-webkit-slider-thumb]:border-2',
   '[&::-webkit-slider-thumb]:border-white',
-  '[&::-webkit-slider-thumb]:bg-[#8fa88f]',
+  '[&::-webkit-slider-thumb]:bg-forest',
   '[&::-webkit-slider-thumb]:shadow-md',
   '[&::-webkit-slider-thumb]:transition-transform',
   '[&::-webkit-slider-thumb]:hover:scale-110',
@@ -15,13 +15,13 @@ const RANGE_CLASS = [
   '[&::-moz-range-thumb]:rounded-full',
   '[&::-moz-range-thumb]:border-2',
   '[&::-moz-range-thumb]:border-white',
-  '[&::-moz-range-thumb]:bg-[#8fa88f]',
+  '[&::-moz-range-thumb]:bg-forest',
   'dark:[&::-moz-range-thumb]:border-neutral-900',
   'focus:outline-none',
 ].join(' ')
 
 const numInputClass =
-  'w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-[#8fa88f]'
+  'w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#0E1A15] dark:text-neutral-100 dark:focus:border-leaf'
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
 
@@ -43,7 +43,7 @@ export default function CatalogPriceRange({ bounds, value, onChange }) {
         <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded-full bg-neutral-200 dark:bg-neutral-700" />
         {/* filled range */}
         <div
-          className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#8fa88f]"
+          className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-forest"
           style={{ left: `${minPct}%`, width: `${maxPct - minPct}%` }}
         />
         <input
