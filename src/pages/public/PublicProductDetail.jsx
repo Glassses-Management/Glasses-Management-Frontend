@@ -1,20 +1,25 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, CheckCircle2, Factory, Hash, Layers, Palette, Ruler } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Factory, Hash, Layers, Minus, Palette, Plus, Ruler, ShoppingCart } from 'lucide-react'
 import HomeHeader from '@/pages/public/HomeHeader'
 import HomeFooter from '@/pages/public/HomeFooter'
 import ProductImage from '@/components/product/ProductImage'
 import { getPublicProductById, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { useAuth } from '@/hook/UseAuth'
+import { useCart } from '@/hook/UseCart'
+import { useToast } from '@/hook/UseToast'
 
 export default function PublicProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { token } = useAuth()
+  const { addItem } = useCart()
+  const { success: toastSuccess } = useToast()
   const [product, setProduct] = useState(null)
   const [images, setImages] = useState([])
   const [active, setActive] = useState(0)
+  const [qty, setQty] = useState(1)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -49,8 +54,6 @@ export default function PublicProductDetail() {
     { icon: Ruler, label: 'Size', value: product.size },
     { icon: Factory, label: 'Supplier', value: product.supplier_name },
   ]
-
-  const chips = product && [product.material, product.color, product.size].filter(Boolean)
 
   return (
     <div className="min-h-screen bg-[#faf7f2] font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#111118] dark:text-neutral-200">
@@ -159,45 +162,61 @@ export default function PublicProductDetail() {
                 </dl>
               </div>
 
-              {token ? (
-                <div className="mt-8 flex flex-col gap-4 rounded-3xl border border-emerald-200 bg-emerald-50/60 p-6 sm:flex-row sm:items-center sm:justify-between dark:border-emerald-500/30 dark:bg-emerald-500/10">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-300">
-                      <CheckCircle2 size={18} />
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-200">You're signed in</p>
-                      <p className="mt-0.5 text-sm text-emerald-700/80 dark:text-emerald-200/70">
-                        Ready to order? Continue to your dashboard.
-                      </p>
-                    </div>
-                  </div>
-                  <Link
-                    to="/dashboard"
-                    className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+              {/* Add to cart */}
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <div className="inline-flex items-center rounded-full border border-neutral-300 dark:border-neutral-600">
+                  <button
+                    type="button"
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                    className="px-3.5 py-2.5 text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
+                    aria-label="Decrease quantity"
                   >
-                    Place Order <ArrowRight size={16} />
-                  </Link>
+                    <Minus size={16} />
+                  </button>
+                  <span className="w-10 text-center text-sm font-semibold text-neutral-900 dark:text-neutral-50">{qty}</span>
+                  <button
+                    type="button"
+                    onClick={() => setQty((q) => q + 1)}
+                    className="px-3.5 py-2.5 text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus size={16} />
+                  </button>
                 </div>
-              ) : (
-                <div className="mt-8 rounded-3xl border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-800">
-                  <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Sign in to place an order</p>
-                  <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                    You can order this frame or book an eye exam after signing in.
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    addItem(product, qty)
+                    toastSuccess(`${product.model} added to cart.`)
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
+                >
+                  <ShoppingCart size={16} />
+                  Add to Cart
+                </button>
+              </div>
+
+              {!token && (
+                <div className="mt-6 flex flex-col gap-4 rounded-3xl border border-neutral-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-700 dark:bg-neutral-800">
+                  <div>
+                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Ordering as a guest?</p>
+                    <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                      Your cart is saved — you'll sign in when you place the order.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      to="/cart"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-neutral-100"
+                    >
+                      View Cart <ArrowRight size={16} />
+                    </Link>
                     <Link
                       to="/login"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
                     >
                       Sign In <ArrowRight size={16} />
                     </Link>
-                    {/* <Link
-                      to="/register"
-                      className="rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-900 dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-neutral-100 dark:hover:text-white"
-                    >
-                      Create an account
-                    </Link> */}
                   </div>
                 </div>
               )}

@@ -1,7 +1,6 @@
 import DataTable from '@/components/data/DataTable'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
-import { CalendarPlus, Pencil, XCircle } from 'lucide-react'
 import { formatDateTime } from '@/utils/format'
 
 const STATUS_VARIANT = {
@@ -11,7 +10,7 @@ const STATUS_VARIANT = {
   CANCELLED: 'danger',
 }
 
-function AppointmentTable({ appointments, onOpenSchedule, onEdit, onCancel }) {
+function AppointmentTable({ appointments, onOpenSchedule, onEdit, onCancel, onDelete }) {
   const columns = [
     {
       key: 'id',
@@ -57,15 +56,18 @@ function AppointmentTable({ appointments, onOpenSchedule, onEdit, onCancel }) {
       render: (row) => (
         <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
           {row.status === 'PENDING_REVIEW' && (
-            <Button size="sm" icon={<CalendarPlus size={14} />} onClick={() => onOpenSchedule?.(row)}>
+            <Button size="sm" onClick={() => onOpenSchedule?.(row)}>
               Schedule
             </Button>
           )}
-          <Button variant="outline" size="sm" icon={<Pencil size={14} />} onClick={() => onEdit?.(row)}>
+          <Button variant="blue" size="sm" onClick={() => onEdit?.(row)}>
             Edit
           </Button>
+          <Button variant="danger" size="sm" onClick={() => onDelete?.(row)}>
+            Delete
+          </Button>
           {row.status !== 'CANCELLED' && (
-            <Button variant="ghost" size="sm" icon={<XCircle size={14} />} onClick={() => onCancel?.(row)}>
+            <Button variant="outline" size="sm" onClick={() => onCancel?.(row)}>
               Cancel
             </Button>
           )}

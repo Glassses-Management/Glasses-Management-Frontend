@@ -1,56 +1,156 @@
+import { useState } from 'react'
 import ProductImage from '@/components/product/ProductImage'
+import { Eye, Heart, ShoppingCart, Star } from 'lucide-react'
 import { formatCurrency } from '@/utils/FormatCurrency'
+import { useCart } from '@/hook/UseCart'
+import { useToast } from '@/hook/UseToast'
 
-function ProductCard({ product, imageSrc, onClick }) {
+const BADGE_STYLES = {
+  'BEST SELLER': 'bg-[#6f8a6f] text-white',
+  NEW: 'bg-[#6f8a6f] text-white',
+  SALE: 'bg-red-600 text-white',
+  'LOW STOCK': 'bg-amber-500 text-white',
+}
+
+function ProductCard({ product, imageSrc, images, onClick }) {
+  const { addItem } = useCart()
+  const { success: toastSuccess } = useToast()
+  const [liked, setLiked] = useState(false)
+
   if (!product) return null
+
+  const imageList = (
+    Array.isArray(images) && images.filter(Boolean).length > 0
+      ? images.filter(Boolean)
+      : imageSrc
+      ? [imageSrc]
+      : []
+  )
+
+  const src = imageList[0] || null
+  const badge = product?.badge
+  const rating = product?.rating
+  const reviewCount = product?.reviewCount
+  const originalPrice = product?.original_price ?? product?.regular_price ?? product?.price
+  const inStock = product?.quantity == null ? true : Number(product.quantity) > 0
+
+  const specLine = [product.material, product.color].filter(Boolean).join(' · ')
+
+  const handleWishlist = (e) => {
+    e.stopPropagation()
+    setLiked((prev) => !prev)
+  }
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation()
+    addItem(product)
+    toastSuccess(`${product.model} added to cart.`)
+  }
+
+  const handleViewDetails = (e) => {
+    e.stopPropagation()
+    onClick?.()
+  }
 
   return (
     <article
       onClick={onClick}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-neutral-800/90 dark:ring-neutral-700 dark:hover:shadow-neutral-900/50"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200/80 transition-all duration-200 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg hover:ring-neutral-300 dark:bg-neutral-800/90 dark:ring-neutral-700 dark:hover:shadow-neutral-900/50 dark:hover:ring-neutral-600"
     >
-      {/* Product Image & Category Badge */}
-      <div className="relative">
-        <ProductImage src={imageSrc} alt={product.model} />
-        {product.category && (
-          <span className="absolute right-3 top-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-neutral-700 shadow-xs backdrop-blur-xs dark:bg-neutral-900/90 dark:text-neutral-300">
-            {product.category}
+      {/* Image area */}
+      <div className="relative p-3 pb-0">
+        <ProductImage
+          src={src}
+          alt={product.model}
+          className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#f7f5f0] object-cover dark:bg-neutral-800/80"
+        />
+
+        {badge && (
+          <span className={`absolute left-5 top-5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${BADGE_STYLES[badge] || 'bg-neutral-900 text-white'}`}>
+            {badge}
           </span>
         )}
+
+        <button
+          type="button"
+          onClick={handleWishlist}
+          aria-pressed={liked}
+          aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
+          className={`absolute right-5 top-5 rounded-full bg-white/90 p-2 text-neutral-500 shadow-sm backdrop-blur transition-colors hover:text-neutral-900 dark:bg-neutral-900/80 dark:text-neutral-300 dark:hover:text-white ${
+            liked ? 'text-red-500 hover:text-red-500 dark:text-red-500 dark:hover:text-red-500' : ''
+          }`}
+        >
+          <Heart size={16} className={`${liked ? 'fill-red-500' : ''}`} />
+        </button>
       </div>
 
-      {/* Card Body */}
-      <div className="flex flex-col p-4">
+      {/* Card body */}
+      <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
           {product.brand || 'Optical Frame'}
         </p>
 
         <h3
-          className="mt-1 line-clamp-1 font-sans font-medium text-lg font-medium text-neutral-900 transition-colors group-hover:text-neutral-700 dark:text-neutral-50 dark:group-hover:text-neutral-200"
+          className="mt-0.5 line-clamp-1 text-lg font-semibold text-neutral-900 dark:text-neutral-50"
           title={product.model}
         >
           {product.model}
         </h3>
 
-        <p className="mt-1 line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">
-          {[product.material, product.color].filter(Boolean).join(' · ') || 'Premium Eyewear'}
-        </p>
+        {specLine && (
+          <p className="mt-0.5 line-clamp-1 text-xs text-neutral-500 dark:text-neutral-400">{specLine}</p>
+        )}
 
-        {/* Card Footer */}
-        <div className="mt-auto flex items-center justify-between border-t border-neutral-100 pt-3 dark:border-neutral-700/60">
-          <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-              Price
-            </span>
-            <span className="text-base font-semibold text-neutral-900 dark:text-neutral-50">
-              {formatCurrency(product.sale_price)}
-            </span>
-          </div>
+        {rating != null && (
+          <p className="mt-1.5 flex items-center gap-1 text-xs text-neutral-600 dark:text-neutral-300">
+            <Star size={13} className="fill-amber-400 text-amber-400" />
+            <span className="font-semibold text-neutral-900 dark:text-neutral-50">{rating}</span>
+            {reviewCount != null && <span className="text-neutral-400 dark:text-neutral-500">({reviewCount})</span>}
+          </p>
+        )}
 
-          <span className="inline-flex items-center gap-1 rounded-full border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-800 transition-all duration-200 group-hover:border-neutral-900 group-hover:bg-neutral-900 group-hover:text-white dark:border-neutral-600 dark:text-neutral-300 dark:group-hover:border-neutral-100 dark:group-hover:bg-neutral-100 dark:group-hover:text-neutral-900">
-            View
-            <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+        {/* Price */}
+        <div className="mt-2 flex items-baseline gap-2">
+          <span className="text-lg font-bold text-neutral-900 dark:text-neutral-50">
+            {formatCurrency(product.sale_price)}
           </span>
+          {originalPrice && Number(originalPrice) > Number(product.sale_price) && (
+            <span className="text-sm text-neutral-400 line-through dark:text-neutral-500">
+              {formatCurrency(originalPrice)}
+            </span>
+          )}
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-auto space-y-1.5 pt-2.5">
+          {inStock ? (
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#8fa88f] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#6f8a6f] active:scale-[0.98]"
+              aria-label={`Add ${product.model} to cart`}
+            >
+              <ShoppingCart size={15} />
+              Add to Cart
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled
+              className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm font-medium text-neutral-400 dark:border-neutral-600 dark:bg-neutral-800/60 dark:text-neutral-500"
+            >
+              Out of Stock
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={handleViewDetails}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-neutral-300 bg-transparent px-4 py-2.5 text-sm font-medium text-neutral-700 transition-all duration-200 hover:border-neutral-900 hover:text-neutral-900 active:scale-[0.98] dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-neutral-100 dark:hover:text-white"
+          >
+            <Eye size={15} />
+            View Details
+          </button>
         </div>
       </div>
     </article>

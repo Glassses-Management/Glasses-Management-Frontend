@@ -49,9 +49,11 @@ import Contact from '@/pages/public/Contact'
 import PublicProductList from '@/pages/public/PublicProductList'
 import PublicProductDetail from '@/pages/public/PublicProductDetail'
 import MyAccountPage from '@/pages/public/MyAccountPage'
+import CartPage from '@/pages/public/CartPage'
 import NotFound from '@/pages/public/NotFound'
 
 import { AuthProvider } from '@/context/AuthContext.jsx'
+import { CartProvider } from '@/context/CartContext.jsx'
 import { CustomerProvider } from '@/context/CustomerContext.jsx'
 import { PrescriptionProvider } from '@/context/PrescriptionContext.jsx'
 import { ToastProvider } from '@/context/ToastContext.jsx'
@@ -204,9 +206,10 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <ToastProvider>
-          <CustomerProvider>
-            <PrescriptionProvider>
+        <CartProvider>
+          <ToastProvider>
+            <CustomerProvider>
+              <PrescriptionProvider>
               <Routes>
 
                 {/* Public pages */}
@@ -215,6 +218,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/products" element={<PublicProductList />} />
                 <Route path="/products/:id" element={<PublicProductDetail />} />
+                <Route path="/cart" element={<CartPage />} />
 
                 {/* Authentication */}
                 <Route path="/login" element={<LoginPage />} />
@@ -251,7 +255,8 @@ function App() {
               </Routes>
             </PrescriptionProvider>
           </CustomerProvider>
-        </ToastProvider>
+          </ToastProvider>
+        </CartProvider>
       </AuthProvider>
     </ThemeProvider>
   )

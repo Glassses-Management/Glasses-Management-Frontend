@@ -5,10 +5,12 @@ const FILE_PATH_REGEX = /\.(jpg|jpeg|png|webp|avif)([?#]|$)/i
 
 export function pickImage(attachments) {
   const list = Array.isArray(attachments) ? attachments : []
+  // Prefer the newest attachment so a freshly uploaded picture replaces an old
+  // one even if leftover duplicates still exist in the attachment list.
   return (
-    list.find((a) => a?.fileType?.startsWith('image/') && a?.filePath) ||
-    list.find((a) => a?.filePath && FILE_PATH_REGEX.test(a.filePath)) ||
-    list.find((a) => a?.filePath) ||
+    [...list].reverse().find((a) => a?.fileType?.startsWith('image/') && a?.filePath) ||
+    [...list].reverse().find((a) => a?.filePath && FILE_PATH_REGEX.test(a.filePath)) ||
+    [...list].reverse().find((a) => a?.filePath) ||
     null
   )
 }
@@ -48,6 +50,7 @@ function ProductImage({ src, alt, className = '' }) {
 
   const showFallback = !src || failed
   const fillsContainer = /\baspect-|\bh-\d/.test(className)
+  const fitClass = /\bobject-contain\b/.test(className) ? 'object-contain' : 'object-cover'
 
   return (
     <div className={`relative w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800/80 ${fillsContainer ? '' : 'h-48'} ${className}`}>
@@ -58,7 +61,7 @@ function ProductImage({ src, alt, className = '' }) {
           src={src}
           alt={alt || ''}
           onError={() => setFailed(true)}
-          className={`object-cover transition-transform duration-300 group-hover:scale-105 ${fillsContainer ? 'absolute inset-0 h-full w-full' : 'h-48 w-full'}`}
+          className={`${fitClass} ${fillsContainer ? 'absolute inset-0 h-full w-full' : 'h-48 w-full'}`}
         />
       )}
     </div>

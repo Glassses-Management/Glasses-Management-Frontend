@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ArrowLeft, Save, Plus } from 'lucide-react'
 import { createProduct, updateProduct } from '@/api/productApi'
-import { uploadAttachment } from '@/api/attachmentApi'
+import { uploadAttachment, getAttachmentsByProduct, deleteAttachment } from '@/api/attachmentApi'
 import ProductImageField from '@/components/product/ProductImageField'
 import Button from '@/components/ui/Button'
 import { useToast } from '@/hook/UseToast'
@@ -98,6 +98,16 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
       const saved = isEdit ? await updateProduct(product.id, payload) : await createProduct(payload)
 
       if (picture) {
+        if (isEdit) {
+          // Replacing the photo: clear the old attachments first so the card
+          // displays the newly uploaded image instead of the first old one.
+          const atts = await getAttachmentsByProduct(saved.id).catch(() => [])
+          const list = Array.isArray(atts) ? atts : Array.isArray(atts?.content) ? atts.content : []
+          for (const att of list) {
+            const id = att?.attachmentId ?? att?.id
+            if (id) await deleteAttachment(id).catch(() => {})
+          }
+        }
         await uploadAttachment({ file: picture, productId: saved.id })
       }
 

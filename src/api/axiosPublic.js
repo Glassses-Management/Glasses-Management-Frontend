@@ -5,14 +5,21 @@ import axios from 'axios'
 // It never attaches an Authorization header.
 const axiosPublic = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
 })
 
 // Normalise errors so callers always get a usable message (no token to clear).
 axiosPublic.interceptors.response.use(
   (response) => response,
+  (error) => Promise.reject(error),
+)
+
+axiosPublic.interceptors.request.use(
+  (config) => {
+    if (config.data) {
+      config.headers['Content-Type'] = 'application/json'
+    }
+    return config
+  },
   (error) => Promise.reject(error),
 )
 

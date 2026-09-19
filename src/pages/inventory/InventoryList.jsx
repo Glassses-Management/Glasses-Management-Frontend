@@ -5,6 +5,7 @@ import InventoryStats from '@/components/inventory/InventoryStats'
 import InventoryFilter from '@/components/inventory/InventoryFilter'
 import InventoryTable from '@/components/inventory/InventoryTable'
 import { getInventories, deleteInventory } from '@/api/inventoryApi'
+import { inventoryStatus, INVENTORY_STATUS, INVENTORY_STATUS_OPTIONS } from '@/utils/InventoryStatus'
 import { useToast } from '@/hook/UseToast'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
@@ -63,7 +64,7 @@ function InventoryList() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     return items.filter((i) => {
-      const itemStatus = i.quantity <= 0 ? 'Out Of Stock' : (i.reorder_threshold != null && i.quantity <= i.reorder_threshold ? 'Low Stock' : 'In Stock')
+      const itemStatus = inventoryStatus(i.quantity, i.reorder_threshold)
       const matchesSearch = !q || (i.sku || '').toLowerCase().includes(q) || (i.model || '').toLowerCase().includes(q) || (i.brand || '').toLowerCase().includes(q)
       const matchesCategory = category === 'all' || i.category === category
       const matchesStatus = status === 'all' || itemStatus === status
@@ -74,13 +75,13 @@ function InventoryList() {
   const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   const categories = useMemo(() => [...new Set(items.map((i) => i.category).filter(Boolean))].sort(), [items])
-  const statuses = useMemo(() => ['In Stock', 'Low Stock', 'Out Of Stock'], [])
+  const statuses = INVENTORY_STATUS_OPTIONS
 
   const stats = useMemo(() => ({
     total: items.length,
-    inStock: items.filter((i) => i.quantity > 0 && (i.reorder_threshold == null || i.quantity > i.reorder_threshold)).length,
-    lowStock: items.filter((i) => i.reorder_threshold != null && i.quantity > 0 && i.quantity <= i.reorder_threshold).length,
-    outOfStock: items.filter((i) => i.quantity <= 0).length,
+    inStock: items.filter((i) => inventoryStatus(i.quantity, i.reorder_threshold) === INVENTORY_STATUS.IN_STOCK).length,
+    lowStock: items.filter((i) => inventoryStatus(i.quantity, i.reorder_threshold) === INVENTORY_STATUS.LOW_STOCK).length,
+    outOfStock: items.filter((i) => inventoryStatus(i.quantity, i.reorder_threshold) === INVENTORY_STATUS.OUT_OF_STOCK).length,
   }), [items])
 
   const handleAdd = () => navigate('/dashboard/inventory/new')

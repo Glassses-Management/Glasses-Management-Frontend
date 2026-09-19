@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hook/UseAuth'
+import { useCart } from '@/hook/UseCart'
 import { hasRole, ROLES } from '@/utils/Roles'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import ProfileAvatar from '@/components/ui/ProfileAvatar'
+import CartButton from '@/components/ui/CartButton'
 import CustomerRequestModal from '@/components/request/CustomerRequestModal'
 
 const NAV_LINKS = [
-  { label: 'Frames', href: '/products' },
-  { label: 'Sunglasses', href: '/products' },
-  { label: 'Eye Exams', href: '#craft' },
+  { label: 'Explore', href: '/products' },
+  { label: 'Product', href: '/products' },
+  { label: 'Contact', href: '/contact' },
   { label: 'About', href: '/about' },
 ]
 
@@ -17,6 +19,7 @@ export default function HomeHeader() {
   const [open, setOpen] = useState(false)
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false)
   const { token, user, logout } = useAuth()
+  const { count } = useCart()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -46,16 +49,22 @@ export default function HomeHeader() {
           Optic <span className="italic">Shop</span>
         </a>
 
-        <nav className="hidden items-center gap-7 text-sm text-neutral-600 dark:text-neutral-400 lg:flex">
+        <nav className="hidden items-center gap-8 text-sm lg:flex">
           {NAV_LINKS.map((link) => (
-            <a key={link.label} href={link.href} className="transition-colors hover:text-neutral-900 dark:hover:text-white">
+            <a
+              key={link.label}
+              href={link.href}
+              className="group relative font-sans font-medium tracking-wide text-neutral-700 transition-colors duration-200 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
+            >
               {link.label}
+              <span className="absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-[#8fa88f] transition-transform duration-300 group-hover:scale-x-100" />
             </a>
           ))}
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
+          <CartButton />
           {isAdmin && (
             <button
               type="button"
@@ -118,6 +127,9 @@ export default function HomeHeader() {
             </a>
           ))}
           <div className="flex flex-col gap-2 py-4">
+            <Link to="/cart" onClick={() => setOpen(false)} className="w-full rounded-full border border-neutral-300 py-2.5 text-center text-sm font-medium text-neutral-800 transition-colors hover:bg-neutral-900 hover:text-white dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-100 dark:hover:text-neutral-900">
+              View Cart ({count})
+            </Link>
             <button
               type="button"
               onClick={() => { handleRequestClick(); setOpen(false) }}

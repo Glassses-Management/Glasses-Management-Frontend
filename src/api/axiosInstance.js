@@ -4,9 +4,6 @@ import axios from 'axios'
 // Base URL = backend host + /api prefix (see API_DOCUMENT.md).
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
 })
 
 // Request interceptor: attach the JWT to every outgoing request if present.
@@ -15,6 +12,9 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+    }
+    if (config.data && !(config.data instanceof FormData)) {
+      config.headers['Content-Type'] = 'application/json'
     }
     return config
   },

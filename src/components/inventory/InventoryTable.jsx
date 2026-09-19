@@ -1,24 +1,24 @@
 import { formatCurrency } from '@/utils/format'
 import Button from '@/components/ui/Button'
-import { Pencil, Trash2 } from 'lucide-react'
+import { inventoryStatus, INVENTORY_STATUS_LABEL } from '@/utils/InventoryStatus'
 
 const STATUS_BADGE = {
-  'In Stock': 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-300',
-  'Low Stock': 'bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-300',
-  'Out Of Stock': 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-300',
+  IN_STOCK: 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-300',
+  LOW_STOCK: 'bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-300',
+  OUT_OF_STOCK: 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-300',
 }
 
 const STATUS_DOT = {
-  'In Stock': 'bg-green-500',
-  'Low Stock': 'bg-orange-500',
-  'Out Of Stock': 'bg-red-500',
+  IN_STOCK: 'bg-green-500',
+  LOW_STOCK: 'bg-orange-500',
+  OUT_OF_STOCK: 'bg-red-500',
 }
 
 function StatusBadge({ status }) {
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_BADGE[status] || 'bg-gray-100 text-gray-700'}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[status] || 'bg-gray-400'}`} aria-hidden="true" />
-      {status}
+      {INVENTORY_STATUS_LABEL[status] || status}
     </span>
   )
 }
@@ -60,11 +60,11 @@ function InventoryTable({ products, onEdit, onDelete }) {
                 <td className="px-5 py-4 text-gray-900 dark:text-neutral-100">{p.category}</td>
                 <td className="px-5 py-4 text-gray-900 dark:text-neutral-100">{p.quantity}</td>
                 <td className="px-5 py-4 text-gray-900 dark:text-neutral-100">{p.reorder_threshold}</td>
-                <td className="px-5 py-4"><StatusBadge status={p.status} /></td>
+                <td className="px-5 py-4"><StatusBadge status={inventoryStatus(p.quantity, p.reorder_threshold)} /></td>
                 <td className="px-5 py-4 text-right">
                   <div className="inline-flex items-center gap-1">
-                    <Button variant="outline" size="sm" icon={<Pencil size={14} />} onClick={() => onEdit?.(p)}>Edit</Button>
-                    <Button variant="danger" size="sm" icon={<Trash2 size={14} />} onClick={() => onDelete?.(p)}>Delete</Button>
+                    <Button variant="blue" size="sm" onClick={() => onEdit?.(p)}>Edit</Button>
+                    <Button variant="danger" size="sm" onClick={() => onDelete?.(p)}>Delete</Button>
                   </div>
                 </td>
               </tr>

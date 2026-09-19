@@ -58,7 +58,7 @@ export default function LoginPage() {
             </svg>
           </div>
           <div>
-            <h1 className="text-lg font-bold text-[#1a1a2e] dark:text-neutral-50">glasses-web</h1>
+            <h1 className="text-lg font-bold text-[#1a1a2e] dark:text-neutral-50">Optic Shop</h1>
             <p className="text-xs text-gray-400 dark:text-neutral-500">Optical Shop Management</p>
           </div>
         </Link>

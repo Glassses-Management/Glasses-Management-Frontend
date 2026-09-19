@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import Pagination from '@/components/ui/Pagination'
+import Modal from '@/components/ui/Modal'
 import OrderStats from '@/components/order/OrderStats'
 import OrderFilter from '@/components/order/OrderFilter'
 import OrderTable from '@/components/order/OrderTable'
-import { getOrders } from '@/api/orderApi'
+import { getOrders, deleteOrder, changeOrderStatus } from '@/api/orderApi'
 import Button from '@/components/ui/Button'
+import { useToast } from '@/hook/UseToast'
 
 const ITEMS_PER_PAGE = 10
 
@@ -21,6 +23,8 @@ const STATUS_OPTIONS = [
 
 function OrderList() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { success: toastSuccess, error: toastError } = useToast()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -28,23 +32,26 @@ function OrderList() {
   const [filters, setFilters] = useState({ status: 'all', customer: 'all' })
   const [currentPage, setCurrentPage] = useState(1)
 
-  useEffect(() => {
-    let cancelled = false
-    const load = async () => {
-      setLoading(true)
-      try {
-        const data = await getOrders({ page: 0, size: 100, sort: 'id,desc' })
-        if (cancelled) return
-        setOrders(Array.isArray(data?.content) ? data.content : [])
-      } catch (err) {
-        console.error('OrderList: failed to load orders:', err?.response?.status || err?.message || err)
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
+  const [editing, setEditing] = useState(null)
+  const [editingLoading, setEditingLoading] = useState(false)
+  const [deleting, setDeleting] = useState(null)
+  const [deletingLoading, setDeletingLoading] = useState(false)
+
+  const loadOrders = useCallback(async () => {
+    setLoading(true)
+    try {
+      const data = await getOrders({ page: 0, size: 100, sort: 'id,desc' })
+      setOrders(Array.isArray(data?.content) ? data.content : [])
+    } catch (err) {
+      console.error('OrderList: failed to load orders:', err?.response?.status || err?.message || err)
+    } finally {
+      setLoading(false)
     }
-    load()
-    return () => { cancelled = true }
   }, [])
+
+  useEffect(() => {
+    loadOrders()
+  }, [location.pathname, loadOrders])
 
   const customerOptions = useMemo(() => {
     const map = new Map()
@@ -86,9 +93,37 @@ function OrderList() {
   const effectivePage = Math.min(currentPage, totalPages)
   const paged = filtered.slice((effectivePage - 1) * ITEMS_PER_PAGE, effectivePage * ITEMS_PER_PAGE)
 
-  const handleViewDetail = (row) => navigate(`/dashboard/orders/${row.id}`)
-
   const handleAdd = () => navigate('/dashboard/orders/new')
+
+  const handleEditSave = async () => {
+    if (!editing || editingLoading) return
+    setEditingLoading(true)
+    try {
+      await changeOrderStatus(editing.id, editing.status)
+      toastSuccess(`Order #${editing.id} updated.`)
+      setEditing(null)
+      await loadOrders()
+    } catch (err) {
+      toastError(err?.response?.data?.message || err?.message || 'Failed to update order')
+    } finally {
+      setEditingLoading(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!deleting || deletingLoading) return
+    setDeletingLoading(true)
+    try {
+      await deleteOrder(deleting.id)
+      toastSuccess(`Order #${deleting.id} deleted.`)
+      setDeleting(null)
+      await loadOrders()
+    } catch (err) {
+      toastError(err?.response?.data?.message || err?.message || 'Failed to delete order')
+    } finally {
+      setDeletingLoading(false)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -120,7 +155,12 @@ function OrderList() {
         </div>
       ) : (
         <>
-          <OrderTable orders={paged} onViewDetail={handleViewDetail} />
+          <OrderTable
+            orders={paged}
+            onRowClick={(row) => navigate(`/dashboard/orders/${row.id}`)}
+            onEdit={(row) => setEditing({ id: row.id, status: row.status || 'PENDING' })}
+            onDelete={(row) => setDeleting(row)}
+          />
 
           <Pagination
             currentPage={effectivePage}
@@ -131,6 +171,60 @@ function OrderList() {
           />
         </>
       )}
+
+      <Modal
+        open={Boolean(editing)}
+        onClose={() => setEditing(null)}
+        title={`Edit Order #${editing?.id || ''}`}
+        maxWidth="max-w-sm"
+        footer={
+          <div className="flex items-center justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={() => setEditing(null)} disabled={editingLoading}>
+              Keep it
+            </Button>
+            <Button type="button" variant="primary" onClick={handleEditSave} loading={editingLoading}>
+              Save Changes
+            </Button>
+          </div>
+        }
+      >
+        <label htmlFor="order-status" className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-neutral-300">
+          Order Status
+        </label>
+        <select
+          id="order-status"
+          value={editing?.status || 'PENDING'}
+          onChange={(e) => setEditing((prev) => (prev ? { ...prev, status: e.target.value } : prev))}
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100"
+        >
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s.value} value={s.value}>{s.label}</option>
+          ))}
+        </select>
+      </Modal>
+
+      <Modal
+        open={Boolean(deleting)}
+        onClose={() => setDeleting(null)}
+        title="Delete order?"
+        maxWidth="max-w-sm"
+        footer={
+          <div className="flex items-center justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={() => setDeleting(null)} disabled={deletingLoading}>
+              Keep it
+            </Button>
+            <Button type="button" variant="danger" onClick={handleDelete} loading={deletingLoading}>
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-gray-500 dark:text-neutral-400">
+          This will permanently delete order{' '}
+          <span className="font-medium text-gray-900 dark:text-neutral-100">#{deleting?.id}</span>.
+          This action cannot be undone.
+        </p>
+      </Modal>
     </div>
   )
 }

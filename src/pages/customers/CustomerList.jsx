@@ -3,7 +3,6 @@
 
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Pencil, Trash2 } from 'lucide-react'
 import SearchBar from '@/components/data/SearchBar'
 import DataTable from '@/components/data/DataTable'
 import Pagination from '@/components/ui/Pagination'
@@ -107,9 +106,8 @@ function CustomerList({ onNavigate }) {
       render: (row) => (
         <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
           <Button
-            variant="outline"
+            variant="blue"
             size="sm"
-            icon={<Pencil size={14} />}
             onClick={(e) => {
               e.stopPropagation()
               navigate(`/dashboard/customers/${row.id}/edit`)
@@ -120,7 +118,6 @@ function CustomerList({ onNavigate }) {
           <Button
             variant="danger"
             size="sm"
-            icon={<Trash2 size={14} />}
             onClick={() => setDeleting(row)}
           >
             Delete

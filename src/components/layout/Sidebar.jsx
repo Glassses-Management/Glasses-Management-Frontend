@@ -112,7 +112,7 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
             <Glasses size={18} className="text-white" />
           </div>
           {!collapsed && (
-            <span className="text-lg font-bold text-[#1a1a2e] transition-colors duration-300 dark:text-neutral-50">glasses-web</span>
+            <span className="text-lg font-bold text-[#1a1a2e] transition-colors duration-300 dark:text-neutral-50">Optic Shop</span>
           )}
         </Link>
         <button

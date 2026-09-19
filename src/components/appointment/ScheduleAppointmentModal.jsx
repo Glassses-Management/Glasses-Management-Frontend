@@ -79,6 +79,7 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
     setSaving(true)
     try {
       await updateAppointment(appointment.id, {
+        customer_id: appointment?.customer_id,
         optometrist_id: form.optometrist_id ? Number(form.optometrist_id) : null,
         scheduled_at: form.scheduled_at ? `${form.scheduled_at}:00` : null,
         status: isSchedule ? 'SCHEDULED' : form.status,

@@ -30,9 +30,7 @@ export const uploadAttachment = async ({ file, userId, productId }) => {
   form.append('file', file)
   if (userId) form.append('userId', userId)
   if (productId) form.append('productId', productId)
-  const { data } = await axiosInstance.post('/attachments/upload', form, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const { data } = await axiosInstance.post('/attachments/upload', form)
   return data
 }
 

@@ -14,7 +14,7 @@ function InventoryFilter({
 }) {
     const filterOptions = [
         { key: 'category', label: 'Category', value: category, options: categories.map((c) => ({ value: c, label: c })) },
-        { key: 'status', label: 'Status', value: status, options: statuses.map((s) => ({ value: s, label: s })) },
+        { key: 'status', label: 'Status', value: status, options: statuses.map((s) => (s && typeof s === 'object' && s.value ? { value: s.value, label: s.label } : { value: s, label: s })) },
     ]
 
     const handleFilterChange = (key, value) => {

@@ -9,7 +9,7 @@ const PAYMENT_STATUS_VARIANT = {
     UNPAID: 'warning',
 }
 
-function OrderTable({ orders, onViewDetail }) {
+function OrderTable({ orders, onRowClick, onEdit, onDelete }) {
     const columns = [
         {
             key: 'id',
@@ -50,16 +50,21 @@ function OrderTable({ orders, onViewDetail }) {
         },
         {
             key: 'action',
-            header: 'Action',
+            header: 'Actions',
             render: (row) => (
-                <Button variant="outline" size="sm" onClick={() => onViewDetail(row)}>
-                    View Detail
-                </Button>
+                <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                    <Button variant="blue" size="sm" onClick={() => onEdit?.(row)}>
+                        Edit
+                    </Button>
+                    <Button variant="danger" size="sm" onClick={() => onDelete?.(row)}>
+                        Delete
+                    </Button>
+                </div>
             ),
         },
     ]
 
-    return <DataTable columns={columns} data={orders} />
+    return <DataTable columns={columns} data={orders} onRowClick={onRowClick} />
 }
 
 export default OrderTable

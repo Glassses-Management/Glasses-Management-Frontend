@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import HomeHeader from '@/pages/public/HomeHeader'
 import HomeFooter from '@/pages/public/HomeFooter'
-import { pickImage } from '@/components/product/ProductImage'
 import ProductCard from '@/components/product/ProductCard'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
 
@@ -32,8 +31,11 @@ export default function PublicProductList() {
         if (cancelled) return
         const imgMap = {}
         items.forEach((p, i) => {
-          const att = pickImage(imageResults[i])
-          if (att?.filePath) imgMap[p.id] = att.filePath
+          const paths = (imageResults[i] || [])
+            .filter((a) => a?.filePath && (a?.fileType?.startsWith('image/') || /\.(jpg|jpeg|png|webp|avif)([?#]|$)/i.test(a.filePath)))
+            .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
+            .map((a) => a.filePath)
+          if (paths.length) imgMap[p.id] = paths
         })
         setImages(imgMap)
       } catch (err) {
@@ -94,7 +96,7 @@ export default function PublicProductList() {
               <ProductCard
                 key={p.id}
                 product={p}
-                imageSrc={images[p.id]}
+                images={images[p.id]}
                 onClick={() => navigate(`/products/${p.id}`)}
               />
             ))}

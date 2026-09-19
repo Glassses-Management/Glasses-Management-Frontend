@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { FileText, Search, CheckCircle, XCircle } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { FileText, Search } from 'lucide-react'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Select from '@/components/ui/Select'
@@ -42,6 +43,7 @@ function typeLabel(type) {
 }
 
 export default function RequestListPage() {
+  const navigate = useNavigate()
   const { success: toastSuccess, error: toastError } = useToast()
   const [requests, setRequests] = useState([])
   const [loading, setLoading] = useState(true)
@@ -68,9 +70,10 @@ export default function RequestListPage() {
 
   const handleApprove = async (id) => {
     try {
-      await approveRequest(id)
-      toastSuccess('Request approved.')
+      const order = await approveRequest(id)
+      toastSuccess('Request approved. Order created.')
       setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'APPROVED' } : r)))
+      navigate('/dashboard/orders')
     } catch (err) {
       toastError(err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to approve request')
     }
@@ -197,7 +200,6 @@ const filtered = useMemo(() => {
                       size="sm"
                       variant="primary"
                       className="!bg-green-600 hover:!bg-green-700"
-                      icon={<CheckCircle size={14} />}
                       onClick={() => handleApprove(req.id)}
                     >
                       Approve
@@ -205,7 +207,6 @@ const filtered = useMemo(() => {
                     <Button
                       size="sm"
                       variant="danger"
-                      icon={<XCircle size={14} />}
                       onClick={() => handleReject(req.id)}
                     >
                       Reject

@@ -6,7 +6,7 @@ import AppointmentStats from '@/components/appointment/AppointmentStats'
 import AppointmentFilter from '@/components/appointment/AppointmentFilter'
 import AppointmentTable from '@/components/appointment/AppointmentTable'
 import ScheduleAppointmentModal from '@/components/appointment/ScheduleAppointmentModal'
-import { getAppointments, updateAppointment } from '@/api/appointmentApi'
+import { getAppointments, updateAppointment, deleteAppointment } from '@/api/appointmentApi'
 import { useToast } from '@/hook/UseToast'
 
 const ITEMS_PER_PAGE = 10
@@ -30,12 +30,15 @@ function AppointmentListPage() {
   const [modal, setModal] = useState({ open: false, mode: 'edit', appointment: null })
   const [cancelling, setCancelling] = useState(null)
   const [cancellingLoading, setCancellingLoading] = useState(false)
+  const [deleting, setDeleting] = useState(null)
+  const [deletingLoading, setDeletingLoading] = useState(false)
 
   const loadAppointments = async () => {
     setLoading(true)
     try {
       const data = await getAppointments()
-      setAppointments(Array.isArray(data) ? data : [])
+      const list = Array.isArray(data) ? data : data?.content ?? []
+      setAppointments(list)
     } catch (err) {
       console.error('AppointmentListPage: failed to load appointments:', err?.response?.status || err?.message || err)
       toastError(err?.response?.data?.message || err?.message || 'Failed to load appointments')
@@ -47,7 +50,12 @@ function AppointmentListPage() {
   useEffect(() => {
     let cancelled = false
     getAppointments()
-      .then((data) => { if (!cancelled) setAppointments(Array.isArray(data) ? data : []) })
+      .then((data) => {
+        if (!cancelled) {
+          const list = Array.isArray(data) ? data : data?.content ?? []
+          setAppointments(list)
+        }
+      })
       .catch((err) => {
         if (cancelled) return
         console.error('AppointmentListPage: failed to load appointments:', err?.response?.status || err?.message || err)
@@ -110,6 +118,21 @@ function AppointmentListPage() {
     }
   }
 
+  const handleDelete = async () => {
+    if (!deleting) return
+    setDeletingLoading(true)
+    try {
+      await deleteAppointment(deleting.id)
+      toastSuccess(`Appointment #${deleting.id} deleted.`)
+      setDeleting(null)
+      await loadAppointments()
+    } catch (err) {
+      toastError(err?.response?.data?.message || err?.message || 'Failed to delete appointment')
+    } finally {
+      setDeletingLoading(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -136,11 +159,12 @@ function AppointmentListPage() {
         </div>
       ) : (
         <>
-          <AppointmentTable
+<AppointmentTable
             appointments={paged}
             onOpenSchedule={openSchedule}
             onEdit={openEdit}
             onCancel={(row) => setCancelling(row)}
+            onDelete={(row) => setDeleting(row)}
           />
 
           <Pagination
@@ -181,6 +205,29 @@ function AppointmentListPage() {
           This will mark appointment{' '}
           <span className="font-medium text-gray-900 dark:text-neutral-100">#{cancelling?.id}</span> as cancelled.
           The customer will no longer be scheduled.
+        </p>
+      </Modal>
+
+      <Modal
+        open={Boolean(deleting)}
+        onClose={() => setDeleting(null)}
+        title="Delete appointment?"
+        maxWidth="max-w-sm"
+        footer={
+          <div className="flex items-center justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={() => setDeleting(null)} disabled={deletingLoading}>
+              Keep it
+            </Button>
+            <Button type="button" variant="danger" onClick={handleDelete} loading={deletingLoading}>
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-gray-500 dark:text-neutral-400">
+          This will permanently delete appointment{' '}
+          <span className="font-medium text-gray-900 dark:text-neutral-100">#{deleting?.id}</span>.
+          This action cannot be undone.
         </p>
       </Modal>
     </div>

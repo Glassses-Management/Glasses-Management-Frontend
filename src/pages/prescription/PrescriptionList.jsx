@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Eye, Pencil } from 'lucide-react'
 import SearchBar from '@/components/data/SearchBar'
 import DataTable from '@/components/data/DataTable'
 import Pagination from '@/components/ui/Pagination'
@@ -95,7 +94,6 @@ function PrescriptionList({ onNavigate }) {
                     <Button
                         variant="outline"
                         size="sm"
-                        icon={<Eye size={14} />}
                         onClick={(e) => {
                             e.stopPropagation()
                             onNavigate?.(`prescriptions/${row.id}`)
@@ -104,9 +102,8 @@ function PrescriptionList({ onNavigate }) {
                         View
                     </Button>
                     <Button
-                        variant="outline"
+                        variant="blue"
                         size="sm"
-                        icon={<Pencil size={14} />}
                         onClick={(e) => {
                             e.stopPropagation()
                             navigate(`/dashboard/prescriptions/${row.id}/edit`)

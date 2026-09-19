@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { Search, Users, Pencil, Trash2, Mail, User, Phone, Lock, Camera } from 'lucide-react'
+import { Search, Users, Trash2, Mail, User, Phone, Lock, Camera } from 'lucide-react'
 import { getUsers, deleteUser, updateUser, createUser } from '@/api/userApi'
 import { getAttachmentsByUser, uploadAttachment } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
@@ -328,32 +328,20 @@ export default function UserListPage({ onNavigate }) {
                     <td className="px-5 py-3 text-gray-500 dark:text-neutral-400">{formatDate(u.created_at || u.createdAt || u.date_created || u.registeredAt)}</td>
                     <td className="px-5 py-3 text-right">
                       <div className="inline-flex gap-2" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          type="button"
+                        <Button
+                          size="sm"
+                          variant="blue"
                           onClick={(e) => { e.stopPropagation(); handleEditOpen(u) }}
-                          title="Edit user"
-                          aria-label="Edit user"
-                          className="group relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-blue-500/10 dark:bg-blue-400/10"
                         >
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0 translate-y-full rounded-full bg-blue-600 transition-transform duration-300 ease-out group-hover:translate-y-0"
-                          />
-                          <Pencil size={14} className="relative z-10 text-blue-600 transition-colors duration-300 group-hover:text-white dark:text-blue-400" />
-                        </button>
-                        <button
-                          type="button"
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="danger"
                           onClick={(e) => { e.stopPropagation(); setDeleting(u.id) }}
-                          title="Delete user"
-                          aria-label="Delete user"
-                          className="group relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-red-500/10 dark:bg-red-400/10"
                         >
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0 translate-y-full rounded-full bg-red-600 transition-transform duration-300 ease-out group-hover:translate-y-0"
-                          />
-                          <Trash2 size={14} className="relative z-10 text-red-600 transition-colors duration-300 group-hover:text-white dark:text-red-400" />
-                        </button>
+                          Delete
+                        </Button>
                       </div>
                     </td>
                   </tr>
