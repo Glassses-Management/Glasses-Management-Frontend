@@ -66,7 +66,7 @@ export default function HomeFeatured() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center rounded-full bg-forest px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+              <span className="inline-flex items-center rounded-full bg-forest px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-white">
                 Featured Catalog
               </span>
               <span className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">
@@ -74,7 +74,7 @@ export default function HomeFeatured() {
                 Live · Synced with Spring Boot REST
               </span>
             </div>
-            <h2 className="mt-3 font-sans text-3xl font-bold tracking-tight text-ink md:text-4xl dark:text-neutral-50">
+            <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
               Featured frames, glazed &amp; ready
             </h2>
           </div>

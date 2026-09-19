@@ -17,7 +17,7 @@ export default function HomeCategories() {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
               Specialized Eyewear Categories
             </p>
-            <h2 className="mt-2 font-sans text-3xl font-bold tracking-tight text-ink md:text-4xl dark:text-neutral-50">
+            <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
               Find the frame for every vision need
             </h2>
           </div>
@@ -39,7 +39,7 @@ export default function HomeCategories() {
               <span className="flex size-11 items-center justify-center rounded-lg bg-mist text-forest dark:bg-[#1E332B] dark:text-leaf">
                 <Icon size={20} />
               </span>
-              <h3 className="mt-4 text-sm font-bold text-ink dark:text-neutral-50">{title}</h3>
+              <h3 className="mt-4 font-sans text-sm font-semibold text-neutral-900 dark:text-neutral-100">{title}</h3>
               <p className="mt-1 text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">{text}</p>
             </div>
           ))}

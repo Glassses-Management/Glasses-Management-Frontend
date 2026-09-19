@@ -38,7 +38,7 @@ export default function HomeTestimonials() {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
             Patient Testimonials
           </p>
-          <h2 className="mt-3 font-sans text-3xl font-bold tracking-tight text-ink md:text-4xl dark:text-neutral-50">
+          <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
             Trusted by a thousand smiles
           </h2>
           <div className="mt-4 flex items-center justify-center gap-2">
@@ -62,7 +62,7 @@ export default function HomeTestimonials() {
                   {initials}
                 </span>
                 <div>
-                  <p className="text-sm font-bold text-ink dark:text-neutral-50">{name}</p>
+                  <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">{name}</p>
                   <p className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-mist px-2 py-0.5 text-[10px] font-semibold text-forest dark:bg-[#1E332B] dark:text-leaf">
                     <BadgeCheck size={11} />
                     Verified Patient

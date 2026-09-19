@@ -19,7 +19,7 @@ export default function CatalogHeader({ totalCount, shownCount }) {
       <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
           <Pill />
-          <h1 className="mt-4 font-sans font-semibold text-4xl text-neutral-900 md:text-5xl dark:text-neutral-50">
+          <h1 className="mt-4 font-sans font-semibold italic text-4xl text-neutral-900 md:text-5xl dark:text-neutral-50">
             Precision Eyewear Catalog
           </h1>
           <p className="mt-3 max-w-xl text-neutral-600 dark:text-neutral-400">

@@ -60,9 +60,9 @@ export default function HomeHero() {
             Clinically Verified Precision Optics
           </p>
 
-          <h1 className="mt-5 font-sans text-5xl font-bold leading-[1.02] tracking-tight md:text-6xl">
-            <span className="block text-ink dark:text-neutral-50">See Better.</span>
-            <span className="block text-forest dark:text-leaf">Look Better.</span>
+          <h1 className="mt-4 font-sans font-semibold text-4xl leading-[1.05] text-neutral-900 md:text-5xl dark:text-neutral-50">
+            <span className="block text-neutral-900 dark:text-neutral-50">See Better.</span>
+            <span className="block italic text-forest dark:text-leaf">Look Better.</span>
           </h1>
 
           <p className="mt-5 max-w-md text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
@@ -121,8 +121,8 @@ export default function HomeHero() {
                 )}
               </div>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-ink dark:text-neutral-50">{featuredProduct.model}</p>
-                <p className="text-sm font-bold text-forest dark:text-leaf">{formatPrice(featuredProduct.sale_price)}</p>
+                <p className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-50">{featuredProduct.model}</p>
+                <p className="text-sm font-semibold text-forest dark:text-leaf">{formatPrice(featuredProduct.sale_price)}</p>
                 <p className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
                   <span className={`mr-1 inline-block size-1.5 rounded-full align-middle ${inStock ? 'bg-forest dark:bg-leaf' : 'bg-amber-500'}`} />
                   {inStock ? 'In Stock' : 'Low Stock'}

@@ -126,7 +126,7 @@ export default function PublicProductDetail() {
                   {product.category || 'Eyewear'}
                 </p>
               </div>
-              <h1 className="mt-4 font-sans font-semibold text-3xl leading-[1.1] tracking-tight text-neutral-900 md:text-4xl dark:text-neutral-50">
+              <h1 className="mt-4 font-sans font-semibold italic text-3xl leading-[1.05] text-neutral-900 md:text-4xl dark:text-neutral-50">
                 {product.model}
               </h1>
               <p className="mt-2.5 text-base text-neutral-500 dark:text-neutral-400">{product.brand}</p>
@@ -135,7 +135,7 @@ export default function PublicProductDetail() {
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
                   Price
                 </p>
-                <p className="mt-1 text-2xl font-bold tracking-tight text-neutral-900 md:text-2xl dark:text-neutral-50">
+                <p className="mt-1 text-2xl font-semibold text-neutral-900 md:text-2xl dark:text-neutral-50">
                   {formatCurrency(product.sale_price)}
                   <span className="ml-2 align-middle text-sm font-normal text-neutral-400 dark:text-neutral-500">per pair</span>
                 </p>

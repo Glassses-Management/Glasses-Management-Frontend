@@ -37,7 +37,7 @@ export default function HomeBookingBanner() {
           {/* Brand panel */}
           <div className="flex flex-col justify-center bg-forest p-8 md:p-10">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">Appointments</p>
-            <h2 className="mt-3 font-sans text-3xl font-bold tracking-tight text-white">
+            <h2 className="mt-6 font-sans font-semibold text-3xl text-white md:text-4xl">
               Book your next exam in under a minute
             </h2>
             <p className="mt-3 max-w-md leading-relaxed text-white/75">
@@ -59,7 +59,7 @@ export default function HomeBookingBanner() {
 
           {/* Quick scheduling panel */}
           <div className="bg-mist-soft p-8 md:p-10 dark:bg-[#101E18]">
-            <h3 className="font-sans text-lg font-bold text-ink dark:text-neutral-50">Quick Scheduling</h3>
+            <h3 className="font-sans text-lg font-semibold text-neutral-900 dark:text-neutral-100">Quick Scheduling</h3>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">Pick a day and a time slot.</p>
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -104,7 +104,7 @@ export default function HomeBookingBanner() {
                 SP
               </span>
               <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-ink dark:text-neutral-50">Dr. S. Prak</p>
+                <p className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-50">Dr. S. Prak</p>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">Lead Optometrist · since 2014</p>
               </div>
             </div>
