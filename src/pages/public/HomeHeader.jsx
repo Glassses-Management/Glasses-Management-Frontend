@@ -6,7 +6,6 @@ import { hasRole, ROLES } from '@/utils/Roles'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 import ProfileAvatar from '@/components/ui/ProfileAvatar'
 import CartButton from '@/components/ui/CartButton'
-import CustomerRequestModal from '@/components/request/CustomerRequestModal'
 
 const NAV_LINKS = [
   { label: 'Explore', href: '/products' },
@@ -17,7 +16,6 @@ const NAV_LINKS = [
 
 export default function HomeHeader() {
   const [open, setOpen] = useState(false)
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false)
   const { token, user, logout } = useAuth()
   const { count } = useCart()
   const navigate = useNavigate()
@@ -38,7 +36,7 @@ export default function HomeHeader() {
     if (!token) {
       navigate('/login', { state: { from: location } })
     } else {
-      setIsRequestModalOpen(true)
+      navigate('/request')
     }
   }
 
@@ -172,8 +170,6 @@ export default function HomeHeader() {
           </div>
         </nav>
       )}
-
-      <CustomerRequestModal open={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} />
     </header>
   )
 }

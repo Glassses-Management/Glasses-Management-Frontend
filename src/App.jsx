@@ -50,6 +50,7 @@ import PublicProductList from '@/pages/public/PublicProductList'
 import PublicProductDetail from '@/pages/public/PublicProductDetail'
 import MyAccountPage from '@/pages/public/MyAccountPage'
 import CartPage from '@/pages/public/CartPage'
+import CustomerRequestPage from '@/pages/public/CustomerRequestPage'
 import NotFound from '@/pages/public/NotFound'
 
 import { AuthProvider } from '@/context/AuthContext.jsx'
@@ -219,6 +220,7 @@ function App() {
                 <Route path="/products" element={<PublicProductList />} />
                 <Route path="/products/:id" element={<PublicProductDetail />} />
                 <Route path="/cart" element={<CartPage />} />
+                <Route path="/request" element={<CustomerRequestPage />} />
 
                 {/* Authentication */}
                 <Route path="/login" element={<LoginPage />} />
