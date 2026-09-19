@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Pencil, KeyRound, RefreshCw, ShoppingBag, CalendarDays, Hash, Phone, Shield } from 'lucide-react'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
-import HomeHeader from '@/pages/public/HomeHeader'
+import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
@@ -116,7 +116,7 @@ function MyAccountPage() {
 
   return (
     <div className="min-h-screen bg-white text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
-      <HomeHeader />
+      <Navbar />
 
       <section className="mx-auto max-w-5xl px-4 py-10 md:px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">My Account</p>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SearchX, X } from 'lucide-react'
-import HomeHeader from '@/pages/public/HomeHeader'
+import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
 import ProductCard from '@/components/product/ProductCard'
 import CatalogHeader from '@/pages/public/CatalogHeader'
@@ -180,7 +180,7 @@ export default function PublicProductList() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
-      <HomeHeader />
+      <Navbar />
 
       <CatalogHeader totalCount={catalog.length} shownCount={filtered.length} />
 

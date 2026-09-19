@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Users, Calendar, FileText, Package } from 'lucide-react'
-import HomeHeader from '@/pages/public/HomeHeader'
+import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
 
 const SERVICES = [
@@ -35,7 +35,7 @@ function About() {
   return (
     <div className="min-h-screen bg-white text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       {/* Hero */}
-      <HomeHeader />
+      <Navbar />
       <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-16 pb-6 md:px-6 md:pt-24 md:pb-10 lg:grid-cols-2">
         <div>
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
