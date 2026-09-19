@@ -21,7 +21,9 @@ export function CustomerProvider({ children }) {
         let cancelled = false;
         const load = async () => {
             try {
-                const data = await getCustomers();
+                // Fetch all registry rows newest-first so newly registered
+                // customers (highest id) appear at the top of the list.
+                const data = await getCustomers({ page: 0, size: 2000, sort: 'id,desc' });
                 const list = data.content || data;
                 if (!cancelled) {
                     setCustomers(list);
