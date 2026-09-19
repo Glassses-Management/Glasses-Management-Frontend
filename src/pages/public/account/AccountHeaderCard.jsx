@@ -1,9 +1,34 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CalendarPlus, Clock } from 'lucide-react'
 import Avatar from '@/components/ui/Avatar'
+import { useAuth } from '@/hook/UseAuth'
+import { getAttachmentsByUser } from '@/api/attachmentApi'
+import { pickImage } from '@/components/product/ProductImage'
 import { PATIENT } from '@/pages/public/account/AccountData'
 
 function AccountHeaderCard() {
+  const { user } = useAuth()
+  const [avatar, setAvatar] = useState('')
+  const displayName = user?.name || PATIENT.name
+  const createdDate = user?.created_at || user?.createdAt
+  const memberSince = createdDate
+    ? new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(createdDate))
+    : null
+
+  useEffect(() => {
+    if (!user?.id) return
+    let cancelled = false
+    getAttachmentsByUser(user.id)
+      .then((items) => {
+        if (!cancelled) setAvatar(pickImage(items)?.filePath || '')
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id])
+
   return (
     <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]">
       <span className="inline-flex items-center gap-2 rounded-full bg-forest/10 px-3 py-1 text-xs font-semibold text-forest dark:bg-leaf/10 dark:text-leaf">
@@ -13,13 +38,13 @@ function AccountHeaderCard() {
 
       <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <Avatar name={PATIENT.name} id={1} size="size-16 text-xl" />
+          <Avatar name={displayName} id={user?.id || 1} src={avatar} size="size-16 text-xl" />
           <div className="min-w-0">
             <h2 className="truncate font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
-              {PATIENT.name}
+              {displayName}
             </h2>
             <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-              {PATIENT.accountType} · Assigned to {PATIENT.doctor} · Member since {PATIENT.memberSince}
+              {user ? 'Primary Care Patient' : PATIENT.accountType} · Assigned to {PATIENT.doctor} · Member since {user ? (memberSince || '—') : PATIENT.memberSince}
             </p>
           </div>
         </div>

@@ -5,8 +5,13 @@ function cn(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-// Colored initials circle derived from a name + id, same look as the table rows.
-function Avatar({ name, id, size = 'size-10' }) {
+// When `src` is provided renders the profile photo, otherwise a colored
+// initials circle derived from a name + id, same look as the table rows.
+function Avatar({ name, id, src, size = 'size-10' }) {
+  if (src) {
+    return <img src={src} alt={name || 'Avatar'} className={cn('shrink-0 rounded-full object-cover', size)} />
+  }
+
   const { bg, text } = getAvatarColors(id)
   return (
     <span
