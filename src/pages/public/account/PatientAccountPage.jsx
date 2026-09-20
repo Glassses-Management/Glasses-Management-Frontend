@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { CalendarDays, Heart, KeyRound, Lock, ShoppingBag, User } from 'lucide-react'
 
-import HomeHeader from '@/pages/public/HomeHeader'
+import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
 import AccountHeaderCard from '@/pages/public/account/AccountHeaderCard'
 import AccountQuickStats from '@/pages/public/account/AccountQuickStats'
@@ -52,7 +52,7 @@ function PatientAccountPage() {
 
   return (
     <div className="min-h-screen bg-mist-soft text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
-      <HomeHeader />
+      <Navbar />
 
       <section className="mx-auto max-w-6xl px-4 py-10 md:px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">Patient Account</p>
