@@ -11,7 +11,8 @@ function AuthSignInPanel() {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const redirectTo = location.state?.from?.pathname || null
+  const from = location.state?.from
+  const redirectTo = typeof from === 'string' ? from : from?.pathname || null
 
   const [portal, setPortal] = useState('patient')
   const [form, setForm] = useState({ identifier: '', password: '' })
@@ -163,7 +164,7 @@ function AuthSignInPanel() {
           disabled={submitting}
           className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-forest px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-forest-deep disabled:cursor-not-allowed disabled:opacity-60 dark:bg-leaf dark:text-forest dark:hover:opacity-90"
         >
-          {submitting ? 'Signing in…' : 'Sign In to Patient Portal'}
+          {submitting ? 'Signing in…' : portal === 'patient' ? 'Sign In to OptiCraft Vault' : 'Sign In to Clinician Console'}
           {!submitting && <ArrowRight size={16} />}
         </button>
       </form>

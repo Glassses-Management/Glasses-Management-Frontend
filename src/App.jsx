@@ -48,7 +48,7 @@ import About from '@/pages/public/About'
 import Contact from '@/pages/public/Contact'
 import PublicProductList from '@/pages/public/PublicProductList'
 import PublicProductDetail from '@/pages/public/PublicProductDetail'
-import PatientAccountPage from '@/pages/public/account/PatientAccountPage'
+import MyAccountPage from '@/pages/public/MyAccountPage'
 import CartPage from '@/pages/public/CartPage'
 import CustomerRequestPage from '@/pages/public/CustomerRequestPage'
 import NotFound from '@/pages/public/NotFound'
@@ -219,6 +219,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/products" element={<PublicProductList />} />
                 <Route path="/products/:id" element={<PublicProductDetail />} />
+                <Route path="/explore" element={<PublicProductList />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/request" element={<CustomerRequestPage />} />
 
@@ -231,7 +232,7 @@ function App() {
                   path="/account"
                   element={
                     <ProtectedRoute>
-                      <PatientAccountPage />
+                      <MyAccountPage />
                     </ProtectedRoute>
                   }
                 />

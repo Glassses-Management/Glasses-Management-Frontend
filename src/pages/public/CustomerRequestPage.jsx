@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AlertCircle, Check, ClipboardList, Lock, Mail, Phone, Send, ShieldCheck, User } from 'lucide-react'
-import HomeHeader from '@/pages/public/HomeHeader'
+import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
 import Button from '@/components/ui/Button'
 import RequestTypePicker from '@/components/request/RequestTypePicker'
@@ -211,7 +211,7 @@ export default function CustomerRequestPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
-      <HomeHeader />
+      <Navbar />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">New Request</p>

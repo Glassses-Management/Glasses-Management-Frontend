@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
-import HomeHeader from '@/pages/public/HomeHeader'
+import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
 import Button from '@/components/ui/Button'
 import { useCart } from '@/hook/UseCart'
@@ -47,7 +47,7 @@ function CartPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
-      <HomeHeader />
+      <Navbar />
 
       <div className="mx-auto max-w-5xl px-4 py-10 md:px-6">
         <button
