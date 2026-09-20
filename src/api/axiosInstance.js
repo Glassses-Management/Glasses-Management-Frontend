@@ -4,6 +4,9 @@ import axios from 'axios'
 // Base URL = backend host + /api prefix (see API_DOCUMENT.md).
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
+  // Abort requests that never get a response so UI state (e.g. auth "checking")
+  // cannot hang forever on an unreachable backend.
+  timeout: 15000,
 })
 
 // Request interceptor: attach the JWT to every outgoing request if present.

@@ -1,4 +1,4 @@
-import { Routes, Route, Outlet, Navigate, useNavigate, useLocation } from 'react-router-dom'
+﻿import { Routes, Route, Outlet, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
 import { useAuth } from '@/hook/UseAuth'
 import { ROLES } from '@/utils/Roles'
@@ -41,6 +41,7 @@ import MyAppointmentPage from '@/pages/appointments/MyAppointmentPage'
 
 import RequestListPage from '@/pages/requests/RequestListPage'
 import StaffPage from '@/pages/staff/StaffPage'
+import ClinicianDashboardPage from '@/pages/staff/ClinicianDashboardPage'
 import OptometristPage from '@/pages/optometrist/OptometristPage'
 
 import Home from '@/pages/public/Home'
@@ -75,6 +76,7 @@ const DASHBOARD_ROUTES = {
   users: 'users',
   profile: 'profile',
   staff: 'staff',
+  clinician: 'clinician',
   optometrist: 'optometrist',
 }
 
@@ -168,6 +170,16 @@ function DashboardRoutes() {
           element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><RequestListPage /></RoleRoute>}
         />
 
+        <Route
+          path="clinician"
+          element={
+            <RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF, ROLES.OPTOMETRIST]}>
+              <Outlet />
+            </RoleRoute>
+          }
+        >
+          <Route index element={<ClinicianDashboardPage />} />
+        </Route>
         <Route
           path="staff"
           element={

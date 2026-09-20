@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -10,6 +10,7 @@ import {
   FileText,
   Send,
   UserRound,
+  Activity,
   ChevronLeft,
 } from 'lucide-react'
 
@@ -34,6 +35,10 @@ const NAV_SECTIONS = [
     items: [
       { key: 'requests', label: 'Requests', icon: Send },
     ],
+  },
+  {
+    label: 'Clinical',
+    items: [{ key: 'clinician', label: 'Clinician', icon: Activity }],
   },
   {
     label: 'Account',

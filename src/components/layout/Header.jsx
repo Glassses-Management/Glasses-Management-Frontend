@@ -1,4 +1,4 @@
-import { Bell, LogOut, Menu } from 'lucide-react'
+﻿import { Bell, LogOut, Menu } from 'lucide-react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const PAGE_TITLES = {
@@ -12,6 +12,7 @@ const PAGE_TITLES = {
   requests: 'Requests',
   users: 'Users',
   profile: 'My Profile',
+  clinician: 'Clinician Dashboard',
 }
 
 export default function Header({ user, onToggleSidebar, onLogout, activeRoute }) {

@@ -22,7 +22,7 @@ const dotClasses = {
 }
 
 const toTitleCase = (text) =>
-  text
+  (text || '')
     .toLowerCase()
     .split('_')
     .filter(Boolean)
