@@ -1,15 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CalendarPlus, Clock } from 'lucide-react'
+import { Camera, CalendarPlus, Clock } from 'lucide-react'
 import Avatar from '@/components/ui/Avatar'
 import { useAuth } from '@/hook/UseAuth'
-import { getAttachmentsByUser } from '@/api/attachmentApi'
+import { useToast } from '@/hook/UseToast'
+import { getAttachmentsByUser, uploadAttachment } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
 import { PATIENT } from '@/pages/public/account/AccountData'
 
 function AccountHeaderCard() {
   const { user } = useAuth()
+  const { success: toastSuccess, error: toastError } = useToast()
+  const fileInputRef = useRef(null)
   const [avatar, setAvatar] = useState('')
+  const [uploading, setUploading] = useState(false)
   const displayName = user?.name || PATIENT.name
   const createdDate = user?.created_at || user?.createdAt
   const memberSince = createdDate
@@ -29,6 +33,24 @@ function AccountHeaderCard() {
     }
   }, [user?.id])
 
+  const handlePick = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !user?.id) return
+    setUploading(true)
+    try {
+      await uploadAttachment({ file, userId: user.id })
+      toastSuccess('Profile picture updated successfully.')
+      const items = await getAttachmentsByUser(user.id)
+      setAvatar(pickImage(items)?.filePath || '')
+    } catch (err) {
+      const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to upload picture'
+      toastError(msg)
+    } finally {
+      setUploading(false)
+    }
+  }
+
   return (
     <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]">
       <span className="inline-flex items-center gap-2 rounded-full bg-forest/10 px-3 py-1 text-xs font-semibold text-forest dark:bg-leaf/10 dark:text-leaf">
@@ -38,7 +60,30 @@ function AccountHeaderCard() {
 
       <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <Avatar name={displayName} id={user?.id || 1} src={avatar} size="size-16 text-xl" />
+          {user?.id ? (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              title={avatar ? 'Click to change your profile picture' : 'Click to upload a profile picture'}
+              aria-label="Upload profile picture"
+              className="relative shrink-0 cursor-pointer rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+            >
+              <Avatar name={displayName} id={user.id} src={avatar} size="size-16 text-xl" />
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-forest text-white ring-2 ring-white dark:ring-[#16271F]" title="Change profile picture">
+                <Camera size={12} />
+              </span>
+            </button>
+          ) : (
+            <Avatar name={displayName} id={1} src={avatar} size="size-16 text-xl" />
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/gif"
+            className="hidden"
+            onChange={handlePick}
+          />
           <div className="min-w-0">
             <h2 className="truncate font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
               {displayName}

@@ -6,6 +6,8 @@ import { useAuth } from '@/hook/UseAuth'
 import { useCart } from '@/hook/UseCart'
 import { getInitials } from '@/utils/avatar'
 import { ROLES } from '@/utils/Roles'
+import { getAttachmentsByUser } from '@/api/attachmentApi'
+import { pickImage } from '@/components/product/ProductImage'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
@@ -55,16 +57,47 @@ function ThemeButton() {
 }
 
 // Round cart button with a dark-green count badge (thin white ring) in the corner.
+// Each add-to-cart triggers a one-shot bounce on the badge, and the cart button
+// stays highlighted until the user clicks it to acknowledge the new items.
 function CartIcon({ count }) {
+  const [notify, setNotify] = useState(false)
+  const [animating, setAnimating] = useState(false)
+  const prevCount = useRef(count)
+
+  useEffect(() => {
+    if (count === 0) {
+      prevCount.current = 0
+      const timer = setTimeout(() => {
+        setNotify(false)
+        setAnimating(false)
+      }, 0)
+      return () => clearTimeout(timer)
+    }
+    if (count <= prevCount.current) {
+      prevCount.current = count
+      return undefined
+    }
+    prevCount.current = count
+    const notifyTimer = setTimeout(() => setNotify(true), 0)
+    const animTimer = setTimeout(() => setAnimating(true), 0)
+    const clearAnimTimer = setTimeout(() => setAnimating(false), 600)
+    return () => {
+      clearTimeout(notifyTimer)
+      clearTimeout(animTimer)
+      clearTimeout(clearAnimTimer)
+    }
+  }, [count])
+
   return (
     <Link
       to="/cart"
+      onClick={() => setNotify(false)}
       aria-label={`Shopping cart, ${count} item${count === 1 ? '' : 's'}`}
-      className={roundBtn}
+      className={`relative ${roundBtn} ${notify ? 'bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf' : ''}`}
     >
       <ShoppingCart size={18} strokeWidth={1.75} />
-      {count > 0 && (
-        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-forest px-1 text-[11px] font-bold text-white ring-2 ring-white dark:ring-[#0E1A15]">
+      {notify && count > 0 && (
+        <span className={`absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-forest px-1 text-[11px] font-bold text-white ring-2 ring-white dark:ring-[#0E1A15] ${animating ? 'animate-bounce' : ''}`}>
           {count}
         </span>
       )}
@@ -79,6 +112,7 @@ function CartIcon({ count }) {
 export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials, cartCount, isAdmin, userImage, userName, onSearch }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
+  const [loadedAvatar, setLoadedAvatar] = useState('')
   const accountRef = useRef(null)
   const navigate = useNavigate()
   const location = useLocation()
@@ -105,7 +139,24 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
         : []
   const admin = isAdmin ?? (authed && rawRoles.some((r) => String(r).toUpperCase().replace(/^ROLE_/, '') === ROLES.ADMIN))
   const name = userName ?? user?.name
-  const avatarImage = userImage
+  const avatarImage = userImage ?? loadedAvatar
+
+  // Load the logged-in user's profile picture so the navbar shows it when one
+  // exists (falls back to the initials circle when there is none).
+  useEffect(() => {
+    if (!user?.id) return undefined
+    let cancelled = false
+    getAttachmentsByUser(user.id)
+      .then((items) => {
+        if (!cancelled) setLoadedAvatar(pickImage(items)?.filePath || '')
+      })
+      .catch(() => {
+        if (!cancelled) setLoadedAvatar('')
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id])
 
   const closeAccount = () => setAccountOpen(false)
 

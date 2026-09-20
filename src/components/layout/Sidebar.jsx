@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -13,6 +13,8 @@ import {
   Activity,
   ChevronLeft,
 } from 'lucide-react'
+import { getAttachmentsByUser } from '@/api/attachmentApi'
+import { pickImage } from '@/components/product/ProductImage'
 
 const NAV_SECTIONS = [
   {
@@ -80,7 +82,21 @@ function SidebarItem({ item, active, collapsed, onNavigate }) {
 export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileClose, user }) {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpenStateInternal, setMobileOpenStateInternal] = useState(false)
+  const [avatarImage, setAvatarImage] = useState('')
   const isMobileOpen = mobileOpen !== undefined ? mobileOpen : mobileOpenStateInternal
+
+  useEffect(() => {
+    if (!user?.id) return undefined
+    let cancelled = false
+    getAttachmentsByUser(user.id)
+      .then((items) => {
+        if (!cancelled) setAvatarImage(pickImage(items)?.filePath || '')
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id])
 
   const setMobile = (next) => {
     if (mobileOpen !== undefined) {
@@ -157,19 +173,35 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
       </nav>
 
       <div className={`border-t border-gray-100 p-3 dark:border-neutral-800 ${collapsed ? 'text-center' : ''}`}>
-        <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-2.5 transition-colors duration-300 dark:bg-white/5">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f] font-semibold text-white">
-            {(user?.name || 'A').charAt(0).toUpperCase()}
-          </div>
+        <button
+          type="button"
+          onClick={() => goTo('profile')}
+          title={collapsed ? 'My Profile' : undefined}
+          aria-label="My Profile"
+          className={`flex w-full items-center gap-3 rounded-xl bg-gray-50 p-2.5 transition-colors duration-300 hover:bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10 ${
+            collapsed ? 'justify-center' : ''
+          }`}
+        >
+          {avatarImage ? (
+            <img
+              src={avatarImage}
+              alt={`${user?.name || 'User'} profile picture`}
+              className="h-9 w-9 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f] font-semibold text-white">
+              {(user?.name || 'A').charAt(0).toUpperCase()}
+            </div>
+          )}
           {!collapsed && (
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 text-left">
               <p className="truncate text-sm font-medium text-[#1a1a2e] dark:text-neutral-50">{user?.name || 'Guest'}</p>
               <p className="truncate text-xs text-gray-400 dark:text-neutral-500">
                 {typeof user?.role === 'string' ? user.role : user?.role?.name || 'Administrator'}
               </p>
             </div>
           )}
-        </div>
+        </button>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
@@ -8,6 +8,7 @@ import { useCart } from '@/hook/UseCart'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { createOrder } from '@/api/orderApi'
+import { getPublicAttachmentsByProduct } from '@/api/publicProductApi'
 import { formatCurrency } from '@/utils/FormatCurrency'
 
 function CartPage() {
@@ -16,6 +17,24 @@ function CartPage() {
   const { token, user } = useAuth()
   const { success: toastSuccess, error: toastError } = useToast()
   const [placing, setPlacing] = useState(false)
+  const [images, setImages] = useState({})
+
+  // Load every picture of each product in the cart (product_id -> image paths).
+  const missingIds = items.map((i) => i.product_id).filter((id) => id != null && !(id in images))
+  useEffect(() => {
+    if (missingIds.length === 0) return undefined
+    let cancelled = false
+    Promise.all(
+      missingIds.map((id) =>
+        getPublicAttachmentsByProduct(id)
+          .then((atts) => [id, (Array.isArray(atts) ? atts : []).filter((a) => a?.filePath).map((a) => a.filePath)])
+          .catch(() => [id, []]),
+      ),
+    ).then((entries) => {
+      if (!cancelled) setImages((prev) => ({ ...prev, ...Object.fromEntries(entries) }))
+    })
+    return () => { cancelled = true }
+  }, [missingIds])
 
   const customerId = user?.customer_id ?? user?.id
 
@@ -84,18 +103,38 @@ function CartPage() {
             <div className="divide-y divide-neutral-100 rounded-3xl bg-white ring-1 ring-neutral-200/60 dark:divide-neutral-800 dark:bg-[#16271F]/60 dark:ring-neutral-800 lg:col-span-2">
               {items.map((item) => {
                 const lineTotal = (Number(item.quantity) || 0) * (Number(item.product?.sale_price) || 0)
+                const itemImages = images[item.product_id] || []
                 return (
                   <div key={item.product_id} className="flex flex-wrap items-center justify-between gap-4 p-5">
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-                        {item.product?.brand || 'Optic Shop'}
-                      </p>
-                      <p className="truncate font-sans text-lg font-medium text-neutral-900 dark:text-neutral-50">
-                        {item.product?.model}
-                      </p>
-                      <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-                        {item.product?.sku}{item.product?.color ? ` · ${item.product.color}` : ''}
-                      </p>
+                    <div className="flex min-w-0 items-center gap-4">
+                      <div className="flex shrink-0 flex-wrap gap-2">
+                        {itemImages.length > 0 ? (
+                          itemImages.map((img, idx) => (
+                            <img
+                              key={idx}
+                              src={img}
+                              alt={`${item.product?.model} view ${idx + 1}`}
+                              className="h-20 w-20 rounded-2xl object-cover ring-1 ring-neutral-200/60 dark:ring-neutral-700"
+                            />
+                          ))
+                        ) : (
+                          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-neutral-100 text-xs text-neutral-400 dark:bg-neutral-800/60">
+                            No image
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+                          {item.product?.brand || 'Optic Shop'}
+                        </p>
+                        <p className="truncate font-sans text-lg font-medium text-neutral-900 dark:text-neutral-50">
+                          {item.product?.model}
+                        </p>
+                        <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                          {item.product?.sku}{item.product?.color ? ` · ${item.product.color}` : ''}
+                        </p>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-4">
