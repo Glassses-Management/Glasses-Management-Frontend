@@ -5,7 +5,7 @@ import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
-import { composeValidators, required } from '@/utils/Validators'
+import { prescriptionErrors } from '@/utils/Validators'
 import { useToast } from '@/hook/UseToast'
 import { usePrescriptions } from '@/hook/UsePrescription'
 import { useCustomers } from '@/hook/UseCustomer'
@@ -113,21 +113,7 @@ function PrescriptionForm() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const lensValid = (val) => val === '' || Number.isFinite(Number(val))
-        const axisValid = (val) => val === '' || (Number(val) >= 0 && Number(val) <= 180)
-
-        const nextErrors = {
-            customer_id: composeValidators(required)(form.customer_id),
-            prescription_date: '',
-            od_sphere: lensValid(form.od_sphere) ? '' : 'Must be a number',
-            od_cylinder: lensValid(form.od_cylinder) ? '' : 'Must be a number',
-            od_axis: axisValid(form.od_axis) ? '' : 'Must be 0-180',
-            os_sphere: lensValid(form.os_sphere) ? '' : 'Must be a number',
-            os_cylinder: lensValid(form.os_cylinder) ? '' : 'Must be a number',
-            os_axis: axisValid(form.os_axis) ? '' : 'Must be 0-180',
-            near_addition: lensValid(form.near_addition) ? '' : 'Must be a number',
-            pupillary_distance: lensValid(form.pupillary_distance) ? '' : 'Must be >= 0',
-        }
+        const nextErrors = prescriptionErrors(form)
         setErrors(nextErrors)
         if (Object.values(nextErrors).some((error) => error)) return
 

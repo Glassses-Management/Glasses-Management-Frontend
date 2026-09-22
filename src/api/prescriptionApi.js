@@ -25,6 +25,11 @@ export const createPrescription = async (payload) => {
   return data
 }
 
+export const createPrescriptionsBulk = async (payload) => {
+  const { data } = await axiosInstance.post('/prescriptions/bulk', payload)
+  return data
+}
+
 export const updatePrescription = async (id, payload) => {
   const { data } = await axiosInstance.put(`/prescriptions/${id}`, payload)
   return data

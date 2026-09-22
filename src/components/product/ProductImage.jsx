@@ -36,9 +36,6 @@ export function GlassesFallback({ className = '' }) {
   )
 }
 
-// When a sizing class (aspect-* or h-*) is passed, the image stretches to fill
-// the whole container (used on the product detail page). Without one it keeps
-// the old fixed-height thumbnail look used by ProductCard.
 function ProductImage({ src, alt, className = '' }) {
   const [failed, setFailed] = useState(false)
   const [prevSrc, setPrevSrc] = useState(src)
@@ -49,19 +46,17 @@ function ProductImage({ src, alt, className = '' }) {
   }
 
   const showFallback = !src || failed
-  const fillsContainer = /\baspect-|\bh-\d/.test(className)
-  const fitClass = /\bobject-contain\b/.test(className) ? 'object-contain' : 'object-cover'
 
   return (
-    <div className={`relative w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800/80 ${fillsContainer ? '' : 'h-48'} ${className}`}>
+    <div className={`relative overflow-hidden bg-neutral-100 dark:bg-neutral-800/80 ${className}`}>
       {showFallback ? (
-        <GlassesFallback className={`${fillsContainer ? 'absolute inset-0' : 'h-48 w-full'}`} />
+        <GlassesFallback className="absolute inset-0 h-full w-full" />
       ) : (
         <img
           src={src}
           alt={alt || ''}
           onError={() => setFailed(true)}
-          className={`${fitClass} ${fillsContainer ? 'absolute inset-0 h-full w-full' : 'h-48 w-full'}`}
+          className={`${/\bobject-contain\b/.test(className) ? 'object-contain' : 'object-cover'} h-full w-full`}
         />
       )}
     </div>

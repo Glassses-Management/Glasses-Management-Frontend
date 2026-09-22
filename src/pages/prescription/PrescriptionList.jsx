@@ -147,7 +147,10 @@ function PrescriptionList({ onNavigate }) {
                         Manage eyewear prescriptions and their lens parameters.
                     </p>
                 </div>
-                <Button onClick={() => navigate('/dashboard/prescriptions/new')}>+ New Prescription</Button>
+                <div className="flex flex-wrap items-center gap-2">
+                    <Button variant="outline" onClick={() => navigate('/dashboard/prescriptions/bulk')}>Bulk Create</Button>
+                    <Button onClick={() => navigate('/dashboard/prescriptions/new')}>+ New Prescription</Button>
+                </div>
             </div>
 
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center">

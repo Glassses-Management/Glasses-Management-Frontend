@@ -1,76 +1,26 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { Search, Plus, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react'
-import { getProducts, deleteProduct } from '@/api/productApi'
-import { getOrderItems } from '@/api/orderItemApi'
-import { deleteOrder } from '@/api/orderApi'
-import { getAttachmentsByProduct, deleteAttachment } from '@/api/attachmentApi'
-import { formatCurrency } from '@/utils/FormatCurrency'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Plus, Search } from 'lucide-react'
+import { getProducts } from '@/api/productApi'
+import { getAttachmentsByProduct } from '@/api/attachmentApi'
+import { pickImage } from '@/components/product/ProductImage'
+import ProductStats from '@/components/product/ProductStats'
+import ProductTable from '@/components/product/ProductTable'
+import DeleteProductModal from '@/components/product/DeleteProductModal'
 import Button from '@/components/ui/Button'
-import { useToast } from '@/hook/UseToast'
-
-const CATEGORY_ORDER = ['Frames', 'Sunglasses', 'Lenses', 'Accessories']
-
-function groupByCategory(products) {
-  const groups = {}
-  const ordered = []
-  products.forEach((p) => {
-    const cat = p.category || 'Other'
-    if (!groups[cat]) {
-      groups[cat] = []
-      ordered.push(cat)
-    }
-    groups[cat].push(p)
-  })
-  ordered.sort((a, b) => {
-    const ia = CATEGORY_ORDER.indexOf(a)
-    const ib = CATEGORY_ORDER.indexOf(b)
-    if (ia !== -1 && ib !== -1) return ia - ib
-    if (ia !== -1) return -1
-    if (ib !== -1) return 1
-    return a.localeCompare(b)
-  })
-  return { groups, ordered }
-}
 
 export default function ProductListPage({ onNavigate }) {
-  const toast = useToast()
   const [products, setProducts] = useState([])
+  const [images, setImages] = useState({})
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [category, setCategory] = useState('all')
+  const [brand, setBrand] = useState('all')
   const [deleting, setDeleting] = useState(null)
-  const [deleteError, setDeleteError] = useState('')
-  const [referencedOrders, setReferencedOrders] = useState(null)
-  const [deletingNow, setDeletingNow] = useState(false)
-  const [openCategories, setOpenCategories] = useState(new Set())
-
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    if (!q) return products
-    return products.filter(
-      (p) =>
-        (p.model || '').toLowerCase().includes(q) ||
-        (p.brand || '').toLowerCase().includes(q) ||
-        (p.sku || '').toLowerCase().includes(q) ||
-        (p.category || '').toLowerCase().includes(q),
-    )
-  }, [products, search])
-
-  const { groups, ordered } = useMemo(() => groupByCategory(filtered), [filtered])
-
-  const toggleCategory = (cat) => {
-    setOpenCategories((prev) => {
-      const next = new Set(prev)
-      if (next.has(cat)) next.delete(cat)
-      else next.add(cat)
-      return next
-    })
-  }
 
   const fetchProducts = useCallback(async () => {
-    setLoading(true)
     try {
       const data = await getProducts({})
-      const list = Array.isArray(data?.content) ? data.content : (Array.isArray(data) ? data : [])
+      const list = Array.isArray(data?.content) ? data.content : Array.isArray(data) ? data : []
       setProducts(list)
     } catch (err) {
       console.error('ProductListPage: failed to load products:', err?.response?.status || err?.message || err)
@@ -80,232 +30,136 @@ export default function ProductListPage({ onNavigate }) {
   }, [])
 
   useEffect(() => {
-    fetchProducts()
+    const run = async () => {
+      await fetchProducts()
+    }
+    run()
   }, [fetchProducts])
 
-  const handleDelete = async () => {
-    if (!deleting || deletingNow) return
-    setDeleteError('')
-    setReferencedOrders(null)
-    try {
-      await deleteProduct(deleting.id)
-      setDeleting(null)
-      toast.success('Product deleted successfully')
-      fetchProducts()
-    } catch (err) {
-      const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to delete product'
-      let orderIds = []
-      try {
-        const items = await getOrderItems({ productId: deleting.id })
-        const list = Array.isArray(items) ? items : Array.isArray(items?.content) ? items.content : []
-        orderIds = [...new Set(list.map((i) => i.order_id ?? i.orderId).filter(Boolean))]
-      } catch {
-        orderIds = []
-      }
-      if (orderIds.length > 0) {
-        setReferencedOrders(orderIds)
-        return
-      }
-      try {
-        await removeProductAttachments(deleting.id)
-        await deleteProduct(deleting.id)
-        setDeleting(null)
-        toast.success('Product deleted successfully')
-        fetchProducts()
-      } catch {
-        setDeleteError(msg)
-      }
+  useEffect(() => {
+    if (loading || products.length === 0) return
+    if (products.every((p) => p.id in images)) return
+    let cancelled = false
+    const pending = products.filter((p) => !(p.id in images))
+    Promise.all(
+      pending.map(async (p) => {
+        const atts = await getAttachmentsByProduct(p.id).catch(() => [])
+        const list = Array.isArray(atts) ? atts : Array.isArray(atts?.content) ? atts.content : []
+        const src = pickImage(list)?.filePath || ''
+        return [p.id, src]
+      }),
+    ).then((entries) => {
+      if (!cancelled) setImages((prev) => ({ ...prev, ...Object.fromEntries(entries) }))
+    })
+    return () => {
+      cancelled = true
     }
-  }
+  }, [products, images, loading])
 
-  const handleForceDelete = async () => {
-    if (!deleting || deletingNow) return
-    setDeleteError('')
-    setDeletingNow(true)
-    try {
-      for (const orderId of referencedOrders || []) {
-        await deleteOrder(orderId)
-      }
-      await removeProductAttachments(deleting.id)
-      await deleteProduct(deleting.id)
-      setDeleting(null)
-      setReferencedOrders(null)
-      toast.success('Product deleted successfully')
-      fetchProducts()
-    } catch (err) {
-      const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to delete product'
-      setDeleteError(msg)
-    } finally {
-      setDeletingNow(false)
-    }
-  }
+  const categories = useMemo(
+    () => [...new Set(products.map((p) => p.category || 'Other'))].sort(),
+    [products],
+  )
+  const brands = useMemo(
+    () => [...new Set(products.map((p) => p.brand || 'Uncategorized'))].sort(),
+    [products],
+  )
 
-  const closeDelete = () => {
-    if (deletingNow) return
-    setDeleting(null)
-    setDeleteError('')
-    setReferencedOrders(null)
-  }
+  const visible = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return products.filter((p) => {
+      const matchSearch =
+        !q || [p.model, p.brand, p.sku, p.category].some((v) => (v || '').toLowerCase().includes(q))
+      const matchCategory = category === 'all' || (p.category || 'Other') === category
+      const matchBrand = brand === 'all' || (p.brand || 'Uncategorized') === brand
+      return matchSearch && matchCategory && matchBrand
+    })
+  }, [products, search, category, brand])
 
-  const removeProductAttachments = async (productId) => {
-    const atts = await getAttachmentsByProduct(productId).catch(() => [])
-    const list = Array.isArray(atts) ? atts : Array.isArray(atts?.content) ? atts.content : []
-    for (const att of list) {
-      const id = att?.attachmentId ?? att?.id
-      if (id) await deleteAttachment(id).catch(() => {})
-    }
-  }
+  const stats = useMemo(
+    () => ({
+      total: products.length,
+      categories: categories.length,
+      brands: brands.length,
+      withImages: Object.values(images).filter(Boolean).length,
+    }),
+    [products, categories, brands, images],
+  )
 
-  const catCount = (cat) => (groups[cat] || []).length
+  const fieldClass =
+    'rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition-colors focus:border-forest dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-leaf'
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Products</h1>
-          <p className="text-sm text-gray-400 dark:text-neutral-500">Manage your optical product catalog</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-50">Products</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
+            Manage your optical products, frames, lenses, and catalog information.
+          </p>
         </div>
-        <Button
-          icon={<Plus size={18} />}
-          onClick={() => onNavigate?.('products/add')}
-        >
+        <Button icon={<Plus size={18} />} onClick={() => onNavigate?.('products/add')}>
           Add Product
         </Button>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-sm">
-        <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-neutral-500" />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by name, brand, or SKU..."
-          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
-        />
+      <ProductStats {...stats} />
+
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative">
+            <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-neutral-500" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, brand, or SKU..."
+              className={`${fieldClass} w-full pl-9 pr-4 sm:w-64`}
+            />
+          </div>
+          <select value={category} onChange={(e) => setCategory(e.target.value)} className={`${fieldClass} cursor-pointer`}>
+            <option value="all">All Categories</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+          <select value={brand} onChange={(e) => setBrand(e.target.value)} className={`${fieldClass} cursor-pointer`}>
+            <option value="all">All Brands</option>
+            {brands.map((b) => (
+              <option key={b} value={b}>{b}</option>
+            ))}
+          </select>
+        </div>
+        <p className="shrink-0 text-sm text-gray-500 dark:text-neutral-400">
+          Showing <span className="font-medium text-gray-900 dark:text-neutral-50">{visible.length}</span> of {products.length} products
+        </p>
       </div>
 
-      {/* Categories */}
-      <div className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
-        {loading ? (
-          <div className="space-y-4 p-5">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="space-y-3">
-                <div className="h-8 animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800" />
-                <div className="space-y-2 pl-4">
-                  {[0, 1, 2].map((j) => (
-                    <div key={j} className="h-12 animate-pulse rounded-lg bg-gray-50 dark:bg-neutral-800/50" />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : ordered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <span className="mb-3 text-4xl">📦</span>
-            <p className="text-sm font-medium text-gray-500 dark:text-neutral-400">
-              {search ? 'No products match your search.' : 'No products yet.'}
-            </p>
-          </div>
-        ) : (
-          <div className="divide-y divide-gray-100 dark:divide-neutral-800">
-            {ordered.map((cat) => {
-              const items = groups[cat]
-              const isOpen = openCategories.has(cat)
-              return (
-                <div key={cat}>
-                  <button
-                    type="button"
-                    onClick={() => toggleCategory(cat)}
-                    className="flex w-full items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
-                  >
-                    {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                    <span className="font-semibold text-gray-900 dark:text-neutral-100">{cat}</span>
-                    <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-neutral-800 dark:text-neutral-400">
-                      {catCount(cat)}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="space-y-2 px-5 pb-3">
-                      {items.map((p) => (
-                        <div
-                          key={p.id}
-                          onClick={() => onNavigate?.(`products/${p.id}`)}
-                          className="flex cursor-pointer items-center justify-between rounded-lg border border-gray-100 bg-gray-50/50 px-4 py-3 transition-colors hover:border-blue-300 hover:bg-blue-50/50 dark:border-neutral-700 dark:bg-neutral-800/30 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/5"
-                        >
-                          <div className="flex min-w-0 items-center gap-3">
-                            <div className="flex flex-col">
-                              <span className="font-medium text-gray-900 dark:text-neutral-100">{p.model}</span>
-                              <span className="text-xs text-gray-500 dark:text-neutral-400">{p.brand} · {p.sku}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className="font-medium text-[#1a1a2e] dark:text-neutral-50">
-                              {formatCurrency(p.sale_price)}
-                            </span>
-                            <div className="inline-flex gap-1">
-                              <Button
-                                variant="blue"
-                                size="sm"
-                                onClick={(e) => { e.stopPropagation(); onNavigate?.(`products/edit/${p.id}`) }}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={(e) => { e.stopPropagation(); setDeleting(p) }}
-                              >
-                                Delete
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
+      {loading ? (
+        <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-50 dark:bg-neutral-800/50" />
+          ))}
+        </div>
+      ) : visible.length === 0 ? (
+        <div className="rounded-2xl border border-gray-200 bg-white py-16 text-center shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+          <p className="text-sm font-medium text-gray-500 dark:text-neutral-400">
+            {search || category !== 'all' || brand !== 'all' ? 'No products match your filters.' : 'No products yet.'}
+          </p>
+        </div>
+      ) : (
+        <ProductTable products={visible} images={images} onNavigate={onNavigate} onDelete={setDeleting} />
+      )}
 
       {deleting && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40 dark:bg-black/60" onClick={closeDelete} />
-          <div className="relative w-full max-w-sm rounded-2xl border border-gray-100 bg-white p-6 shadow-xl dark:border-neutral-700 dark:bg-[#1c1c28]">
-            <h2 className="text-lg font-bold text-[#1a1a2e] dark:text-neutral-50">Delete Product</h2>
-            <p className="mt-2 text-sm text-gray-500 dark:text-neutral-400">
-              Are you sure you want to delete <span className="font-medium text-[#1a1a2e] dark:text-neutral-200">{deleting.model}</span>? This action cannot be undone.
-            </p>
-            {referencedOrders && (
-              <div className="mt-4 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
-                <AlertTriangle size={18} className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" />
-                <p className="text-sm text-amber-800 dark:text-amber-300">
-                  {referencedOrders.length > 0
-                    ? `This product is part of ${referencedOrders.length} existing order${referencedOrders.length === 1 ? '' : 's'}. Deleting it will also permanently delete those order${referencedOrders.length === 1 ? '' : 's'} and their history.`
-                    : 'This product is referenced by existing orders. Deleting it also removes those order records.'}
-                </p>
-              </div>
-            )}
-            {deleteError && (
-              <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">{deleteError}</p>
-            )}
-            <div className="mt-5 flex justify-end gap-3">
-              <Button variant="ghost" onClick={closeDelete} disabled={deletingNow}>Cancel</Button>
-              {referencedOrders ? (
-                <Button variant="danger" onClick={handleForceDelete} loading={deletingNow}>
-                  {deletingNow ? 'Deleting…' : 'Delete Product & Orders'}
-                </Button>
-              ) : (
-                <Button variant="danger" onClick={handleDelete} loading={deletingNow}>
-                  Delete
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
+        <DeleteProductModal
+          product={deleting}
+          onClose={() => setDeleting(null)}
+          onDeleted={() => {
+            setDeleting(null)
+            fetchProducts()
+          }}
+        />
       )}
     </div>
   )

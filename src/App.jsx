@@ -24,6 +24,7 @@ import CustomerList from '@/pages/customers/CustomerList'
 import CustomerDetail from '@/pages/customers/CustomerDetail'
 import CustomerForm from '@/components/form/CustomerForm'
 import PrescriptionList from '@/pages/prescription/PrescriptionList'
+import BulkPrescriptionPage from '@/pages/prescription/BulkPrescriptionPage'
 import PrescriptionForm from '@/components/form/PrescriptionForm'
 import PrescriptionDetail from '@/pages/prescription/PrescriptionDetail'
 import InventoryList from '@/pages/inventory/InventoryList'
@@ -104,6 +105,8 @@ function DashboardRoutes() {
   const handleNavigate = (key) => {
     if (key === 'dashboard') {
       navigate('/dashboard')
+    } else if (key === 'profile') {
+      navigate('/account')
     } else {
       navigate(`/dashboard/${key}`)
     }
@@ -161,6 +164,7 @@ function DashboardRoutes() {
         <Route path="orders/:id" element={<OrderDetail />} />
 
         <Route path="prescriptions" element={<PrescriptionList onNavigate={handleNavigate} />} />
+        <Route path="prescriptions/bulk" element={<BulkPrescriptionPage />} />
         <Route path="prescriptions/new" element={<PrescriptionForm />} />
         <Route path="prescriptions/:id/edit" element={<PrescriptionForm />} />
         <Route path="prescriptions/:id" element={<PrescriptionDetail />} />
