@@ -11,7 +11,7 @@ function cn(...classes) {
 function AccountGlazingProgress() {
   return (
     <AccountCard>
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800" data-aos="fade-up">
         <div>
           <h3 className="font-sans text-base font-semibold text-neutral-900 dark:text-neutral-50">
             Bespoke Glazing & Delivery Progress
@@ -34,7 +34,7 @@ function AccountGlazingProgress() {
         </div>
       </div>
 
-      <div className="px-6 pb-6 pt-5">
+      <div className="px-6 pb-6 pt-5" data-aos="fade-up" data-aos-delay="100">
         <div className="flex items-start">
           {GLAZE_STEPS.map((step, index) => {
             const done = index < GLAZE_ACTIVE_STEP

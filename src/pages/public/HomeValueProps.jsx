@@ -35,7 +35,7 @@ export default function HomeValueProps() {
   return (
     <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-[#121F18]">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center" data-aos="fade-up">
           <p className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
             <Eye size={14} />
             The Optic Dispensary
@@ -45,10 +45,11 @@ export default function HomeValueProps() {
           </h2>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {PROPS.map(({ number, icon: Icon, title, text, tag }) => (
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-aos="fade-up" data-aos-delay="150">
+          {PROPS.map(({ number, icon: Icon, title, text, tag }, i) => (
             <div
               key={number}
+              data-aos-delay={`${i * 100}`}
               className="group rounded-2xl bg-white p-6 ring-1 ring-edge shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-[#16271F] dark:ring-neutral-800"
             >
               <div className="flex items-start justify-between">

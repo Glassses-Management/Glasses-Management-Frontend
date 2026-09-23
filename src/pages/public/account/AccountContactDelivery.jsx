@@ -15,7 +15,7 @@ function AccountContactDelivery() {
         </button>
       </div>
 
-      <ul className="mt-4 space-y-3">
+      <ul className="mt-4 space-y-3" data-aos="fade-up">
         <li className="flex items-start gap-3">
           <MapPin size={15} className="mt-0.5 shrink-0 text-forest dark:text-leaf" />
           <p className="text-sm text-neutral-600 dark:text-neutral-300">

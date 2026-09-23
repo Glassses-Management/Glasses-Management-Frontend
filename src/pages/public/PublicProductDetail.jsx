@@ -187,7 +187,7 @@ export default function PublicProductDetail() {
           <>
             <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
               {/* Left — gallery */}
-              <div className="min-w-0">
+              <div className="min-w-0" data-aos="fade-right">
                 <div className={`${card} overflow-hidden rounded-3xl`}>
                   <div className="relative aspect-[4/3] overflow-hidden bg-white">
                     {images[active] ? (
@@ -241,7 +241,7 @@ export default function PublicProductDetail() {
               </div>
 
               {/* Right — purchase panel */}
-              <div className="min-w-0 py-1">
+              <div className="min-w-0 py-1" data-aos="fade-left">
                 <div className="flex items-start justify-between gap-4">
                   <p className={`${eyebrow} pt-1`}>{product.category || 'Eyewear'}</p>
                   <p className="text-right text-xs text-neutral-500 dark:text-neutral-400">
@@ -374,7 +374,7 @@ export default function PublicProductDetail() {
             </div>
 
             {/* Craft Architecture */}
-            <section className="mt-20 text-center">
+            <section className="mt-20 text-center" data-aos="fade-up">
               <p className={eyebrow}>Craft Architecture</p>
               <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
                 Built for daily <span className="italic text-forest dark:text-leaf">wear</span>
@@ -382,7 +382,7 @@ export default function PublicProductDetail() {
               <p className={`mx-auto mt-3 max-w-xl text-sm ${muted}`}>
                 Every Optic Shop frame passes the same 38-step bench protocol before it reaches a showcase.
               </p>
-              <div className="mt-10 grid gap-5 md:grid-cols-3">
+              <div className="mt-10 grid gap-5 md:grid-cols-3" data-aos="fade-up" data-aos-delay="150">
                 {FEATURES.map((f) => {
                   const Icon = f.icon
                   return (
@@ -400,7 +400,7 @@ export default function PublicProductDetail() {
             </section>
 
             {/* Dimensional matrix */}
-            <section className={`${card} mt-16 flex flex-col gap-6 rounded-3xl p-8 lg:flex-row lg:items-center lg:justify-between`}>
+            <section className={`${card} mt-16 flex flex-col gap-6 rounded-3xl p-8 lg:flex-row lg:items-center lg:justify-between`} data-aos="fade-up">
               <div className="min-w-0">
                 <p className={eyebrow}>Dimensional Matrix</p>
                 <h3 className="mt-2 text-xl font-semibold text-neutral-900 dark:text-neutral-50">Technical Specifications</h3>
@@ -416,7 +416,7 @@ export default function PublicProductDetail() {
               </div>
             </section>
 
-            <div className="mt-12 flex justify-center">
+            <div className="mt-12 flex justify-center" data-aos="fade-up">
               <Link to="/products" className="inline-flex items-center gap-2 rounded-xl bg-forest px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-forest-deep dark:bg-leaf dark:text-forest dark:hover:opacity-90">
                 Explore the Collection <ArrowRight size={16} />
               </Link>

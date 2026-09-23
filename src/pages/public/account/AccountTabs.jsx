@@ -4,7 +4,7 @@ function cn(...classes) {
 
 function AccountTabs({ tabs, active, onChange }) {
   return (
-    <div className="mt-6 overflow-x-auto rounded-2xl border border-neutral-200 bg-white p-1.5 shadow-sm dark:border-neutral-800 dark:bg-[#16271F]">
+    <div className="mt-6 overflow-x-auto rounded-2xl border border-neutral-200 bg-white p-1.5 shadow-sm dark:border-neutral-800 dark:bg-[#16271F]" data-aos="fade-up">
       <div className="flex min-w-max gap-1.5">
         {tabs.map((tab) => {
           const isActive = tab.key === active

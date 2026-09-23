@@ -22,7 +22,7 @@ function AccountVisionBenefits() {
         <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">Member ID {BENEFITS.memberId}</p>
       </div>
 
-      <ul className="mt-4 space-y-3">
+      <ul className="mt-4 space-y-3" data-aos="fade-up">
         {BENEFITS.breakdown.map((benefit) => (
           <li key={benefit.label} className="flex items-center justify-between gap-3">
             <span className="text-sm text-neutral-600 dark:text-neutral-300">{benefit.label}</span>

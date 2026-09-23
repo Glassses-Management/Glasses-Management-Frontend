@@ -78,13 +78,13 @@ function CartPage() {
         </button>
 
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">Your Selection</p>
-        <h1 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 dark:text-neutral-50 md:text-5xl">
+        <h1 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 dark:text-neutral-50 md:text-5xl" data-aos="fade-up">
           Shopping <span className="italic">Cart</span>
         </h1>
         <div className="mt-4 h-[3px] w-12 rounded-full bg-forest" />
 
         {items.length === 0 ? (
-          <div className="mt-12 flex flex-col items-center justify-center rounded-3xl bg-white px-6 py-16 text-center ring-1 ring-neutral-200/60 dark:bg-[#16271F]/60 dark:ring-neutral-800">
+          <div className="mt-12 flex flex-col items-center justify-center rounded-3xl bg-white px-6 py-16 text-center ring-1 ring-neutral-200/60 dark:bg-[#16271F]/60 dark:ring-neutral-800" data-aos="fade-up">
             <ShoppingBag size={40} className="text-neutral-300 dark:text-neutral-600" />
             <p className="mt-4 text-lg font-semibold text-neutral-900 dark:text-neutral-50">Your cart is empty</p>
             <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
@@ -100,7 +100,7 @@ function CartPage() {
         ) : (
           <div className="mt-8 grid gap-8 lg:grid-cols-3">
             {/* Item list */}
-            <div className="divide-y divide-neutral-100 rounded-3xl bg-white ring-1 ring-neutral-200/60 dark:divide-neutral-800 dark:bg-[#16271F]/60 dark:ring-neutral-800 lg:col-span-2">
+            <div className="divide-y divide-neutral-100 rounded-3xl bg-white ring-1 ring-neutral-200/60 dark:divide-neutral-800 dark:bg-[#16271F]/60 dark:ring-neutral-800 lg:col-span-2" data-aos="fade-left">
               {items.map((item) => {
                 const lineTotal = (Number(item.quantity) || 0) * (Number(item.product?.sale_price) || 0)
                 const itemImages = images[item.product_id] || []
@@ -183,7 +183,7 @@ function CartPage() {
 
             {/* Summary */}
             <div className="lg:sticky lg:top-6">
-              <div className="rounded-3xl bg-white p-6 ring-1 ring-neutral-200/60 dark:bg-[#16271F]/60 dark:ring-neutral-800">
+              <div className="rounded-3xl bg-white p-6 ring-1 ring-neutral-200/60 dark:bg-[#16271F]/60 dark:ring-neutral-800" data-aos="fade-right">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
                   Summary
                 </p>

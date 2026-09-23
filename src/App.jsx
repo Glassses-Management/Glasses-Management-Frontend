@@ -61,6 +61,8 @@ import { CustomerProvider } from '@/context/CustomerContext.jsx'
 import { PrescriptionProvider } from '@/context/PrescriptionContext.jsx'
 import { ToastProvider } from '@/context/ToastContext.jsx'
 import { ThemeProvider } from '@/context/ThemeContext.jsx'
+import AosSetup from '@/components/ui/AosSetup'
+import ScrollToTop from '@/components/ui/ScrollToTop'
 
 
 const DASHBOARD_ROUTES = {
@@ -222,6 +224,8 @@ function DashboardRoutes() {
 function App() {
   return (
     <ThemeProvider>
+      <AosSetup />
+      <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <ToastProvider>

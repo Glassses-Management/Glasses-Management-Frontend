@@ -11,18 +11,18 @@ export default function ContactPromoBanner() {
   return (
     <section className="bg-forest text-white transition-colors duration-300 dark:bg-forest-deep">
       <div className="mx-auto max-w-5xl px-4 py-16 text-center md:px-6 md:py-20">
-        <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-white/10 text-leaf">
+        <span data-aos="fade-up" className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-white/10 text-leaf">
           <ScanEye size={26} />
         </span>
-        <h2 className="mt-6 font-sans font-semibold text-3xl text-white md:text-4xl">
+        <h2 data-aos="fade-up" data-aos-delay="100" className="mt-6 font-sans font-semibold text-3xl text-white md:text-4xl">
           Most eyewear, ready in 5–7 working days
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-neutral-400">
+        <p data-aos="fade-up" data-aos-delay="200" className="mx-auto mt-4 max-w-2xl text-neutral-400">
           Standard single-vision lenses are typically completed within one week of confirming your prescription —
           and your final alignment check is always on us.
         </p>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <div data-aos="fade-up" data-aos-delay="300" className="mt-8 flex flex-wrap justify-center gap-3">
           {STATS.map(({ icon: Icon, label }) => (
             <span
               key={label}
@@ -36,6 +36,8 @@ export default function ContactPromoBanner() {
 
         <a
           href="#inquiry"
+          data-aos="fade-up"
+          data-aos-delay="400"
           className="mt-9 inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-medium text-forest shadow-sm transition-opacity hover:opacity-90"
         >
           Start your inquiry

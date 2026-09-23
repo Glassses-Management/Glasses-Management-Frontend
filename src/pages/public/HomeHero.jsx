@@ -54,7 +54,7 @@ export default function HomeHero() {
     <section className="bg-white py-14 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 md:px-6 lg:grid-cols-2">
         {/* Copy */}
-        <div>
+        <div data-aos="fade-left">
           <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
             <span className="size-2 rounded-full bg-forest dark:bg-leaf" />
             Clinically Verified Precision Optics
@@ -86,7 +86,7 @@ export default function HomeHero() {
             </Link>
           </div>
 
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
+          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3" data-aos="fade-up" data-aos-delay="150">
             {TRUST.map(({ icon: Icon, label }) => (
               <span key={label} className="inline-flex items-center gap-2 text-xs font-medium text-neutral-600 dark:text-neutral-300">
                 <Icon size={15} className="text-forest dark:text-leaf" />
@@ -97,7 +97,7 @@ export default function HomeHero() {
         </div>
 
         {/* Hero image + floating product card */}
-        <div className="relative">
+        <div className="relative" data-aos="fade-right" data-aos-delay="100">
           <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-edge dark:bg-[#15261F] dark:ring-neutral-800">
             {imageError || !featuredImage ? (
               <HeroFallbackArt />

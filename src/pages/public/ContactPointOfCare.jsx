@@ -54,17 +54,19 @@ export default function ContactPointOfCare() {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
           Choose Your Point of Care
         </p>
-        <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
+        <h2 data-aos="fade-up" className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
           Every step of your eyewear journey, in one place
         </h2>
-        <p className="mt-3 max-w-2xl text-neutral-600 dark:text-neutral-400">
+        <p data-aos="fade-up" data-aos-delay="100" className="mt-3 max-w-2xl text-neutral-600 dark:text-neutral-400">
           From the clinical exam to frame styling and lab finishing — contact the right team directly.
         </p>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {POINTS.map(({ icon: Icon, title, detail, href, description, hours, statusClass, cta, primary }) => (
+          {POINTS.map(({ icon: Icon, title, detail, href, description, hours, statusClass, cta, primary }, i) => (
             <div
               key={title}
+              data-aos="fade-up"
+              data-aos-delay={`${i * 100}`}
               className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-700 dark:bg-[#16271F]"
             >
               <span className="flex size-11 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">

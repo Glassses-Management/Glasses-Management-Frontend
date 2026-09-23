@@ -7,7 +7,7 @@ import { APPOINTMENTS } from '@/pages/public/account/AccountData'
 function AccountAppointments() {
   return (
     <AccountCard>
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800" data-aos="fade-up">
         <div className="flex items-center gap-2.5">
           <span className="flex size-9 items-center justify-center rounded-lg bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
             <CalendarDays size={16} />
@@ -28,7 +28,7 @@ function AccountAppointments() {
         </Link>
       </div>
 
-      <ul className="divide-y divide-neutral-100 px-6 dark:divide-neutral-800">
+      <ul className="divide-y divide-neutral-100 px-6 dark:divide-neutral-800" data-aos="fade-up" data-aos-delay="100">
         {APPOINTMENTS.map((appointment) => (
           <li key={appointment.title} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center">
             <div className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-mist dark:bg-[#1E332B]">

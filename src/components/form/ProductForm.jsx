@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ArrowLeft, Save, Plus } from 'lucide-react'
 import { createProduct, updateProduct } from '@/api/productApi'
 import { uploadAttachment, getAttachmentsByProduct, deleteAttachment } from '@/api/attachmentApi'
-import ProductImageField from '@/components/product/ProductImageField'
+import AttachmentUploader from '@/components/uploads/AttachmentUploader'
 import Button from '@/components/ui/Button'
 import { useToast } from '@/hook/UseToast'
 
@@ -176,11 +176,12 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
             <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Upload a photo for the product catalog.</p>
           </header>
           <div className="p-5">
-            <ProductImageField
+            <AttachmentUploader
+              defer
               label="Picture"
               required={!isEdit}
-              file={picture}
-              previewUrl={existingImage}
+              currentImage={existingImage}
+              accept="image/*"
               onFileChange={setPicture}
             />
           </div>

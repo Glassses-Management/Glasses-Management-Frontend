@@ -52,7 +52,7 @@ function AccountHeaderCard() {
   }
 
   return (
-    <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]">
+    <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]" data-aos="fade-up">
       <span className="inline-flex items-center gap-2 rounded-full bg-forest/10 px-3 py-1 text-xs font-semibold text-forest dark:bg-leaf/10 dark:text-leaf">
         <span className="size-1.5 animate-pulse rounded-full bg-forest dark:bg-leaf" />
         Wavefront Clinical Record Synced

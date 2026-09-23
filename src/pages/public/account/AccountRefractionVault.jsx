@@ -5,7 +5,7 @@ import { LENS_TAGS, REFRACTION_ROWS, SUB_METRICS } from '@/pages/public/account/
 function AccountRefractionVault() {
   return (
     <AccountCard>
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800" data-aos="fade-up">
         <div>
           <h3 className="font-sans text-base font-semibold text-neutral-900 dark:text-neutral-50">
             Digital Wavefront Refraction Vault
@@ -18,7 +18,7 @@ function AccountRefractionVault() {
         </span>
       </div>
 
-      <div className="px-6 pt-4">
+      <div className="px-6 pt-4" data-aos="fade-up" data-aos-delay="100">
         <table className="w-full text-left">
           <thead>
             <tr className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">

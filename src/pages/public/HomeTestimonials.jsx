@@ -34,7 +34,7 @@ export default function HomeTestimonials() {
   return (
     <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center" data-aos="fade-up">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
             Patient Testimonials
           </p>
@@ -47,10 +47,11 @@ export default function HomeTestimonials() {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {TESTIMONIALS.map(({ initials, name, quote }) => (
+        <div className="mt-12 grid gap-6 md:grid-cols-3" data-aos="fade-up" data-aos-delay="150">
+          {TESTIMONIALS.map(({ initials, name, quote }, i) => (
             <figure
               key={initials}
+              data-aos-delay={`${i * 100}`}
               className="flex flex-col rounded-2xl bg-white p-6 ring-1 ring-edge shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-[#16271F] dark:ring-neutral-800"
             >
               <Stars />

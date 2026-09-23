@@ -114,7 +114,7 @@ export default function ContactHero() {
         </nav>
 
         {/* Badge row */}
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="0">
           {BADGES.map(({ icon: Icon, label }) => (
             <span
               key={label}
@@ -128,7 +128,7 @@ export default function ContactHero() {
 
         {/* Hero */}
         <div className="mt-8 grid items-center gap-10 lg:grid-cols-2">
-          <div>
+          <div data-aos="fade-left" data-aos-delay="100">
             <Eyebrow>Contact &amp; Clinic Concierge</Eyebrow>
             <h1 className="mt-4 font-sans font-semibold text-4xl leading-[1.05] text-neutral-900 md:text-5xl dark:text-neutral-50">
               Personal eyecare and a truly{' '}
@@ -147,7 +147,7 @@ export default function ContactHero() {
             </a>
           </div>
 
-          <div className="relative mx-auto w-full max-w-xs sm:max-w-md">
+          <div data-aos="fade-right" data-aos-delay="100" className="relative mx-auto w-full max-w-xs sm:max-w-md">
             <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-[#15261F] dark:ring-neutral-800">
               {imageError || !featuredImage ? (
                 <HeroArt />
@@ -199,8 +199,8 @@ export default function ContactHero() {
 
         {/* Trust strip */}
         <div className="mt-14 grid gap-8 border-t border-neutral-200 pt-8 sm:grid-cols-3 dark:border-neutral-800">
-          {TRUST.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="flex items-start gap-3">
+          {TRUST.map(({ icon: Icon, title, text }, i) => (
+            <div key={title} className="flex items-start gap-3" data-aos="fade-up" data-aos-delay={`${(i + 1) * 100}`}>
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
                 <Icon size={18} />
               </span>

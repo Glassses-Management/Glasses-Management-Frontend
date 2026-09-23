@@ -15,7 +15,6 @@ import {
   applySort,
   buildFacetCounts,
   buildFacetOptions,
-  fallbackCatalog,
 } from '@/pages/public/CatalogData'
 import { formatCurrency } from '@/utils/FormatCurrency'
 
@@ -50,21 +49,20 @@ export default function PublicProductList() {
         const all = []
         for (let pageIdx = 0; pageIdx < 3; pageIdx += 1) {
           const page = await getPublicProducts({ page: pageIdx, size: 100, sort: 'createdAt,desc' }).catch(() => null)
-          const content = page?.content || []
+          const content = Array.isArray(page) ? page : (page?.content || [])
           if (cancelled || content.length === 0) break
           all.push(...content)
-          if (pageIdx + 1 >= (page?.totalPages ?? 1)) break
+          if (Array.isArray(page) || pageIdx + 1 >= (page?.totalPages ?? 1)) break
         }
         if (cancelled) return
-        const merged = fallbackCatalog(all)
-        setCatalog(merged)
+        setCatalog(all)
 
         const imageResults = await Promise.all(
-          merged.map((p) => p.id > 0 ? getPublicAttachmentsByProduct(p.id).catch(() => []) : Promise.resolve([]))
+          all.map((p) => p.id > 0 ? getPublicAttachmentsByProduct(p.id).catch(() => []) : Promise.resolve([]))
         )
         if (cancelled) return
         const imgMap = {}
-        merged.forEach((p, i) => {
+        all.forEach((p, i) => {
           const paths = (imageResults[i] || [])
             .filter((a) => a?.filePath && (a?.fileType?.startsWith('image/') || /\.(jpg|jpeg|png|webp|avif)([?#]|$)/i.test(a.filePath)))
             .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
@@ -73,7 +71,7 @@ export default function PublicProductList() {
         })
         setImages(imgMap)
       } catch {
-        if (!cancelled) setCatalog(fallbackCatalog([]))
+        if (!cancelled) setCatalog([])
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -182,7 +180,7 @@ export default function PublicProductList() {
     <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       <Navbar />
 
-      <CatalogHeader totalCount={catalog.length} shownCount={filtered.length} />
+      <CatalogHeader totalCount={catalog.length} shownCount={filtered.length} data-aos="fade-up" />
 
       <div className="mx-auto max-w-6xl px-4 pb-16 pt-8 md:px-6 md:pt-10">
         <div className="grid items-start gap-8 lg:grid-cols-[260px_1fr]">
@@ -219,7 +217,7 @@ export default function PublicProductList() {
           </div>
 
           {/* Main content */}
-          <div>
+          <div data-aos="fade-up">
             <CatalogToolbar
               shownStart={visible.length === 0 ? 0 : 1}
               shownEnd={visible.length}
@@ -259,7 +257,7 @@ export default function PublicProductList() {
               </div>
             ) : (
               <>
-                <div className={filters.view === 'list' ? 'grid grid-cols-1 gap-6' : 'grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3'}>
+                <div className={filters.view === 'list' ? 'grid grid-cols-1 gap-6' : 'grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3'} data-aos="fade-up">
                   {visible.map((p) => (
                     <ProductCard
                       key={p.id}

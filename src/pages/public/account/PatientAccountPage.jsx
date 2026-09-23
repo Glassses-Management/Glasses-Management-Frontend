@@ -56,7 +56,7 @@ function PatientAccountPage() {
 
       <section className="mx-auto max-w-6xl px-4 py-10 md:px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">Patient Account</p>
-        <h1 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 md:text-5xl dark:text-neutral-50">
+        <h1 className="mt-3 font-sans font-semibold text-4xl text-neutral-900 md:text-5xl dark:text-neutral-50" data-aos="fade-up">
           Optical <span className="italic">Health Dashboard</span>
         </h1>
         <div className="mt-4 h-[3px] w-12 rounded-full bg-forest" />

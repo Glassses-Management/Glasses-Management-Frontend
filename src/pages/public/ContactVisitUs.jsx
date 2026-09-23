@@ -52,16 +52,16 @@ export default function ContactVisitUs() {
     <section className="py-16 md:py-20">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">Visit Us</p>
-        <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
+        <h2 data-aos="fade-up" className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
           Plan your visit to the clinic
         </h2>
 
         <div className="mt-10 grid items-start gap-6 lg:grid-cols-5">
-          <div className="lg:col-span-3">
+          <div data-aos="fade-left" className="lg:col-span-3">
             <MapPlaceholder />
           </div>
 
-          <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#16271F] lg:col-span-2">
+          <div data-aos="fade-right" className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#16271F] lg:col-span-2">
             <h3 className="font-sans text-base font-semibold text-neutral-900 dark:text-neutral-100">Getting here</h3>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
               Free parking and step-free access throughout the clinic and showroom.

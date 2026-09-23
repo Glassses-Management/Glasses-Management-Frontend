@@ -42,9 +42,9 @@ function HomeFooter() {
   return (
     <footer className="border-t border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-[#0E1A15]">
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
-        <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2 lg:grid-cols-[2.2fr_1fr_1fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2 lg:grid-cols-[2.2fr_1fr_1fr_1.2fr]" data-aos="fade-up">
           {/* Brand column */}
-          <div className="md:col-span-2 lg:col-span-1 lg:pr-12">
+          <div className="md:col-span-2 lg:col-span-1 lg:pr-12" data-aos="fade-left" data-aos-delay="100">
             <Link to="/" className="inline-flex h-7 items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-forest text-white dark:bg-leaf dark:text-forest">
                 <Glasses size={15} strokeWidth={2} />
@@ -92,7 +92,7 @@ function HomeFooter() {
           </nav>
 
           {/* Showrooms */}
-          <div>
+          <div data-aos="fade-right" data-aos-delay="150">
             <h4 className={headingClass}>Showrooms</h4>
             <ul className="mt-2">
               {SHOWROOMS.map((s) => (
@@ -108,7 +108,7 @@ function HomeFooter() {
         </div>
 
         {/* Divider + bottom bar */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-5 text-xs text-neutral-500 transition-colors duration-300 dark:border-neutral-800 dark:text-neutral-500 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-5 text-xs text-neutral-500 transition-colors duration-300 dark:border-neutral-800 dark:text-neutral-500 sm:flex-row" data-aos="fade-up" data-aos-delay="200">
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-3">
             <p>&copy; {year} Optic Shop. All rights reserved.</p>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-leaf/10 px-2.5 py-0.5 text-[11px] font-medium text-forest dark:bg-leaf/15 dark:text-leaf">

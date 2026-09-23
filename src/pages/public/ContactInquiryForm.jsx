@@ -82,7 +82,7 @@ export default function ContactInquiryForm() {
     <section id="inquiry" className="scroll-mt-20 py-16 md:py-20">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 md:px-6 lg:grid-cols-2">
         {/* Inquiry form */}
-        <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-[#16271F]">
+        <div data-aos="fade-left" className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-[#16271F]">
           <div className="flex items-center gap-3 bg-gradient-to-r from-forest to-forest-deep px-6 py-5 text-white">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/20">
               <MessageSquare size={18} />
@@ -145,7 +145,7 @@ export default function ContactInquiryForm() {
         </div>
 
         {/* Schedule */}
-        <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#16271F]">
+        <div data-aos="fade-right" className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#16271F]">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">

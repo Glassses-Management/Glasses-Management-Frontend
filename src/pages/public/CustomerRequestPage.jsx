@@ -50,7 +50,7 @@ const cardClass =
 
 function GuestPrompt({ from }) {
   return (
-    <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800">
+    <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800" data-aos="fade-up">
       <span className="flex size-14 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
         <Lock size={24} strokeWidth={1.8} />
       </span>
@@ -215,7 +215,7 @@ export default function CustomerRequestPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">New Request</p>
-        <h1 className="mt-3 font-sans font-semibold text-4xl leading-tight text-neutral-900 dark:text-neutral-50 md:text-5xl">
+        <h1 className="mt-3 font-sans font-semibold text-4xl leading-tight text-neutral-900 dark:text-neutral-50 md:text-5xl" data-aos="fade-up">
           Submit Optical <span className="italic">Service</span> or Product Request
         </h1>
         <div className="mt-4 h-[3px] w-12 rounded-full bg-forest" />
@@ -226,7 +226,7 @@ export default function CustomerRequestPage() {
         {!isAuthenticated ? (
           <GuestPrompt from={location} />
         ) : submitted ? (
-          <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800">
+          <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800" data-aos="fade-up">
             <span className="flex size-16 items-center justify-center rounded-full bg-forest/10 text-forest ring-8 ring-forest/10 dark:bg-leaf/10 dark:text-leaf dark:ring-leaf/10">
               <Check size={30} strokeWidth={2.5} />
             </span>
@@ -254,10 +254,10 @@ export default function CustomerRequestPage() {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} noValidate className="mt-8 grid items-start gap-6 lg:grid-cols-3">
+          <form onSubmit={handleSubmit} noValidate className="mt-8 grid items-start gap-6 lg:grid-cols-3" data-aos="fade-up">
             <div className="space-y-6 lg:col-span-2">
               {/* Request type */}
-              <section className={cn(cardClass, errors.requestType && 'ring-1 ring-red-300')}>
+              <section className={cn(cardClass, errors.requestType && 'ring-1 ring-red-300')} data-aos="fade-up" data-aos-delay="100">
                 <SectionHeader icon={ClipboardList} title="Request Type" required />
                 <RequestTypePicker value={requestType} onChange={chooseType} />
                 {errors.requestType && (
@@ -269,7 +269,7 @@ export default function CustomerRequestPage() {
               </section>
 
               {/* Customer information */}
-              <section className={cardClass}>
+              <section className={cardClass} data-aos="fade-up" data-aos-delay="200">
                 <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
                   <SectionHeader icon={User} title="Customer Information" />
                   <Link
@@ -290,7 +290,7 @@ export default function CustomerRequestPage() {
               </section>
 
               {/* Request details */}
-              <section className={cardClass}>
+              <section className={cardClass} data-aos="fade-up" data-aos-delay="300">
                 <SectionHeader icon={ShieldCheck} title="Request Details" required />
                 {!requestType ? (
                   <p className="rounded-xl border border-dashed border-neutral-200 p-4 text-center text-sm text-neutral-400 dark:border-neutral-700 dark:text-neutral-500">
@@ -392,7 +392,7 @@ export default function CustomerRequestPage() {
               </div>
             </div>
 
-            <aside className="lg:col-span-1">
+            <aside className="lg:col-span-1" data-aos="fade-right">
               <div className="lg:sticky lg:top-24">
                 <CustomerRequestSidebar />
               </div>

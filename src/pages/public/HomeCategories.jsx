@@ -12,7 +12,7 @@ export default function HomeCategories() {
   return (
     <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-[#121F18]">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" data-aos="fade-up">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
               Specialized Eyewear Categories
@@ -26,10 +26,11 @@ export default function HomeCategories() {
           </p>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {CATEGORIES.map(({ icon: Icon, title, text }) => (
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5" data-aos="fade-up" data-aos-delay="150">
+          {CATEGORIES.map(({ icon: Icon, title, text }, i) => (
             <div
               key={title}
+              data-aos-delay={`${i * 100}`}
               className="group relative rounded-2xl bg-white p-5 ring-1 ring-edge shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-[#16271F] dark:ring-neutral-800"
             >
               <ArrowUpRight

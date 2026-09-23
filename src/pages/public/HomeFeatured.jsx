@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
-import { DEMO_FRAMES } from '@/pages/public/CatalogData'
 
 const TABS = [
   { value: 'all', label: 'All' },
@@ -24,7 +23,7 @@ function matchesTab(p, tab) {
 
 export default function HomeFeatured() {
   const navigate = useNavigate()
-  const [pool, setPool] = useState(DEMO_FRAMES)
+  const [pool, setPool] = useState([])
   const [images, setImages] = useState({})
   const [tab, setTab] = useState('all')
 
@@ -33,10 +32,9 @@ export default function HomeFeatured() {
     const load = async () => {
       try {
         const page = await getPublicProducts({ page: 0, size: 8, sort: 'createdAt,desc' })
-        const items = (page?.content || []).filter((p) => p.id > 0 && !DEMO_FRAMES.some((d) => d.id === p.id))
-        const live = items.length > 0 ? [...items, ...DEMO_FRAMES.slice(0, 8)] : DEMO_FRAMES.slice(0, 8)
+        const items = (Array.isArray(page) ? page : (page?.content || [])).filter((p) => p.id > 0)
         if (cancelled) return
-        setPool(live)
+        setPool(items.slice(0, 8))
         const imageResults = await Promise.all(
           items.map((p) => getPublicAttachmentsByProduct(p.id).catch(() => []))
         )

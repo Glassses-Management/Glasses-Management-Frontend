@@ -36,7 +36,7 @@ export default function ContactFaq() {
   return (
     <section className="py-16 md:py-20">
       <div className="mx-auto max-w-3xl px-4 md:px-6">
-        <div className="text-center">
+        <div data-aos="fade-up" className="text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">Quick Answers</p>
           <h2 className="mt-3 font-sans font-semibold text-3xl text-neutral-900 md:text-4xl dark:text-neutral-50">
             Frequently asked questions
@@ -50,6 +50,8 @@ export default function ContactFaq() {
             return (
               <div
                 key={q}
+                data-aos="fade-up"
+                data-aos-delay={`${i * 100}`}
                 className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 dark:border-neutral-700 dark:bg-[#16271F]"
               >
                 <button

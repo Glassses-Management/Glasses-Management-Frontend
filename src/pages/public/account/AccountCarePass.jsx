@@ -3,7 +3,7 @@ import { CARE_PASS } from '@/pages/public/account/AccountData'
 
 function AccountCarePass() {
   return (
-    <section className="rounded-2xl border border-forest bg-forest p-6 shadow-sm transition-colors duration-300 dark:border-forest-deep dark:bg-forest-deep">
+    <section className="rounded-2xl border border-forest bg-forest p-6 shadow-sm transition-colors duration-300 dark:border-forest-deep dark:bg-forest-deep" data-aos="fade-up">
       <span className="inline-flex size-10 items-center justify-center rounded-xl bg-white/10 text-leaf">
         <Sparkles size={20} />
       </span>

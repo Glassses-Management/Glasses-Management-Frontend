@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import ErrorOverlay from '@/components/dev/ErrorOverlay'
 import './index.css'
+import 'aos/dist/aos.css'
 
 // The overlay lives in its own root so it survives the main app unmounting
 // entirely (which is exactly what happens when an uncaught error blanks the page).
