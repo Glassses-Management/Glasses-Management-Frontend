@@ -213,12 +213,12 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-md transition-colors duration-300 dark:border-neutral-800 dark:bg-[#0E1A15]/90">
       <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-4 md:px-6">
         {/* Column 1 — logo (left). "Shop" stays italic for the brand. */}
-        <Link to="/" onClick={() => setMenuOpen(false)} className="justify-self-start text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
+        <Link to="/" onClick={() => setMenuOpen(false)} className="col-start-1 justify-self-start text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
           Optic <span className="italic">Shop</span>
         </Link>
 
         {/* Column 2 — centered links, same position in both auth states. */}
-        <nav className="hidden justify-self-center items-center gap-8 lg:flex">
+        <nav className="col-start-2 hidden justify-self-center items-center gap-8 lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}
@@ -233,7 +233,7 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
         </nav>
 
         {/* Column 3 — right-side actions (all 36px tall). */}
-        <div className="ml-4 flex items-center justify-self-end gap-1.5">
+        <div className="col-start-3 ml-4 flex items-center justify-self-end gap-1.5">
           {/* Admin badge — admin only, shows from 1280px up (xl). */}
           {authed && admin && (
             <span className="mr-2 hidden h-9 items-center gap-1.5 whitespace-nowrap rounded-full bg-emerald-50 px-3 text-xs font-semibold text-forest xl:inline-flex dark:bg-leaf/15 dark:text-leaf">

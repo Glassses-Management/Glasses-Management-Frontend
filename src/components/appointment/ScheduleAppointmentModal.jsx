@@ -21,6 +21,12 @@ function toDateTimeLocal(iso) {
   return match ? match[0] : ''
 }
 
+function minDateTime() {
+  const d = new Date()
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
 function displayName(opt) {
   return opt?.name || opt?.email || opt?.username || `Optometrist #${opt?.id}`
 }
@@ -147,6 +153,7 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
           required={isSchedule}
           name="scheduled_at"
           type="datetime-local"
+          min={isSchedule ? minDateTime() : undefined}
           value={form.scheduled_at}
           onChange={(e) => set('scheduled_at', e.target.value)}
           error={errors.scheduled_at}

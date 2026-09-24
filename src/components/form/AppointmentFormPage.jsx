@@ -8,6 +8,12 @@ import { composeValidators, required } from '@/utils/Validators'
 import { useToast } from '@/hook/UseToast'
 import { createAppointment, updateAppointment } from '@/api/appointmentApi'
 
+const minDateTime = () => {
+    const d = new Date()
+    const pad = (n) => String(n).padStart(2, '0')
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
 const AppointmentForm = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -33,7 +39,8 @@ const AppointmentForm = () => {
 
     const nextErrors = {
       customer_id: composeValidators(required)(form.customer_id),
-      scheduled_at: composeValidators(required)(form.scheduled_at),
+      scheduled_at: composeValidators(required)(form.scheduled_at) ||
+        (form.scheduled_at && new Date(form.scheduled_at) <= new Date() ? 'Date & time must be in the future' : ''),
     }
     setErrors(nextErrors)
     if (Object.values(nextErrors).some((err) => err)) return
@@ -96,7 +103,7 @@ const AppointmentForm = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Field label="Customer ID" icon={User} name="customer_id" required value={form.customer_id} onChange={(e) => set('customer_id', e.target.value)} error={errors.customer_id} placeholder="Enter customer ID" />
           <Field label="Optometrist ID" icon={Stethoscope} name="optometrist_id" value={form.optometrist_id} onChange={(e) => set('optometrist_id', e.target.value)} error={errors.optometrist_id} placeholder="Optional" />
-          <Field label="Date & Time" icon={Clock} name="scheduled_at" type="datetime-local" required value={form.scheduled_at} onChange={(e) => set('scheduled_at', e.target.value)} error={errors.scheduled_at} />
+          <Field label="Date & Time" icon={Clock} name="scheduled_at" type="datetime-local" min={minDateTime()} required value={form.scheduled_at} onChange={(e) => set('scheduled_at', e.target.value)} error={errors.scheduled_at} />
           <Field label="Status" icon={Calendar} name="status" value={form.status} onChange={(e) => set('status', e.target.value)}>
             <select className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-100 dark:focus:border-[#8fa88f]">
               <option value="SCHEDULED">Scheduled</option>

@@ -127,7 +127,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#8fa88f] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#6f8a6f] active:scale-[0.98]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#8fa88f] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#6f8a6f] active:scale-[0.98] lg:rounded-full"
               aria-label={`Add ${product.model} to cart`}
             >
               <ShoppingCart size={15} />
@@ -137,7 +137,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
             <button
               type="button"
               disabled
-              className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm font-medium text-neutral-400 dark:border-neutral-600 dark:bg-neutral-800/60 dark:text-neutral-500"
+              className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-sm font-medium text-neutral-400 dark:border-neutral-600 dark:bg-neutral-800/60 dark:text-neutral-500 lg:rounded-full"
             >
               Out of Stock
             </button>
@@ -146,7 +146,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
           <button
             type="button"
             onClick={handleViewDetails}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-neutral-300 bg-transparent px-4 py-2.5 text-sm font-medium text-neutral-700 transition-all duration-200 hover:border-neutral-900 hover:text-neutral-900 active:scale-[0.98] dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-neutral-100 dark:hover:text-white"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-transparent px-4 py-2.5 text-sm font-medium text-neutral-700 transition-all duration-200 hover:border-neutral-900 hover:text-neutral-900 active:scale-[0.98] lg:rounded-full dark:border-neutral-600 dark:text-neutral-300 dark:hover:border-neutral-100 dark:hover:text-white"
           >
             <Eye size={15} />
             View Details

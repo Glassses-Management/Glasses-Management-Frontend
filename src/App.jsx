@@ -41,6 +41,7 @@ import OptometristCalendarPage from '@/pages/appointments/OptometristCalendarPag
 import MyAppointmentPage from '@/pages/appointments/MyAppointmentPage'
 
 import RequestListPage from '@/pages/requests/RequestListPage'
+import RequestAddPage from '@/pages/requests/RequestAddPage'
 import StaffPage from '@/pages/staff/StaffPage'
 import ClinicianDashboardPage from '@/pages/staff/ClinicianDashboardPage'
 import OptometristPage from '@/pages/optometrist/OptometristPage'
@@ -173,8 +174,15 @@ function DashboardRoutes() {
 
         <Route
           path="requests"
-          element={<RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}><RequestListPage /></RoleRoute>}
-        />
+          element={
+            <RoleRoute roles={[ROLES.ADMIN, ROLES.STAFF]}>
+              <Outlet />
+            </RoleRoute>
+          }
+        >
+          <Route index element={<RequestListPage />} />
+          <Route path="add" element={<RequestAddPage />} />
+        </Route>
 
         <Route
           path="clinician"

@@ -113,7 +113,7 @@ function CustomerList({ onNavigate }) {
               navigate(`/dashboard/customers/${row.id}/edit`)
             }}
           >
-            Update
+            Edit
           </Button>
           <Button
             variant="danger"

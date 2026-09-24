@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { FileText } from 'lucide-react'
+import { FileText, PlusCircle } from 'lucide-react'
 import Badge from '@/components/ui/Badge'
+import Button from '@/components/ui/Button'
+import CustomerRequestModal from '@/components/request/CustomerRequestModal'
 import { getMyRequests } from '@/api/requestApi'
 import { formatDate } from '@/utils/FormatDate'
 
@@ -25,6 +27,7 @@ const TYPE_LABEL = {
 // Uses /requests/mine so the backend resolves the customer from the JWT.
 export default function MyRequestsSection() {
   const [requests, setRequests] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -48,8 +51,15 @@ export default function MyRequestsSection() {
 
   return (
     <section className="py-5">
-      <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">My Requests</p>
-      <p className="mt-0.5 mb-4 text-xs text-gray-400 dark:text-neutral-500">Requests you have submitted</p>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">My Requests</p>
+          <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Requests you have submitted</p>
+        </div>
+        <Button size="sm" icon={<PlusCircle size={14} />} onClick={() => setModalOpen(true)}>
+          Request
+        </Button>
+      </div>
 
       {requests === null ? (
         <p className="rounded-lg bg-gray-50 py-6 text-center text-sm text-gray-400 dark:bg-white/5 dark:text-neutral-500">
@@ -82,6 +92,8 @@ export default function MyRequestsSection() {
           ))}
         </div>
       )}
+
+      <CustomerRequestModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </section>
   )
 }

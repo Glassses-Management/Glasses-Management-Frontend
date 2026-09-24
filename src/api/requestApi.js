@@ -33,6 +33,14 @@ export const createRequest = async (payload) => {
   return data
 }
 
+// Admin/Staff create a request on behalf of an existing customer. Posts to the
+// same /requests endpoint as the customer flow, but includes an explicit
+// customerId (the backend must accept it for non-CUSTOMER roles).
+export const createRequestForCustomer = async (payload) => {
+  const { data } = await axiosInstance.post('/requests', payload)
+  return data
+}
+
 export const approveRequest = async (id) => {
   const { data } = await axiosInstance.post(`/requests/${id}/approve`)
   return data

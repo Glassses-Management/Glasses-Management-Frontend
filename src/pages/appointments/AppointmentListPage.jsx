@@ -7,6 +7,8 @@ import AppointmentFilter from '@/components/appointment/AppointmentFilter'
 import AppointmentTable from '@/components/appointment/AppointmentTable'
 import ScheduleAppointmentModal from '@/components/appointment/ScheduleAppointmentModal'
 import { getAppointments, updateAppointment, deleteAppointment } from '@/api/appointmentApi'
+import { getCustomers } from '@/api/customerApi'
+import { getOptometrists } from '@/api/userApi'
 import { useToast } from '@/hook/UseToast'
 
 const ITEMS_PER_PAGE = 10
@@ -21,6 +23,8 @@ const STATUS_OPTIONS = [
 function AppointmentListPage() {
   const { success: toastSuccess, error: toastError } = useToast()
   const [appointments, setAppointments] = useState([])
+  const [customers, setCustomers] = useState([])
+  const [optometrists, setOptometrists] = useState([])
   const [loading, setLoading] = useState(true)
 
   const [search, setSearch] = useState('')
@@ -33,11 +37,31 @@ function AppointmentListPage() {
   const [deleting, setDeleting] = useState(null)
   const [deletingLoading, setDeletingLoading] = useState(false)
 
+  const customersById = useMemo(() => {
+    const map = new Map()
+    customers.forEach((c) => map.set(c.id, c))
+    return map
+  }, [customers])
+
+  const optometristsById = useMemo(() => {
+    const map = new Map()
+    optometrists.forEach((o) => map.set(o.id, o))
+    return map
+  }, [optometrists])
+
   const loadAppointments = async () => {
     setLoading(true)
     try {
-      const data = await getAppointments()
-      const list = Array.isArray(data) ? data : data?.content ?? []
+      const [apptData, custData, optData] = await Promise.all([
+        getAppointments(),
+        getCustomers({ page: 0, size: 1000 }).catch(() => ({ content: [] })),
+        getOptometrists().catch(() => []),
+      ])
+      const list = Array.isArray(apptData) ? apptData : apptData?.content ?? []
+      const custList = Array.isArray(custData) ? custData : custData?.content ?? []
+      const optList = Array.isArray(optData) ? optData : optData?.content ?? []
+      setCustomers(custList)
+      setOptometrists(optList)
       setAppointments(list)
     } catch (err) {
       console.error('AppointmentListPage: failed to load appointments:', err?.response?.status || err?.message || err)
@@ -49,19 +73,9 @@ function AppointmentListPage() {
 
   useEffect(() => {
     let cancelled = false
-    getAppointments()
-      .then((data) => {
-        if (!cancelled) {
-          const list = Array.isArray(data) ? data : data?.content ?? []
-          setAppointments(list)
-        }
-      })
-      .catch((err) => {
-        if (cancelled) return
-        console.error('AppointmentListPage: failed to load appointments:', err?.response?.status || err?.message || err)
-        toastError(err?.response?.data?.message || err?.message || 'Failed to load appointments')
-      })
-      .finally(() => { if (!cancelled) setLoading(false) })
+    loadAppointments().then(() => {
+      if (cancelled) return
+    })
     return () => { cancelled = true }
   }, [])
 
@@ -78,16 +92,26 @@ function AppointmentListPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
-    return appointments.filter((a) => {
-      const matchesSearch =
-        !q ||
-        String(a.id).includes(q) ||
-        (a.customer_name || '').toLowerCase().includes(q) ||
-        (a.customer_id != null && String(a.customer_id).includes(q))
-      const matchesStatus = filters.status === 'all' || a.status === filters.status
-      return matchesSearch && matchesStatus
-    })
-  }, [appointments, search, filters])
+    return appointments
+      .map((a) => ({
+        ...a,
+        customer_name: a.customer_name || customersById.get(a.customer_id)?.name || '',
+        optometrist_name: a.optometrist_name || optometristsById.get(a.optometrist_id)?.name || '',
+      }))
+      .filter((a) => {
+        const matchesSearch =
+          !q ||
+          String(a.id).includes(q) ||
+          (a.customer_name || '').toLowerCase().includes(q) ||
+          (a.customer_id != null && String(a.customer_id).includes(q))
+        const matchesStatus = filters.status === 'all' || a.status === filters.status
+        return matchesSearch && matchesStatus
+      })
+      .sort((a, b) => {
+        const time = (row) => (row.created_at ? new Date(row.created_at).getTime() : -Number(row.id))
+        return time(b) - time(a)
+      })
+  }, [appointments, search, filters, customersById, optometristsById])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
   const effectivePage = Math.min(currentPage, totalPages)

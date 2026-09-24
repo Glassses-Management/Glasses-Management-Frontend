@@ -15,6 +15,12 @@ import { createPrescription } from '@/api/prescriptionApi'
 import { updateAppointment } from '@/api/appointmentApi'
 import { getOptometrists } from '@/api/userApi'
 
+const minDateTime = () => {
+    const d = new Date()
+    const pad = (n) => String(n).padStart(2, '0')
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
 export default function StaffPage() {
     const { success: toastSuccess, error: toastError } = useToast()
     const { customers } = useCustomers()
@@ -109,7 +115,11 @@ export default function StaffPage() {
         setScheduleErrors({})
         const nextErrors = {}
         if (!scheduleForm.optometrist_id) nextErrors.optometrist_id = 'Select an optometrist'
-        if (!scheduleForm.scheduled_at) nextErrors.scheduled_at = 'Date and time are required'
+        if (!scheduleForm.scheduled_at) {
+            nextErrors.scheduled_at = 'Date and time are required'
+        } else if (new Date(scheduleForm.scheduled_at) <= new Date()) {
+            nextErrors.scheduled_at = 'Date & time must be in the future'
+        }
         if (Object.values(nextErrors).some(Boolean)) return
 
         setScheduling(true)
@@ -296,7 +306,7 @@ export default function StaffPage() {
                                 onChange={(e) => setScheduleForm((prev) => ({ ...prev, optometrist_id: e.target.value }))}
                                 error={scheduleErrors.optometrist_id}
                             />
-                            <Field label="Date & Time" name="scheduled_at" type="datetime-local" required value={scheduleForm.scheduled_at} onChange={(e) => setScheduleForm((prev) => ({ ...prev, scheduled_at: e.target.value }))} error={scheduleErrors.scheduled_at} />
+                            <Field label="Date & Time" name="scheduled_at" type="datetime-local" min={minDateTime()} required value={scheduleForm.scheduled_at} onChange={(e) => setScheduleForm((prev) => ({ ...prev, scheduled_at: e.target.value }))} error={scheduleErrors.scheduled_at} />
                             <Field label="Notes" name="notes" value={scheduleForm.notes} onChange={(e) => setScheduleForm((prev) => ({ ...prev, notes: e.target.value }))} placeholder="Add any relevant notes..." />
                             <Button type="submit" loading={scheduling}>Schedule Appointment</Button>
                         </form>
