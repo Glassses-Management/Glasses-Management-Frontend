@@ -32,6 +32,10 @@ export function CustomerProvider({ children }) {
             }
             catch (err) {
                 if (!cancelled) {
+                    // Drop the cached snapshot. Keeping it would render customers
+                    // that are not in the database, which is worse than an empty
+                    // list because staff cannot tell the two apart.
+                    setCustomers([]);
                     setError(err?.message || 'Failed to load customers');
                 }
             }

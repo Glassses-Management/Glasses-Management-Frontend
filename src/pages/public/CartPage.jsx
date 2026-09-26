@@ -6,6 +6,7 @@ import HomeFooter from '@/pages/public/HomeFooter'
 import Button from '@/components/ui/Button'
 import { useCart } from '@/hook/UseCart'
 import { useAuth } from '@/hook/UseAuth'
+import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { useToast } from '@/hook/UseToast'
 import { createOrder } from '@/api/orderApi'
 import { getPublicAttachmentsByProduct } from '@/api/publicProductApi'
@@ -14,7 +15,8 @@ import { formatCurrency } from '@/utils/FormatCurrency'
 function CartPage() {
   const navigate = useNavigate()
   const { items, count, subtotal, updateQuantity, removeItem, clearCart } = useCart()
-  const { token, user } = useAuth()
+  const { token } = useAuth()
+  const { customerId, loading: customerLoading, error: customerError } = useOwnCustomerId()
   const { success: toastSuccess, error: toastError } = useToast()
   const [placing, setPlacing] = useState(false)
   const [images, setImages] = useState({})
@@ -36,15 +38,13 @@ function CartPage() {
     return () => { cancelled = true }
   }, [missingIds])
 
-  const customerId = user?.customer_id ?? user?.id
-
   const handleCheckout = async () => {
     if (!token) {
       navigate('/login', { state: { from: '/cart' } })
       return
     }
     if (customerId == null) {
-      toastError('No customer profile found for this account.')
+      toastError(customerError || 'No customer profile found for this account.')
       return
     }
     setPlacing(true)
@@ -200,7 +200,7 @@ function CartPage() {
                 <p className="mt-4 text-xs text-neutral-400 dark:text-neutral-500">
                   A member of our team will confirm your order details and any lens options when it's ready.
                 </p>
-                <Button className="w-full !rounded-full !bg-forest hover:!bg-forest-deep dark:!bg-leaf dark:!text-forest dark:hover:!opacity-90 mt-5" onClick={handleCheckout} loading={placing}>
+                <Button className="w-full !rounded-full !bg-forest hover:!bg-forest-deep dark:!bg-leaf dark:!text-forest dark:hover:!opacity-90 mt-5" onClick={handleCheckout} loading={placing || customerLoading}>
                   {token ? 'Place Order' : 'Sign In to Checkout'}
                 </Button>
                 {!token && (

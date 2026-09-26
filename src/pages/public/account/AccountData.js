@@ -105,6 +105,7 @@ export const COMPLIANCE = {
 
 export const ACCOUNT_TABS = [
   { key: 'overview', label: 'Overview & Prescriptions' },
+  { key: 'requests', label: 'My Requests' },
   { key: 'personal', label: 'Personal & Insurance' },
   { key: 'orders', label: 'Order History' },
   { key: 'appointments', label: 'Appointments & Recalls' },

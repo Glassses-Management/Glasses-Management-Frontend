@@ -9,6 +9,7 @@ import OrderTable from '@/components/order/OrderTable'
 import { getOrders, deleteOrder, changeOrderStatus } from '@/api/orderApi'
 import Button from '@/components/ui/Button'
 import { useToast } from '@/hook/UseToast'
+import { useProductImages } from '@/hook/UseProductImages'
 
 const ITEMS_PER_PAGE = 10
 
@@ -93,6 +94,10 @@ function OrderList() {
   const effectivePage = Math.min(currentPage, totalPages)
   const paged = filtered.slice((effectivePage - 1) * ITEMS_PER_PAGE, effectivePage * ITEMS_PER_PAGE)
 
+  // Only the rows actually on screen are looked up, so a page of 10 orders does
+  // not fire a request for every product across all 100 loaded orders.
+  const images = useProductImages(paged.flatMap((o) => (o.items || []).map((item) => item.product_id)))
+
   const handleAdd = () => navigate('/dashboard/orders/new')
 
   const handleEditSave = async () => {
@@ -157,6 +162,7 @@ function OrderList() {
         <>
           <OrderTable
             orders={paged}
+            images={images}
             onRowClick={(row) => navigate(`/dashboard/orders/${row.id}`)}
             onEdit={(row) => setEditing({ id: row.id, status: row.status || 'PENDING' })}
             onDelete={(row) => setDeleting(row)}

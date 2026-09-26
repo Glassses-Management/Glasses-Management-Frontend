@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Check } from 'lucide-react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, CalendarPlus, Check } from 'lucide-react'
 import Badge, { getVariantFromStatus } from '@/components/ui/Badge'
+import OrderItemsTable from '@/components/order/OrderItemsTable'
+import { useProductImages } from '@/hook/UseProductImages'
+import { useToast } from '@/hook/UseToast'
 import { formatCurrency, formatDate, formatDateTime } from '@/utils/format'
 import { getOrderById, changeOrderStatus } from '@/api/orderApi'
 
@@ -29,6 +32,18 @@ const PAYMENT_VARIANT = {
   UNPAID: 'warning',
 }
 
+// POST /api/requests creates orders at PENDING_REVIEW, but that status is absent
+// from both the valid-status list and the transition table of
+// POST /api/orders/{id}/status (API_DOCUMENT.md section 10.1). Changing it to
+// CONFIRMED returns 400, so these orders cannot be advanced at all and the
+// status steps below stay empty. Booking the fitting still works, because an
+// appointment is independent of the order status - which is why the Schedule
+// fitting button is offered instead.
+const STUCK_REVIEW = 'PENDING_REVIEW'
+
+const STUCK_REVIEW_NOTE =
+  'This order came from a customer request, so it sits at Pending Review. That status cannot be changed to Confirmed — the server rejects the move (HTTP 400) — so the steps above will not move. Book the fitting below, then ask your backend owner to allow Pending Review → Confirmed.'
+
 const stepColors = [
   { track: 'bg-amber-200', dot: 'bg-amber-500', text: 'text-amber-600' },
   { track: 'bg-blue-200', dot: 'bg-blue-500', text: 'text-blue-600' },
@@ -39,23 +54,17 @@ const stepColors = [
 
 function OrderDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const { success: toastSuccess, error: toastError } = useToast()
   const [order, setOrder] = useState(null)
   const [status, setStatus] = useState('PENDING')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [advancing, setAdvancing] = useState(false)
 
-  const loadOrder = async () => {
-    try {
-      const data = await getOrderById(id)
-      setOrder(data)
-      setStatus(data?.status || 'PENDING')
-    } catch (err) {
-      setError('Order not found or failed to load.')
-      console.error('OrderDetail: failed to load order:', err?.response?.status || err?.message || err)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // Product pictures live in the attachments service, not on the order, so they
+  // are fetched per product id once the order has loaded.
+  const images = useProductImages((order?.items || []).map((item) => item.product_id))
 
   useEffect(() => {
     let cancelled = false
@@ -94,15 +103,27 @@ function OrderDetail() {
   const step = STATUS_STEP[status]
   const canTransition = step >= 0 && status !== 'COMPLETED' && status !== 'CANCELLED'
 
+  // Confirming an order moves it into the Appointments page queue, where staff
+  // book the fitting date (scheduled_at is required, so it cannot be booked here
+  // without asking for a date first).
   const advance = async () => {
     const next = NEXT_STATUS[status]
     if (!next) return
+    setAdvancing(true)
     try {
       const updated = await changeOrderStatus(order.id, next)
       setStatus(updated?.status || next)
+      toastSuccess(
+        next === 'CONFIRMED'
+          ? 'Order confirmed. Book the appointment from the Appointments page.'
+          : `Order moved to ${next.replace(/_/g, ' ').toLowerCase()}.`,
+      )
     } catch (err) {
-      const msg = err?.response?.data?.error || err?.message || 'Failed to update status'
-      console.error('OrderDetail: failed to update status:', msg)
+      const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to update status'
+      toastError(msg)
+    }
+    finally {
+      setAdvancing(false)
     }
   }
 
@@ -155,24 +176,49 @@ function OrderDetail() {
           ))}
         </div>
 
+        {status === STUCK_REVIEW && (
+          <p className="mt-4 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
+            {STUCK_REVIEW_NOTE}
+          </p>
+        )}
+
         {canTransition && (
           <div className="mt-4 flex justify-end">
             <button
               type="button"
               onClick={advance}
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              disabled={advancing}
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
             >
               Advance to {NEXT_STATUS[status].replace(/_/g, ' ').toLowerCase()}
               <Check size={16} />
             </button>
           </div>
         )}
-        {!canTransition && (
+        {!canTransition && status !== STUCK_REVIEW && (
           <p className="mt-4 text-right text-xs text-gray-400 dark:text-neutral-500">
             {status === 'COMPLETED' ? 'This order is completed.' : status === 'CANCELLED' ? 'This order was cancelled.' : ''}
           </p>
         )}
       </div>
+
+      {/* Booking a fitting does not depend on the order status, so this stays
+          available for orders stuck at Pending Review. */}
+      {status !== 'COMPLETED' && status !== 'CANCELLED' && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm dark:bg-[#1c1c28]">
+          <p className="text-sm text-gray-500 dark:text-neutral-400">
+            Book a fitting date so the customer knows when to collect this order.
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate('/dashboard/appointments', { state: { scheduleId: order.id } })}
+            className="inline-flex items-center gap-2 rounded-lg bg-forest px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-forest-deep dark:bg-leaf dark:text-forest dark:hover:bg-leaf"
+          >
+            <CalendarPlus size={16} />
+            Schedule fitting
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Order information */}
@@ -228,46 +274,7 @@ function OrderDetail() {
         </div>
       </div>
 
-      {/* Items table */}
-      <div className="overflow-hidden rounded-2xl bg-white shadow-sm dark:bg-[#1c1c28]">
-        <div className="border-b border-gray-100 px-6 py-4 dark:border-neutral-800">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-neutral-50">Items</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="bg-gray-50 dark:bg-white/5">
-                <th className="px-6 py-3 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-500">Product</th>
-                <th className="px-6 py-3 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-500">Quantity</th>
-                <th className="px-6 py-3 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-500">Unit Price</th>
-                <th className="px-6 py-3 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-500">Lens Type</th>
-                <th className="px-6 py-3 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-500">Coating</th>
-                <th className="px-6 py-3 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-500">Total Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(order.items || []).map((item) => (
-                <tr key={item.id} className="border-b border-gray-100 last:border-b-0 dark:border-neutral-800">
-                  <td className="px-6 py-4">
-                    <p className="font-medium text-gray-900 dark:text-neutral-100">Product #{item.product_id}</p>
-                  </td>
-                  <td className="px-6 py-4 text-gray-900 dark:text-neutral-100">{item.quantity}</td>
-                  <td className="px-6 py-4 text-gray-900 dark:text-neutral-100">{formatCurrency(item.unit_price)}</td>
-                  <td className="px-6 py-4 text-gray-900 dark:text-neutral-100">{item.len_type || '—'}</td>
-                  <td className="px-6 py-4 text-gray-900 dark:text-neutral-100">{item.len_coating || '—'}</td>
-                  <td className="px-6 py-4 font-medium text-gray-900 dark:text-neutral-100">{formatCurrency(item.total_price)}</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colSpan={5} className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-neutral-500">Total</td>
-                <td className="px-6 py-4 text-sm font-bold text-gray-900 dark:text-neutral-50">{formatCurrency(order.total)}</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
+      <OrderItemsTable items={order.items} total={order.total} images={images} />
     </div>
   )
 }

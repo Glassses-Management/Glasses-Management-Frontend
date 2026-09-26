@@ -18,6 +18,35 @@ function jwtExpiryMs(token) {
     }
 }
 
+// Normalises an auth response into { token, user }.
+//
+// The backend may answer with the documented AuthResponse object
+// ({access_token, user}), an object using `token`, or the raw JWT as plain
+// text. Both login and register go through here, because a shape mismatch must
+// fail loudly. Previously register trusted the shape blindly: an unexpected
+// body set the token to undefined, threw nothing, and the form reported
+// success while the account was unusable.
+async function readAuthResponse(data, action) {
+    const token = typeof data === 'string' ? data : data?.access_token || data?.token;
+    if (!token) {
+        throw new Error(`${action} response did not include a token`);
+    }
+
+    let user = data && typeof data === 'object' ? data.user : null;
+    if (!user) {
+        // Token-only response: fetch the profile with the token we just got.
+        localStorage.setItem('token', token);
+        try {
+            user = await getMe();
+        }
+        catch {
+            user = null;
+        }
+    }
+
+    return { token, user };
+}
+
 export function AuthProvider({ children }){
     const [user, setUser] = useState(() => {
         try{
@@ -119,41 +148,17 @@ export function AuthProvider({ children }){
     }, [])
 
     const login = useCallback(async (identifier, password) => {
-        const data = await loginApi(identifier, password);
-
-        // The backend may return the documented AuthResponse object
-        // ({access_token, user}) or the raw JWT as plain text. Normalise both.
-        const token = typeof data === 'string' ? data : data?.access_token;
-        if(!token){
-            throw new Error('Login response did not include a token');
-        }
-
-        let user;
-        if(data && typeof data === 'object' && data.user){
-            user = data.user;
-        }
-        else{
-            // Raw-token response: fetch the profile with the token we just got.
-            localStorage.setItem('token', token);
-            try{
-                user = await getMe();
-            }
-            catch{
-                user = null;
-            }
-        }
-
+        const { token, user } = await readAuthResponse(await loginApi(identifier, password), 'Login');
         setToken(token);
         setUser(user);
-
         return user;
     }, [])
 
     const register = useCallback(async (payload) => {
-        const data = await registerApi(payload);
-        setToken(data.access_token);
-        setUser(data.user);
-        return data.user;
+        const { token, user } = await readAuthResponse(await registerApi(payload), 'Registration');
+        setToken(token);
+        setUser(user);
+        return user;
     }, [])
 
     const logout = useCallback(() => {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, Heart, KeyRound, Lock, ShoppingBag, User } from 'lucide-react'
+import { CalendarDays, Heart, KeyRound, Lock, Send, ShoppingBag, User } from 'lucide-react'
 
 import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
@@ -9,6 +9,8 @@ import AccountTabs from '@/pages/public/account/AccountTabs'
 import AccountRefractionVault from '@/pages/public/account/AccountRefractionVault'
 import AccountGlazingProgress from '@/pages/public/account/AccountGlazingProgress'
 import AccountAppointments from '@/pages/public/account/AccountAppointments'
+import AccountRequests from '@/pages/public/account/AccountRequests'
+import AccountOrders from '@/pages/public/account/AccountOrders'
 import AccountVisionBenefits from '@/pages/public/account/AccountVisionBenefits'
 import AccountCarePass from '@/pages/public/account/AccountCarePass'
 import AccountContactDelivery from '@/pages/public/account/AccountContactDelivery'
@@ -17,6 +19,11 @@ import AccountTabPlaceholder from '@/pages/public/account/AccountTabPlaceholder'
 import { ACCOUNT_TABS, COMPLIANCE } from '@/pages/public/account/AccountData'
 
 const TAB_BLUEPRINTS = {
+  requests: {
+    icon: Send,
+    title: 'My Requests',
+    blurb: 'Product and eye exam requests you have submitted',
+  },
   personal: {
     icon: User,
     title: 'Personal & Insurance',
@@ -78,6 +85,14 @@ function PatientAccountPage() {
                 <AccountCarePass />
                 <AccountContactDelivery />
               </aside>
+            </div>
+          ) : tab === 'requests' ? (
+            <div className="mt-6">
+              <AccountRequests />
+            </div>
+          ) : tab === 'orders' ? (
+            <div className="mt-6">
+              <AccountOrders />
             </div>
           ) : (
             <AccountTabPlaceholder icon={blueprint.icon} title={blueprint.title} blurb={blueprint.blurb} />

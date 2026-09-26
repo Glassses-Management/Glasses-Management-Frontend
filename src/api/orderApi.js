@@ -5,6 +5,29 @@ export const getOrders = async (params) => {
   return data
 }
 
+// GET /api/orders is paged and the server clamps size to
+// spring.data.web.pageable.max-page-size=100, so a single call only returns the
+// newest 100 matching rows. Walk the pages when every match is needed.
+export const getAllOrders = async (params = {}) => {
+  const orders = []
+  let page = 0
+  let totalPages
+
+  do {
+    const { data } = await axiosInstance.get('/orders', {
+      params: { ...params, page, size: 100, sort: 'id,desc' },
+    })
+
+    if (Array.isArray(data)) return data
+
+    orders.push(...(data?.content || []))
+    totalPages = data?.totalPages ?? 1
+    page += 1
+  } while (page < totalPages && page < 20)
+
+  return orders
+}
+
 export const getOrderById = async (id) => {
   const { data } = await axiosInstance.get(`/orders/${id}`)
   return data

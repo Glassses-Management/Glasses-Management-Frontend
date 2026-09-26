@@ -6,6 +6,7 @@ import AppointmentStats from '@/components/appointment/AppointmentStats'
 import AppointmentFilter from '@/components/appointment/AppointmentFilter'
 import AppointmentTable from '@/components/appointment/AppointmentTable'
 import ScheduleAppointmentModal from '@/components/appointment/ScheduleAppointmentModal'
+import PendingScheduleQueue from '@/components/appointment/PendingScheduleQueue'
 import { getAppointments, updateAppointment, deleteAppointment } from '@/api/appointmentApi'
 import { getCustomers } from '@/api/customerApi'
 import { getOptometrists } from '@/api/userApi'
@@ -108,6 +109,13 @@ function AppointmentListPage() {
         return matchesSearch && matchesStatus
       })
       .sort((a, b) => {
+        // Anything without a date reads "Not scheduled yet", so pin those to
+        // the top where they cannot be missed. Everything else stays in the
+        // usual newest-first order underneath.
+        const aUnscheduled = a.scheduled_at ? 1 : 0
+        const bUnscheduled = b.scheduled_at ? 1 : 0
+        if (aUnscheduled !== bUnscheduled) return aUnscheduled - bUnscheduled
+
         const time = (row) => (row.created_at ? new Date(row.created_at).getTime() : -Number(row.id))
         return time(b) - time(a)
       })
@@ -168,6 +176,8 @@ function AppointmentListPage() {
 
       <AppointmentStats stats={stats} />
 
+      <PendingScheduleQueue onScheduled={loadAppointments} />
+
       <AppointmentFilter
         search={search}
         onSearchChange={setSearch}
@@ -183,13 +193,14 @@ function AppointmentListPage() {
         </div>
       ) : (
         <>
-<AppointmentTable
+          <AppointmentTable
             appointments={paged}
             onOpenSchedule={openSchedule}
             onEdit={openEdit}
             onCancel={(row) => setCancelling(row)}
             onDelete={(row) => setDeleting(row)}
           />
+
 
           <Pagination
             currentPage={effectivePage}

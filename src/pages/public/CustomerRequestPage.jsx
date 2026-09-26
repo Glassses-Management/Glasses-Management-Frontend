@@ -89,7 +89,6 @@ export default function CustomerRequestPage() {
 
   const [requestType, setRequestType] = useState('')
   const [reason, setReason] = useState('')
-  const [productType, setProductType] = useState('')
   const [contactMethod, setContactMethod] = useState('Phone')
   const [notes, setNotes] = useState('')
 
@@ -121,23 +120,20 @@ export default function CustomerRequestPage() {
     return () => { cancelled = true }
   }, [token, customerId])
 
+  // Only an eye exam / prescription change can be submitted here, so the notes
+  // are always built from the exam fields.
   const composedNotes = useMemo(() => {
     const lines = []
-    if (requestType === 'exam') {
-      if (reason) lines.push(`Reason for visit: ${reason}`)
-      if (contactMethod) lines.push(`Preferred contact method: ${contactMethod}`)
-    } else if (requestType === 'product') {
-      if (productType) lines.push(`Product type: ${productType}`)
-    }
+    if (reason) lines.push(`Reason for visit: ${reason}`)
+    if (contactMethod) lines.push(`Preferred contact method: ${contactMethod}`)
     if (notes.trim()) lines.push(notes.trim())
     return lines.join('\n')
-  }, [requestType, reason, productType, contactMethod, notes])
+  }, [reason, contactMethod, notes])
 
   // Clear any server-side field error when the user edits that field.
   const patchDetails = (patch) => {
     if (patch.notes) setNotes(patch.notes)
     if (patch.reason) setReason(patch.reason)
-    if (patch.productType) setProductType(patch.productType)
     if (patch.contactMethod) setContactMethod(patch.contactMethod)
     if (patch.notes !== undefined && detailsError.notes) setDetailsError({})
   }
@@ -146,7 +142,6 @@ export default function CustomerRequestPage() {
     setRequestType(type)
     setErrors((prev) => ({ ...prev, requestType: undefined }))
     setReason('')
-    setProductType('')
     setSelectedRxId(undefined)
     setEnabledRx(false)
   }
@@ -196,7 +191,6 @@ export default function CustomerRequestPage() {
   const resetForm = () => {
     setRequestType('')
     setReason('')
-    setProductType('')
     setContactMethod('Phone')
     setNotes('')
     setEnabledRx(false)
@@ -216,11 +210,12 @@ export default function CustomerRequestPage() {
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-12">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">New Request</p>
         <h1 className="mt-3 font-sans font-semibold text-4xl leading-tight text-neutral-900 dark:text-neutral-50 md:text-5xl" data-aos="fade-up">
-          Submit Optical <span className="italic">Service</span> or Product Request
+          Request an Eye Exam or <span className="italic">Prescription Change</span>
         </h1>
         <div className="mt-4 h-[3px] w-12 rounded-full bg-forest" />
         <p className="mt-5 max-w-2xl text-neutral-600 dark:text-neutral-400">
           Tell us what you need and our optical team will review your request and contact you with the next steps.
+          Non-prescription products such as sunglasses are ordered from the catalog instead.
         </p>
 
         {!isAuthenticated ? (
@@ -299,7 +294,7 @@ export default function CustomerRequestPage() {
                 ) : (
                   <RequestDetailsCard
                     type={requestType}
-                    value={{ reason, productType, contactMethod, notes }}
+                    value={{ reason, contactMethod, notes }}
                     onChange={patchDetails}
                     error={detailsError}
                   />

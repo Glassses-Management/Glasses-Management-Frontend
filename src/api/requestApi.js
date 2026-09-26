@@ -1,8 +1,19 @@
 import axiosInstance from '@/api/axiosInstance'
 
+// The backend has a real /api/requests API. API_DOCUMENT.md section 12 only
+// documents the POST, but the GET/approve/reject endpoints exist and work —
+// always prefer these over reading requests out of /orders.
+
+// The list endpoints answer with a Spring Page wrapper or a bare array
+// depending on the endpoint, so normalise to a plain array.
+const toList = (data) => {
+  if (Array.isArray(data)) return data
+  return data?.content || []
+}
+
 export const getRequests = async () => {
   const { data } = await axiosInstance.get('/requests')
-  return data
+  return toList(data)
 }
 
 export const getRequestById = async (id) => {
@@ -12,7 +23,7 @@ export const getRequestById = async (id) => {
 
 export const getRequestsByStatus = async (status) => {
   const { data } = await axiosInstance.get(`/requests/status/${status}`)
-  return data
+  return toList(data)
 }
 
 // The logged-in customer's own requests. The backend resolves the customer from
@@ -20,12 +31,12 @@ export const getRequestsByStatus = async (status) => {
 // request history.
 export const getMyRequests = async () => {
   const { data } = await axiosInstance.get('/requests/mine')
-  return data
+  return toList(data)
 }
 
 export const getRequestsByCustomer = async (customerId) => {
   const { data } = await axiosInstance.get(`/requests/customer/${customerId}`)
-  return data
+  return toList(data)
 }
 
 export const createRequest = async (payload) => {

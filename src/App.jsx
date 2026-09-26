@@ -249,7 +249,17 @@ function App() {
                 <Route path="/products/:id" element={<PublicProductDetail />} />
                 <Route path="/explore" element={<PublicProductList />} />
                 <Route path="/cart" element={<CartPage />} />
-                <Route path="/request" element={<CustomerRequestPage />} />
+                <Route
+                  path="/request"
+                  element={
+                    // POST /api/requests requires ROLE_CUSTOMER (API_DOCUMENT.md
+                    // section 12), so staff must not reach this form - the submit
+                    // would just fail with 403 and create nothing.
+                    <RoleRoute roles={[ROLES.CUSTOMER]}>
+                      <CustomerRequestPage />
+                    </RoleRoute>
+                  }
+                />
 
                 {/* Authentication */}
                 <Route path="/login" element={<LoginPage />} />

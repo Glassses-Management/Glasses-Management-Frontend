@@ -1,6 +1,8 @@
+import { Ban, Trash2 } from 'lucide-react'
 import DataTable from '@/components/data/DataTable'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
+import DropdownMenu from '@/components/ui/DropdownMenu'
 import { formatDateTime } from '@/utils/format'
 
 const STATUS_VARIANT = {
@@ -41,7 +43,7 @@ function AppointmentTable({ appointments, onOpenSchedule, onEdit, onCancel, onDe
       header: 'Scheduled Time',
       render: (row) => (
         <span className="text-gray-900 dark:text-neutral-100">
-          {row.scheduled_at ? formatDateTime(row.scheduled_at) : '—'}
+          {row.scheduled_at ? formatDateTime(row.scheduled_at) : <span className="text-amber-600 dark:text-amber-400">Not scheduled yet</span>}
         </span>
       ),
     },
@@ -52,31 +54,40 @@ function AppointmentTable({ appointments, onOpenSchedule, onEdit, onCancel, onDe
     },
     {
       key: 'actions',
-      header: 'Actions',
-      render: (row) => (
-        <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-          {row.status === 'PENDING_REVIEW' && (
-            <Button size="sm" onClick={() => onOpenSchedule?.(row)}>
-              Schedule
-            </Button>
-          )}
-          <Button variant="blue" size="sm" onClick={() => onEdit?.(row)}>
-            Edit
-          </Button>
-          <Button variant="danger" size="sm" onClick={() => onDelete?.(row)}>
-            Delete
-          </Button>
-          {row.status !== 'CANCELLED' && (
-            <Button variant="outline" size="sm" onClick={() => onCancel?.(row)}>
-              Cancel
-            </Button>
-          )}
-        </div>
-      ),
+      header: '',
+      render: (row) => {
+        const menuItems = []
+        if (row.status !== 'CANCELLED') {
+          menuItems.push({
+            label: 'Cancel appointment',
+            icon: <Ban size={14} />,
+            onSelect: () => onCancel?.(row),
+          })
+        }
+        menuItems.push({
+          label: 'Delete',
+          icon: <Trash2 size={14} />,
+          danger: true,
+          onSelect: () => onDelete?.(row),
+        })
+
+        return (
+          <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+            {(row.status === 'PENDING_REVIEW' || !row.scheduled_at) && (
+              <Button size="sm" onClick={() => onOpenSchedule?.(row)}>
+                Schedule
+              </Button>
+            )}
+            <DropdownMenu items={menuItems} label={`Actions for appointment #${row.id}`} />
+          </div>
+        )
+      },
     },
   ]
 
-  return <DataTable columns={columns} data={appointments} />
+  // Clicking anywhere on a row opens Edit, which also covers changing the
+  // status. Cancel and Delete sit behind the "..." menu so a row stays quiet.
+  return <DataTable columns={columns} data={appointments} onRowClick={onEdit} />
 }
 
 export default AppointmentTable

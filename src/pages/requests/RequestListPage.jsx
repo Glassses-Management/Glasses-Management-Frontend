@@ -1,57 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Download, FileText, MoreHorizontal, PlusCircle, Search } from 'lucide-react'
-import Badge from '@/components/ui/Badge'
+import { ChevronLeft, ChevronRight, Download, FileText, PlusCircle, Search } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Select from '@/components/ui/Select'
-import { useToast } from '@/hook/UseToast'
-import { getRequests, approveRequest, rejectRequest } from '@/api/requestApi'
-import { getInitials, getAvatarColors } from '@/utils/avatar'
-import { formatDate } from '@/utils/FormatDate'
-
-const STATUS_VARIANT = {
-  PENDING: 'info',
-  PENDING_REVIEW: 'info',
-  APPROVED: 'success',
-  CONFIRMED: 'success',
-  IN_PROGRESS: 'info',
-  READY_FOR_PICKUP: 'success',
-  COMPLETED: 'neutral',
-  REJECTED: 'danger',
-  CANCELLED: 'neutral',
-}
-
-const STATUS_ACCENT = {
-  PENDING: 'bg-blue-500',
-  PENDING_REVIEW: 'bg-blue-500',
-  IN_PROGRESS: 'bg-amber-500',
-  APPROVED: 'bg-emerald-500',
-  CONFIRMED: 'bg-emerald-500',
-  READY_FOR_PICKUP: 'bg-emerald-500',
-  COMPLETED: 'bg-gray-400',
-  REJECTED: 'bg-red-500',
-  CANCELLED: 'bg-red-500',
-}
-
-const TYPE_LABEL = {
-  exam: 'Eye Examination',
-  product: 'Product',
-}
-
-function Avatar({ name, id }) {
-  const { bg, text } = getAvatarColors(id)
-  return (
-    <span
-      className="flex size-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
-      style={{ backgroundColor: bg, color: text }}
-    >
-      {getInitials(name)}
-    </span>
-  )
-}
+import RequestCard from '@/components/request/RequestCard'
+import { getRequests } from '@/api/requestApi'
+import { getAppointments } from '@/api/appointmentApi'
+import { parseRequestRef, REQUEST_TYPE_LABEL } from '@/utils/RequestOrder'
 
 function typeLabel(type) {
-  return TYPE_LABEL[type] || type
+  return REQUEST_TYPE_LABEL[type] || type
 }
 
 function StatusPill({ dot, label }) {
@@ -63,52 +21,72 @@ function StatusPill({ dot, label }) {
   )
 }
 
+// Sort key for "newest first". Returns null when the request has no usable
+// timestamp, so the caller can fall back to the id.
+function timeOf(request) {
+  const raw = request?.createdAt ?? request?.created_at
+  if (!raw) return null
+  const t = Date.parse(raw)
+  return Number.isNaN(t) ? null : t
+}
+
 export default function RequestListPage() {
   const navigate = useNavigate()
-  const { success: toastSuccess, error: toastError } = useToast()
   const [requests, setRequests] = useState([])
+  const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
   const [query, setQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
-  useEffect(() => {
-    let cancelled = false
-    const load = async () => {
-      try {
-        const data = await getRequests()
-        if (!cancelled) setRequests(data.content || data)
-      } catch {
-        if (!cancelled) setRequests([])
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-    void load()
-    return () => {
-      cancelled = true
-    }
+  // Plain fetch, no setState, so it is safe to call from anywhere.
+  const fetchAll = useCallback(async () => {
+    const [reqs, appts] = await Promise.all([getRequests(), getAppointments()])
+    return { reqs: Array.isArray(reqs) ? reqs : [], appts: Array.isArray(appts) ? appts : [] }
   }, [])
 
-  const handleApprove = async (id) => {
+  // Reloads the queue, e.g. after a request was approved or scheduled.
+  const refresh = useCallback(async () => {
     try {
-      await approveRequest(id)
-      toastSuccess('Request approved. Order created.')
-      setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'APPROVED' } : r)))
-      navigate('/dashboard/orders')
-    } catch (err) {
-      toastError(err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to approve request')
+      const { reqs, appts } = await fetchAll()
+      setRequests(reqs)
+      setAppointments(appts)
+      setLoadError('')
     }
-  }
+    catch (err) {
+      const status = err?.response?.status
+      const detail = err?.response?.data?.error || err?.response?.data?.message || err?.message
+      // A failed load must not look like "no requests" - surface the reason.
+      setLoadError(`Could not load requests${status ? ` (HTTP ${status})` : ''}: ${detail || 'unknown error'}`)
+      console.error('RequestListPage: failed to load requests:', status || err?.message || err)
+      setRequests([])
+      setAppointments([])
+    }
+  }, [fetchAll])
 
-  const handleReject = async (id) => {
-    try {
-      await rejectRequest(id)
-      toastSuccess('Request rejected.')
-      setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'REJECTED' } : r)))
-    } catch (err) {
-      toastError(err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to reject request')
+  useEffect(() => {
+    const run = async () => {
+      await refresh()
+      setLoading(false)
     }
-  }
+    void run()
+  }, [refresh])
+
+  // Appointments carry no order_id, so the link back to a request is the
+  // reference text in the notes (see utils/RequestOrder). A request can end up
+  // with more than one row (a dateless placeholder plus the real booking), so
+  // prefer whichever one actually carries a date.
+  const appointmentByRequest = useMemo(() => {
+    const map = new Map()
+    for (const appointment of appointments) {
+      const requestId = parseRequestRef(appointment?.notes)
+      if (requestId == null) continue
+      const existing = map.get(requestId)
+      if (!existing) map.set(requestId, appointment)
+      else if (!existing.scheduled_at && appointment.scheduled_at) map.set(requestId, appointment)
+    }
+    return map
+  }, [appointments])
 
   const statusOptions = useMemo(() => {
     const statuses = [...new Set(requests.map((r) => r.status).filter(Boolean))]
@@ -129,13 +107,22 @@ export default function RequestListPage() {
         String(r.notes || '').toLowerCase().includes(q)
       return matchesStatus && matchesQuery
     })
-    result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    return result
+    // Newest first. Ids only ever increase, so they settle the order whenever
+    // createdAt is missing or unparseable instead of scrambling the list.
+    return result.sort((a, b) => {
+      const ta = timeOf(a)
+      const tb = timeOf(b)
+      if (ta != null && tb != null && ta !== tb) return tb - ta
+      return (b.id ?? 0) - (a.id ?? 0)
+    })
   }, [requests, query, statusFilter])
 
   const pendingCount = requests.filter((r) => r.status === 'PENDING').length
   const approvedCount = requests.filter((r) => r.status === 'APPROVED').length
-  const rejectedCount = requests.filter((r) => r.status === 'REJECTED').length
+  const declinedCount = requests.filter((r) => r.status === 'REJECTED').length
+  const unscheduledCount = requests.filter(
+    (r) => r.status === 'APPROVED' && !appointmentByRequest.get(r.id)?.scheduled_at,
+  ).length
 
   if (loading) {
     return (
@@ -165,9 +152,10 @@ export default function RequestListPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
-          <StatusPill dot="bg-blue-500" label={`${pendingCount} Pending`} />
+          <StatusPill dot="bg-blue-500" label={`${pendingCount} Awaiting Approval`} />
           <StatusPill dot="bg-emerald-500" label={`${approvedCount} Approved`} />
-          <StatusPill dot="bg-red-500" label={`${rejectedCount} Rejected`} />
+          {unscheduledCount > 0 && <StatusPill dot="bg-amber-500" label={`${unscheduledCount} Need Scheduling`} />}
+          <StatusPill dot="bg-red-500" label={`${declinedCount} Declined`} />
           <Button
             variant="forest"
             className="shadow-sm"
@@ -241,75 +229,31 @@ export default function RequestListPage() {
         </button>
       </div>
 
-      {filtered.length === 0 ? (
+      {loadError && (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950/30">
+          <p className="text-sm font-semibold text-red-700 dark:text-red-300">Could not load requests</p>
+          <p className="mt-1 text-xs text-red-600 dark:text-red-400">{loadError}</p>
+        </div>
+      )}
+
+      {!loadError && filtered.length === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
           <FileText size={40} className="mx-auto mb-3 text-gray-300 dark:text-neutral-600" />
-          <p className="text-base font-medium text-gray-600 dark:text-neutral-300">No requests found</p>
+          <p className="text-base font-medium text-gray-600 dark:text-neutral-300">
+            {query || statusFilter !== 'all' ? 'No requests match your filters' : 'No requests found'}
+          </p>
           <p className="mt-1 text-sm text-gray-400 dark:text-neutral-500">
             Customer requests will appear here for review.
           </p>
         </div>
-      ) : (
-        <div className="space-y-3">
+      ) : (        <div className="space-y-3">
           {filtered.map((req) => (
-            <div
+            <RequestCard
               key={req.id}
-              className="flex overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-800 dark:bg-[#1c1c28]"
-            >
-              <div aria-hidden="true" className={`w-1 shrink-0 ${STATUS_ACCENT[req.status] || 'bg-gray-300'}`} />
-              <div className="flex flex-1 flex-col gap-4 p-5 sm:flex-row sm:items-start">
-                <Avatar name={req.customer_name || '?'} id={req.customer_id} />
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                    <span className="font-semibold text-gray-900 dark:text-neutral-100">
-                      {req.customer_name || 'Unknown customer'}
-                    </span>
-                    <span className="text-xs font-medium text-gray-400 dark:text-neutral-500">#{req.id}</span>
-                    <Badge text={req.status || 'PENDING'} variant={STATUS_VARIANT[req.status] || 'neutral'} />
-                    <span className="rounded-md bg-gray-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:bg-neutral-800 dark:text-neutral-400">
-                      {typeLabel(req.type)}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm font-medium leading-relaxed text-gray-800 dark:text-neutral-200">
-                    "{req.notes || 'No notes provided'}"
-                  </p>
-                  <p className="mt-1.5 text-xs text-gray-400 dark:text-neutral-500">
-                    Requested {formatDate(req.createdAt)} · Patient ID {req.customer_id || '–'}
-                  </p>
-                </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  {req.status === 'PENDING' ? (
-                    <>
-                      <Button
-                        size="sm"
-                        className="!bg-green-600 hover:!bg-green-700"
-                        onClick={() => handleApprove(req.id)}
-                      >
-                        Approve
-                      </Button>
-                      <Button size="sm" variant="danger" onClick={() => handleReject(req.id)}>
-                        Decline
-                      </Button>
-                    </>
-                  ) : req.status === 'APPROVED' ? (
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/30">
-                      Intake Done
-                    </span>
-                  ) : (
-                    <Button size="sm" variant="outline" className="!text-forest dark:!text-leaf">
-                      Re-open
-                    </Button>
-                  )}
-                  <button
-                    type="button"
-                    aria-label="More actions"
-                    className="flex size-8 items-center justify-center rounded-full text-gray-400 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 dark:text-neutral-500 dark:hover:bg-white/10"
-                  >
-                    <MoreHorizontal size={18} />
-                  </button>
-                </div>
-              </div>
-            </div>
+              request={req}
+              appointment={appointmentByRequest.get(req.id)}
+              onChanged={refresh}
+            />
           ))}
         </div>
       )}

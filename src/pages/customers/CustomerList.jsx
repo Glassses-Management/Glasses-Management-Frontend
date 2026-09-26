@@ -48,7 +48,7 @@ function CustomerDeleteModal({ customer, onConfirm, onClose }) {
 
 function CustomerList({ onNavigate }) {
   const navigate = useNavigate()
-  const { customers: customersData, deleteCustomer } = useCustomers()
+  const { customers: customersData, error, deleteCustomer } = useCustomers()
 
   const [search, setSearch] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
@@ -148,6 +148,13 @@ function CustomerList({ onNavigate }) {
           <SearchBar value={search} onChange={setSearch} />
         </div>
       </div>
+
+      {error && (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300">
+          Could not load customers from the server: {error}. The list below is empty rather than
+          showing cached data, so you are not looking at records that no longer exist.
+        </div>
+      )}
 
       <DataTable
         columns={columns}

@@ -29,7 +29,11 @@ const Select = forwardRef(function Select(
         return opts
     }, [options])
 
-    const allOption = placeholder && !normalizedOptions.some((o) => o.value === '')
+    // Prepend the "everything" option only when the caller has not already
+    // supplied a catch-all, otherwise two <option>s share the key and React
+    // drops one of them. Callers mark their own catch-all as 'all' or ''.
+    const hasCatchAll = normalizedOptions.some((o) => o.value === 'all' || o.value === '')
+    const allOption = placeholder && !hasCatchAll
         ? [{ value: 'all', label: placeholder }, ...normalizedOptions]
         : normalizedOptions
 
