@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Avatar from '@/components/ui/Avatar'
-import { getAttachmentsByUser } from '@/api/attachmentApi'
+import { getMyAttachments } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
 
 // Circular profile picture that links to /account. Shows the uploaded photo
@@ -12,7 +12,7 @@ export default function ProfileAvatar({ user, size = 'size-9', onClick }) {
   useEffect(() => {
     if (!user?.id) return
     let cancelled = false
-    getAttachmentsByUser(user.id)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setAvatar(pickImage(items)?.filePath || '')
       })

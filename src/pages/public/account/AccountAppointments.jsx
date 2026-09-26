@@ -3,22 +3,24 @@ import { Link } from 'react-router-dom'
 import { CalendarDays, Clock, Plus, Stethoscope } from 'lucide-react'
 import Badge from '@/components/ui/Badge'
 import AccountCard from '@/pages/public/account/AccountCard'
-import { getAppointmentsByCustomer } from '@/api/appointmentApi'
+import { getMyAppointments } from '@/api/appointmentApi'
 import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { formatDate, formatTime } from '@/utils/FormatDate'
 
 // The customer's real appointments. Appointments are created by the clinic when
 // a request is approved or a cart order is confirmed.
 export default function AccountAppointments() {
-  const { customerId, loading: customerLoading, error: customerError } = useOwnCustomerId()
+  const { needsProfile, loading: customerLoading, error: customerError } = useOwnCustomerId()
   const [appointments, setAppointments] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (customerId == null) return undefined
+    // Nothing to load until the account resolves to a profile. The empty state is
+    // rendered from `visible`, so no state is set here.
+    if (needsProfile) return undefined
     let cancelled = false
 
-    getAppointmentsByCustomer(customerId)
+    getMyAppointments()
       .then((data) => {
         if (cancelled) return
         setAppointments(Array.isArray(data) ? data : [])
@@ -34,9 +36,9 @@ export default function AccountAppointments() {
       })
 
     return () => { cancelled = true }
-  }, [customerId])
+  }, [needsProfile])
 
-  const visible = customerId == null && !customerLoading ? [] : appointments
+  const visible = needsProfile ? [] : customerLoading ? [] : appointments
 
   return (
     <AccountCard>
@@ -63,7 +65,7 @@ export default function AccountAppointments() {
 
       {error ? (
         <p className="px-6 py-8 text-center text-sm text-red-600 dark:text-red-400">{error}</p>
-      ) : customerError && customerId == null ? (
+      ) : customerError ? (
         <p className="px-6 py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">{customerError}</p>
       ) : visible === null ? (
         <div className="space-y-3 px-6 py-6">

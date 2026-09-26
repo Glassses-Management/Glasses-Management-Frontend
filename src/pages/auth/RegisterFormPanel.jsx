@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, CalendarDays, Eye, EyeOff, Lock, Mail, Phone, User } from 'lucide-react'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { email, phone as verifyPhone } from '@/utils/Validators'
-import AuthSsoRow from '@/pages/auth/AuthSsoRow'
+import { postLoginRoute } from '@/utils/postLogin'
+import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
+import { isGoogleConfigured } from '@/lib/googleIdentity'
+import { googleAccountExists } from '@/api/authApi'
 
 const inputClass =
   'w-full rounded-xl border border-neutral-200 bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-900 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#0E1A15] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
@@ -12,7 +15,7 @@ const inputClass =
 const iconClass = 'pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500'
 
 function RegisterFormPanel() {
-  const { register } = useAuth()
+  const { register, loginWithGoogle } = useAuth()
   const { error: toastError } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
@@ -30,6 +33,9 @@ function RegisterFormPanel() {
   })
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
+  // Set when Google reports an address that already has an account, so the page
+  // can offer the sign-in route instead of leaving the user at a dead end.
+  const [existingAccount, setExistingAccount] = useState(false)
 
   const update = (name, value) => {
     setForm((prev) => ({ ...prev, [name]: value }))
@@ -74,27 +80,79 @@ function RegisterFormPanel() {
     }
   }
 
+  // Google creates the account on the backend from the verified email, so this is
+  // a sign-up and a sign-in at the same time. Missing profile details are
+  // collected on the completion page that postLoginRoute routes to.
+  //
+  // An address that already has an account is refused here rather than signed in:
+  // this page promises to create an account, so an existing address belongs on the
+  // sign-in page. The check is a separate, non-mutating call so nothing is created
+  // and no session is issued before the decision is made.
+  const handleGoogleCredential = useCallback(async (credential) => {
+    setSubmitting(true)
+    try {
+      if (await googleAccountExists(credential)) {
+        setExistingAccount(true)
+        toastError('You already have an account with this email. Please sign in instead.')
+        return
+      }
+      const user = await loginWithGoogle(credential)
+      navigate(await postLoginRoute(user, redirectTo), { replace: true })
+    } catch (err) {
+      const data = err?.response?.data
+      toastError(data?.error || data?.message || 'Google sign-up failed. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }, [loginWithGoogle, navigate, redirectTo, toastError])
+
+  // Stable identity: the Google button's effect depends on this, and an inline
+  // arrow would rebuild the button on every render.
+  const handleGoogleLoadError = useCallback(() => {
+    toastError('Google sign-up could not be loaded. Use the form instead.')
+  }, [toastError])
+
   return (
     <div className="flex items-center justify-center p-5 md:p-10">
       <div className="w-full max-w-[440px] rounded-2xl bg-white p-7 shadow-lg ring-1 ring-neutral-200/60 transition-colors duration-300 md:p-8 dark:bg-[#16271F] dark:ring-neutral-800">
-        <h1 className="font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
+        <h1 className="mb-4 font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
           Create your account
         </h1>
-        <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
-          Create a secure profile in seconds.
-        </p>
 
-        <div className="mt-6">
-          <AuthSsoRow />
-        </div>
+        {isGoogleConfigured() && (
+          <>
+            <GoogleSignInButton
+              onCredential={handleGoogleCredential}
+              onError={handleGoogleLoadError}
+              disabled={submitting}
+            />
 
-        <div className="my-6 flex items-center gap-3">
-          <span className="h-px flex-1 bg-neutral-200 dark:bg-neutral-700" />
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-            or with email
-          </span>
-          <span className="h-px flex-1 bg-neutral-200 dark:bg-neutral-700" />
-        </div>
+            {existingAccount && (
+              <div className="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
+                <p className="font-medium">This email already has an account.</p>
+                <p className="mt-1">
+                  Registration is only for new accounts.{' '}
+                  <Link
+                    to="/login"
+                    state={redirectTo ? { from: location } : undefined}
+                    className="font-semibold underline underline-offset-2"
+                  >
+                    Sign in instead
+                  </Link>
+                  .
+                </p>
+              </div>
+            )}
+
+            <div className="my-6 flex items-center gap-3">
+              <span className="h-px flex-1 bg-neutral-200 dark:bg-neutral-700" />
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+                or with email
+              </span>
+              <span className="h-px flex-1 bg-neutral-200 dark:bg-neutral-700" />
+            </div>
+          </>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div className="grid grid-cols-2 gap-3">
@@ -139,7 +197,7 @@ function RegisterFormPanel() {
                 type="email"
                 value={form.email}
                 onChange={(e) => update('email', e.target.value)}
-                placeholder="you@example.com"
+                  placeholder="you@gmail.com"
                 className={inputClass}
               />
             </div>

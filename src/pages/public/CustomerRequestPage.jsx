@@ -11,7 +11,7 @@ import CustomerRequestSidebar from '@/components/request/CustomerRequestSidebar'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { createRequest } from '@/api/requestApi'
-import { getPrescriptionsByCustomer } from '@/api/prescriptionApi'
+import { getMyPrescriptions } from '@/api/prescriptionApi'
 
 function cn(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -84,7 +84,6 @@ export default function CustomerRequestPage() {
   const { success: toastSuccess, error: toastError } = useToast()
   const location = useLocation()
 
-  const customerId = user?.customer_id ?? user?.id
   const isAuthenticated = !!token
 
   const [requestType, setRequestType] = useState('')
@@ -105,9 +104,9 @@ export default function CustomerRequestPage() {
   const [serverError, setServerError] = useState('')
 
   useEffect(() => {
-    if (!token || customerId == null) return
+    if (!token) return
     let cancelled = false
-    getPrescriptionsByCustomer(customerId)
+    getMyPrescriptions()
       .then((data) => {
         if (!cancelled) setPrescriptions(Array.isArray(data) ? data : [])
       })
@@ -118,7 +117,7 @@ export default function CustomerRequestPage() {
         if (!cancelled) setRxLoading(false)
       })
     return () => { cancelled = true }
-  }, [token, customerId])
+  }, [token])
 
   // Only an eye exam / prescription change can be submitted here, so the notes
   // are always built from the exam fields.

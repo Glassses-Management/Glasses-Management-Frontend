@@ -5,6 +5,14 @@ export const getOrders = async (params) => {
   return data
 }
 
+// The signed-in customer's own orders, newest first. Customer pages use this
+// because GET /api/orders is staff-only, and because passing a customerId there
+// would let any account read somebody else's orders.
+export const getMyOrders = async () => {
+  const { data } = await axiosInstance.get('/orders/mine')
+  return data
+}
+
 // GET /api/orders is paged and the server clamps size to
 // spring.data.web.pageable.max-page-size=100, so a single call only returns the
 // newest 100 matching rows. Walk the pages when every match is needed.

@@ -15,6 +15,14 @@ export const getPrescriptionsByCustomer = async (customerId) => {
   return data
 }
 
+// The signed-in customer's own prescriptions. Customer pages use this because
+// GET /api/prescriptions/customer/{customerId} is staff-only, and letting a
+// customer pass any id there would expose other patients' medical data.
+export const getMyPrescriptions = async () => {
+  const { data } = await axiosInstance.get('/prescriptions/mine')
+  return data
+}
+
 export const getPrescriptionsByUser = async (userId) => {
   const { data } = await axiosInstance.get(`/prescriptions/user/${userId}`)
   return data

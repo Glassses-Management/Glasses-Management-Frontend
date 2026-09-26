@@ -9,11 +9,22 @@ const axiosInstance = axios.create({
   timeout: 15000,
 })
 
+// Endpoints that must be reachable while signed out.
+//
+// Sending an Authorization header here is actively harmful: Spring Security's
+// bearer token filter authenticates before authorization is evaluated, so a
+// stale or expired token left in localStorage makes the backend answer 401 for
+// an endpoint that is permitAll(). The result is that signing in fails until
+// the stale token is cleared.
+const PUBLIC_AUTH_PATHS = ['/auth/login', '/auth/google']
+
 // Request interceptor: attach the JWT to every outgoing request if present.
 axiosInstance.interceptors.request.use(
   (config) => {
+    const url = config.url || ''
+    const isPublicAuth = PUBLIC_AUTH_PATHS.some((path) => url.includes(path))
     const token = localStorage.getItem('token')
-    if (token) {
+    if (token && !isPublicAuth) {
       config.headers.Authorization = `Bearer ${token}`
     }
     if (config.data && !(config.data instanceof FormData)) {

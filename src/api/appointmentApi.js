@@ -15,6 +15,16 @@ export const getAppointmentsByCustomer = async (customerId) => {
   return data
 }
 
+// The signed-in customer's own appointments.
+//
+// This also fixes a pre-existing break: /api/appointments/customer/{id} never
+// existed on the backend, so the old call fell through to /appointments/{id} and
+// failed to bind "customer" to a Long.
+export const getMyAppointments = async () => {
+  const { data } = await axiosInstance.get('/appointments/mine')
+  return data
+}
+
 export const getAppointmentsByOptometrist = async (optometristId) => {
   const { data } = await axiosInstance.get(`/appointments/optometrist/${optometristId}`)
   return data

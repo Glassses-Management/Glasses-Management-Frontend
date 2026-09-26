@@ -52,6 +52,7 @@ import Contact from '@/pages/public/Contact'
 import PublicProductList from '@/pages/public/PublicProductList'
 import PublicProductDetail from '@/pages/public/PublicProductDetail'
 import PatientAccountPage from '@/pages/public/account/PatientAccountPage'
+import CompleteProfilePage from '@/pages/public/CompleteProfilePage'
 import CartPage from '@/pages/public/CartPage'
 import CustomerRequestPage from '@/pages/public/CustomerRequestPage'
 import NotFound from '@/pages/public/NotFound'
@@ -271,6 +272,17 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <PatientAccountPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Google signups land here until the customer profile exists,
+                    because Google cannot supply the required phone number. */}
+                <Route
+                  path="/complete-profile"
+                  element={
+                    <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                      <CompleteProfilePage />
                     </ProtectedRoute>
                   }
                 />

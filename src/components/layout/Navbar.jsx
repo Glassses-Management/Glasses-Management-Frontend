@@ -6,7 +6,7 @@ import { useAuth } from '@/hook/UseAuth'
 import { useCart } from '@/hook/UseCart'
 import { getInitials } from '@/utils/avatar'
 import { ROLES } from '@/utils/Roles'
-import { getAttachmentsByUser } from '@/api/attachmentApi'
+import { getMyAttachments } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
 
 const NAV_LINKS = [
@@ -146,7 +146,7 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
   useEffect(() => {
     if (!user?.id) return undefined
     let cancelled = false
-    getAttachmentsByUser(user.id)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setLoadedAvatar(pickImage(items)?.filePath || '')
       })

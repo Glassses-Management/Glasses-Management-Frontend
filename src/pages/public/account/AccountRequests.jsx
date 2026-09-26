@@ -5,7 +5,7 @@ import Badge from '@/components/ui/Badge'
 import AccountCard from '@/pages/public/account/AccountCard'
 import RequestStepper from '@/components/request/RequestStepper'
 import { getMyRequests } from '@/api/requestApi'
-import { getAppointments } from '@/api/appointmentApi'
+import { getMyAppointments } from '@/api/appointmentApi'
 import { formatDate, formatTime } from '@/utils/FormatDate'
 import {
   parseRequestRef,
@@ -89,9 +89,10 @@ export default function AccountRequests() {
 
     const load = async () => {
       try {
-        // /requests/mine resolves the customer from the JWT, so no customer id
-        // is sent. 404 just means this account has no linked customer profile.
-        const [reqs, appts] = await Promise.allSettled([getMyRequests(), getAppointments()])
+        // /requests/mine and /appointments/mine both resolve the customer from the
+        // JWT, so no customer id is sent. 404 just means this account has no linked
+        // customer profile.
+        const [reqs, appts] = await Promise.allSettled([getMyRequests(), getMyAppointments()])
 
         if (cancelled) return
 

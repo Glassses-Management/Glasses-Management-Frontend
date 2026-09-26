@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -13,7 +13,7 @@ import {
   Activity,
   ChevronLeft,
 } from 'lucide-react'
-import { getAttachmentsByUser } from '@/api/attachmentApi'
+import { getMyAttachments } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
 
 const NAV_SECTIONS = [
@@ -88,7 +88,7 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
   useEffect(() => {
     if (!user?.id) return undefined
     let cancelled = false
-    getAttachmentsByUser(user.id)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setAvatarImage(pickImage(items)?.filePath || '')
       })

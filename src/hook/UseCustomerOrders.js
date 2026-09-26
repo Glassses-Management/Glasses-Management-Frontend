@@ -1,35 +1,45 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { getOrders } from '@/api/orderApi'
-import { getAppointmentsByCustomer } from '@/api/appointmentApi'
+import { getMyOrders } from '@/api/orderApi'
+import { getMyAppointments } from '@/api/appointmentApi'
 import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { parseOrderRef } from '@/utils/OrderAppointment'
 
 // Loads the signed-in customer's orders, joined to the appointment that holds
 // their collection date.
 //
-// There is no /orders/mine endpoint, so the orders come from the staff list
-// endpoint filtered by the customerId query param it supports.
+// Both calls are the self-scoped /mine routes, which the backend resolves from
+// the JWT. The previous version called the staff list endpoints with a
+// customerId query parameter; those are closed to customers now, and passing an
+// id there would have let any account read another customer's orders.
 //
 // A collection date is NOT a field on the order - the backend has no pickup
 // column (API_DOCUMENT.md section 10.1). The date lives on the appointment staff
 // create when booking the order, and the two are linked by an "Order #<id>"
 // marker in the appointment notes (utils/OrderAppointment).
 export function useCustomerOrders() {
-  const { customerId, loading: customerLoading, error: customerError } = useOwnCustomerId()
+  const { needsProfile, loading: customerLoading, error: customerError } = useOwnCustomerId()
   const [orders, setOrders] = useState(null)
   const [appointments, setAppointments] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (customerId == null) return
     let cancelled = false
 
     const load = async () => {
+      // No profile yet, so there is nothing to list. The page routes to
+      // complete-profile instead of showing an error.
+      if (needsProfile) {
+        setOrders([])
+        setAppointments([])
+        setError('')
+        return
+      }
+
       try {
         const [orderRes, apptRes] = await Promise.allSettled([
-          getOrders({ page: 0, size: 20, sort: 'id,desc', customerId }),
-          getAppointmentsByCustomer(customerId),
+          getMyOrders(),
+          getMyAppointments(),
         ])
         if (cancelled) return
 
@@ -54,7 +64,7 @@ export function useCustomerOrders() {
 
     void load()
     return () => { cancelled = true }
-  }, [customerId])
+  }, [needsProfile])
 
   // Appointments carry no order_id, so the link back to an order is the
   // reference text in the notes.
@@ -71,6 +81,6 @@ export function useCustomerOrders() {
     orders: orders || [],
     appointmentByOrder,
     error: customerError || error,
-    loading: customerLoading || (customerId != null && orders === null),
+    loading: customerLoading || (orders === null && !needsProfile),
   }
 }

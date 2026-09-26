@@ -15,6 +15,13 @@ export const getAttachmentsByUser = async (userId) => {
   return data
 }
 
+// The signed-in account's own files (avatar). Customer pages use this because
+// /attachments/by-user/{userId} is staff-only, and it accepted any userId.
+export const getMyAttachments = async () => {
+  const { data } = await axiosInstance.get('/attachments/mine')
+  return data
+}
+
 export const getAttachmentsByProduct = async (productId) => {
   const { data } = await axiosInstance.get(`/attachments/by-product/${productId}`)
   return data

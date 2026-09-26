@@ -5,7 +5,7 @@ import { useToast } from '@/hook/UseToast'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
-import { getOrders } from '@/api/orderApi'
+import { getMyOrders } from '@/api/orderApi'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { formatDate } from '@/utils/FormatDate'
 import AvatarUploadSection from '@/pages/profile/AvatarUploadSection'
@@ -81,11 +81,11 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!customerId) return
     let cancelled = false
-    getOrders({ page: 0, size: 5, sort: 'id,desc', customerId })
+    getMyOrders()
       .then((data) => {
         if (cancelled) return
-        setOrders(Array.isArray(data?.content) ? data.content : [])
-        setOrderTotal(data?.totalElements ?? 0)
+        setOrders(Array.isArray(data) ? data : [])
+        setOrderTotal(Array.isArray(data) ? data.length : 0)
       })
       .catch((err) => {
         if (cancelled) return

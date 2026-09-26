@@ -16,7 +16,7 @@ function CartPage() {
   const navigate = useNavigate()
   const { items, count, subtotal, updateQuantity, removeItem, clearCart } = useCart()
   const { token } = useAuth()
-  const { customerId, loading: customerLoading, error: customerError } = useOwnCustomerId()
+  const { customerId, loading: customerLoading, error: customerError, needsProfile } = useOwnCustomerId()
   const { success: toastSuccess, error: toastError } = useToast()
   const [placing, setPlacing] = useState(false)
   const [images, setImages] = useState({})
@@ -44,6 +44,12 @@ function CartPage() {
       return
     }
     if (customerId == null) {
+      // A Google account without a profile cannot order yet. Send them to the
+      // form instead of reporting an error, so the cart is not a dead end.
+      if (needsProfile) {
+        navigate('/complete-profile', { state: { from: '/cart' } })
+        return
+      }
       toastError(customerError || 'No customer profile found for this account.')
       return
     }

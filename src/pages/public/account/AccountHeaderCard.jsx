@@ -4,7 +4,7 @@ import { Camera, CalendarPlus, Clock } from 'lucide-react'
 import Avatar from '@/components/ui/Avatar'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
-import { getAttachmentsByUser, uploadAttachment } from '@/api/attachmentApi'
+import { getMyAttachments, uploadAttachment } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
 import { PATIENT } from '@/pages/public/account/AccountData'
 
@@ -23,7 +23,7 @@ function AccountHeaderCard() {
   useEffect(() => {
     if (!user?.id) return
     let cancelled = false
-    getAttachmentsByUser(user.id)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setAvatar(pickImage(items)?.filePath || '')
       })
@@ -41,7 +41,7 @@ function AccountHeaderCard() {
     try {
       await uploadAttachment({ file, userId: user.id })
       toastSuccess('Profile picture updated successfully.')
-      const items = await getAttachmentsByUser(user.id)
+      const items = await getMyAttachments()
       setAvatar(pickImage(items)?.filePath || '')
     } catch (err) {
       const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to upload picture'

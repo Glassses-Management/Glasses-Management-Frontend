@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AuthContext } from "@/context/AuthContextStore";
-import { login as loginApi, getMe } from "@/api/authApi";
+import { login as loginApi, getMe, googleLogin as googleLoginApi } from "@/api/authApi";
 import { registerCustomer as registerApi } from "@/api/customerApi";
 
 // Read the exp (expiry, in seconds) claim from a stored JWT without any library.
@@ -161,6 +161,17 @@ export function AuthProvider({ children }){
         return user;
     }, [])
 
+    // Signs in with the ID token that Google Identity Services produced in the
+    // browser. The token is only an assertion of identity: the backend verifies
+    // it with Google's keys and decides the role, so nothing here is trusted for
+    // authorization.
+    const loginWithGoogle = useCallback(async (credential) => {
+        const { token, user } = await readAuthResponse(await googleLoginApi(credential), 'Google sign-in');
+        setToken(token);
+        setUser(user);
+        return user;
+    }, [])
+
     const logout = useCallback(() => {
         setToken(null);
         setUser(null);
@@ -185,7 +196,7 @@ export function AuthProvider({ children }){
         }
     }, [token]);
 
-    const value = {user, token, loading, checking, login, register, logout, getUser}
+    const value = {user, token, loading, checking, login, register, loginWithGoogle, logout, getUser}
 
     return <AuthContext.Provider value={value}>
         {children}

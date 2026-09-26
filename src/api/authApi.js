@@ -10,6 +10,19 @@ export const getMe = async () => {
   return data
 }
 
+export const googleLogin = async (credential) => {
+  const { data } = await axiosInstance.post('/auth/google', { credential })
+  return data
+}
+
+// Reports whether a Google identity already has an account. Used by the
+// registration page so it can send an existing address to the sign-in page
+// instead of silently signing the person in.
+export const googleAccountExists = async (credential) => {
+  const { data } = await axiosInstance.post('/auth/google/exists', { credential })
+  return Boolean(data?.exists)
+}
+
 export const changePassword = async (currentPassword, newPassword) => {
   const { data } = await axiosInstance.put('/auth/change-password', {
     currentPassword,
