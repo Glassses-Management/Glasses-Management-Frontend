@@ -3,7 +3,6 @@ import { ShoppingBag } from 'lucide-react'
 
 import AccountCard from '@/pages/public/account/AccountCard'
 import AccountOrderRow from '@/pages/public/account/AccountOrderRow'
-import { useCustomerOrders } from '@/hook/UseCustomerOrders'
 
 const cardHead =
   'flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800'
@@ -13,9 +12,11 @@ const cardHead =
 // Staff book the collection from the Appointments page queue; this is the
 // read-only customer side of that. The joining of order to collection date
 // happens in useCustomerOrders.
-export default function AccountOrders() {
-  const { orders, appointmentByOrder, error, loading } = useCustomerOrders()
-
+//
+// The data is passed in rather than fetched here: PatientAccountPage loads it
+// once and shares it with the overview widgets, so opening this tab does not
+// re-request the same orders and appointments.
+export default function AccountOrders({ orders, appointmentByOrder, error, loading }) {
   return (
     <AccountCard>
       <div className={cardHead} data-aos="fade-up">
@@ -26,7 +27,7 @@ export default function AccountOrders() {
           <div>
             <h3 className="font-sans text-base font-semibold text-neutral-900 dark:text-neutral-50">Order History</h3>
             <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-              Your purchases and when to collect them
+              Your purchases and when to collect them — select one for its progress
             </p>
           </div>
         </div>

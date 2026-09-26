@@ -1,5 +1,10 @@
 // Placeholder dataset for the patient account dashboard. All values are demo
 // content for previews — swap these out for real API data when it exists.
+//
+// The order-related entries that used to live here (QUICK_STATS, GLAZE_STEPS,
+// GLAZE_ACTIVE_STEP, GLAZE_ORDER) are gone. They described a fabricated order
+// "Aurora Round / FRA-2051" permanently sitting at step 2, which the overview
+// rendered as if it were real. Order figures now come from useCustomerOrders.
 
 export const PATIENT = {
   name: 'Sarah Chen',
@@ -8,13 +13,6 @@ export const PATIENT = {
   memberSince: 'Aug 2024',
   offlineDays: 3,
 }
-
-export const QUICK_STATS = [
-  { label: 'Active Prescription', value: 'Active', sub: 'Valid through Aug 2027' },
-  { label: 'Next Appointment', value: 'Tue, Oct 14', sub: '10:30 AM · Dr. Prak' },
-  { label: 'Current Order', value: 'In Progress', sub: 'Order #4521' },
-  { label: 'Lifetime Spend', value: '$1,240', sub: '18 verified purchases' },
-]
 
 export const REFRACTION_ROWS = [
   { param: 'Sphere', od: '-3.25 D', os: '-3.00 D' },
@@ -32,17 +30,6 @@ export const SUB_METRICS = [
 ]
 
 export const LENS_TAGS = ['Anti-Reflective', 'Blue-Light Shield', 'UV400', 'Photochromic']
-
-export const GLAZE_STEPS = ['Order Verified', 'Digital Surfacing', 'Frame Quality Check', 'Courier Dispatch']
-export const GLAZE_ACTIVE_STEP = 2
-
-export const GLAZE_ORDER = {
-  model: 'Aurora Round',
-  sku: 'FRA-2051',
-  price: '$240.00',
-  status: 'Frame Quality Check',
-  statusVariant: 'info',
-}
 
 export const APPOINTMENTS = [
   {

@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import { useAuth } from '@/hook/UseAuth'
 import { hasRole, ROLES } from '@/utils/Roles'
-import AuthSegmentedToggle from '@/pages/auth/AuthSegmentedToggle'
 import AuthSsoRow from '@/pages/auth/AuthSsoRow'
 import AuthTrustLine from '@/pages/auth/AuthTrustLine'
 
@@ -17,7 +16,6 @@ function AuthSignInPanel() {
   const from = location.state?.from
   const redirectTo = typeof from === 'string' ? from : from?.pathname || null
 
-  const [portal, setPortal] = useState('patient')
   const [form, setForm] = useState({ identifier: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [phoneMode, setPhoneMode] = useState(false)
@@ -58,15 +56,11 @@ function AuthSignInPanel() {
   return (
     <div className="flex items-center justify-center p-5 md:p-10">
       <div className="w-full max-w-[440px] rounded-2xl bg-white p-7 shadow-lg ring-1 ring-neutral-200/60 transition-colors duration-300 md:p-8 dark:bg-[#16271F] dark:ring-neutral-800">
-        <AuthSegmentedToggle value={portal} onChange={setPortal} />
-
-        <h1 className="mt-6 text-center font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
+        <h1 className="font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
           Sign in to your account
         </h1>
         <p className="mt-1.5 text-center text-sm text-neutral-500 dark:text-neutral-400">
-          {portal === 'patient'
-            ? 'Access your private optical health record and orders.'
-            : 'Staff & practitioner access with role-based privileges.'}
+          Access your private optical health record and orders.
         </p>
 
         <div className="mt-6">
@@ -165,7 +159,7 @@ function AuthSignInPanel() {
             disabled={submitting}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-forest px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-forest-deep disabled:cursor-not-allowed disabled:opacity-60 dark:bg-leaf dark:text-forest dark:hover:opacity-90"
           >
-            {submitting ? 'Signing in…' : portal === 'patient' ? 'Sign in to Vault' : 'Sign in to Console'}
+            {submitting ? 'Signing in…' : 'Sign in'}
             {!submitting && <ArrowRight size={16} />}
           </button>
         </form>

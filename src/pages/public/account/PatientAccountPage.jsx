@@ -7,7 +7,7 @@ import AccountHeaderCard from '@/pages/public/account/AccountHeaderCard'
 import AccountQuickStats from '@/pages/public/account/AccountQuickStats'
 import AccountTabs from '@/pages/public/account/AccountTabs'
 import AccountRefractionVault from '@/pages/public/account/AccountRefractionVault'
-import AccountGlazingProgress from '@/pages/public/account/AccountGlazingProgress'
+import AccountActiveOrder from '@/pages/public/account/AccountActiveOrder'
 import AccountAppointments from '@/pages/public/account/AccountAppointments'
 import AccountRequests from '@/pages/public/account/AccountRequests'
 import AccountOrders from '@/pages/public/account/AccountOrders'
@@ -15,6 +15,7 @@ import AccountVisionBenefits from '@/pages/public/account/AccountVisionBenefits'
 import AccountCarePass from '@/pages/public/account/AccountCarePass'
 import AccountContactDelivery from '@/pages/public/account/AccountContactDelivery'
 import AccountTabPlaceholder from '@/pages/public/account/AccountTabPlaceholder'
+import { useCustomerOrders } from '@/hook/UseCustomerOrders'
 
 import { ACCOUNT_TABS, COMPLIANCE } from '@/pages/public/account/AccountData'
 
@@ -53,9 +54,18 @@ const TAB_BLUEPRINTS = {
 }
 
 function PatientAccountPage() {
-  const [tab, setTab] = useState('overview')
+  // Opens on Order History rather than Overview. Overview used to lead with a
+  // hard-coded lab progress bar for an order that did not exist, so the tab a
+  // customer actually needed was two clicks away and the first thing they saw
+  // was fiction.
+  const [tab, setTab] = useState('orders')
   const isOverview = tab === 'overview'
   const blueprint = isOverview ? null : TAB_BLUEPRINTS[tab]
+
+  // Loaded once here and shared. The overview widgets and the order list all
+  // need the same orders and appointments, so fetching per component would
+  // repeat the identical requests.
+  const customerOrders = useCustomerOrders()
 
   return (
     <div className="min-h-screen bg-mist-soft text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
@@ -70,14 +80,17 @@ function PatientAccountPage() {
 
         <div className="mt-6">
           <AccountHeaderCard />
-          <AccountQuickStats />
+          <AccountQuickStats orders={customerOrders.orders} />
           <AccountTabs tabs={ACCOUNT_TABS} active={tab} onChange={setTab} />
 
           {isOverview ? (
             <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
               <div className="min-w-0 space-y-6">
                 <AccountRefractionVault />
-                <AccountGlazingProgress />
+                <AccountActiveOrder
+                  orders={customerOrders.orders}
+                  appointmentByOrder={customerOrders.appointmentByOrder}
+                />
                 <AccountAppointments />
               </div>
               <aside className="min-w-0 space-y-6">
@@ -92,7 +105,7 @@ function PatientAccountPage() {
             </div>
           ) : tab === 'orders' ? (
             <div className="mt-6">
-              <AccountOrders />
+              <AccountOrders {...customerOrders} />
             </div>
           ) : (
             <AccountTabPlaceholder icon={blueprint.icon} title={blueprint.title} blurb={blueprint.blurb} />

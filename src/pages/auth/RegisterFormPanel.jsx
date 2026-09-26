@@ -4,7 +4,6 @@ import { ArrowRight, CalendarDays, Eye, EyeOff, Lock, Mail, Phone, User } from '
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { email, phone as verifyPhone } from '@/utils/Validators'
-import RegisterSegmentedToggle from '@/pages/auth/RegisterSegmentedToggle'
 import AuthSsoRow from '@/pages/auth/AuthSsoRow'
 
 const inputClass =
@@ -19,7 +18,6 @@ function RegisterFormPanel() {
   const location = useLocation()
   const redirectTo = location.state?.from?.pathname || null
 
-  const [portal, setPortal] = useState('patient')
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -79,15 +77,11 @@ function RegisterFormPanel() {
   return (
     <div className="flex items-center justify-center p-5 md:p-10">
       <div className="w-full max-w-[440px] rounded-2xl bg-white p-7 shadow-lg ring-1 ring-neutral-200/60 transition-colors duration-300 md:p-8 dark:bg-[#16271F] dark:ring-neutral-800">
-        <div className="flex justify-center">
-          <RegisterSegmentedToggle value={portal} onChange={setPortal} />
-        </div>
-
-        <h1 className="mt-6 font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
+        <h1 className="font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
           Create your account
         </h1>
         <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-400">
-          {portal === 'clinician' ? 'Practitioner access with role-based privileges.' : 'Create a secure profile in seconds.'}
+          Create a secure profile in seconds.
         </p>
 
         <div className="mt-6">

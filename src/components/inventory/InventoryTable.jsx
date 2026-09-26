@@ -1,4 +1,3 @@
-import { formatCurrency } from '@/utils/format'
 import Button from '@/components/ui/Button'
 import { inventoryStatus, INVENTORY_STATUS_LABEL } from '@/utils/InventoryStatus'
 
@@ -16,8 +15,10 @@ const STATUS_DOT = {
 
 function StatusBadge({ status }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_BADGE[status] || 'bg-gray-100 text-gray-700'}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[status] || 'bg-gray-400'}`} aria-hidden="true" />
+    // whitespace-nowrap keeps "Out of Stock" on one line when the table gets
+    // narrow, and shrink-0 stops the dot being squashed by the wrapping text.
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_BADGE[status] || 'bg-gray-100 text-gray-700'}`}>
+      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT[status] || 'bg-gray-400'}`} aria-hidden="true" />
       {INVENTORY_STATUS_LABEL[status] || status}
     </span>
   )
