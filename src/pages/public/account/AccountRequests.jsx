@@ -6,6 +6,7 @@ import AccountCard from '@/pages/public/account/AccountCard'
 import RequestStepper from '@/components/request/RequestStepper'
 import { getMyRequests } from '@/api/requestApi'
 import { getMyAppointments } from '@/api/appointmentApi'
+import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { formatDate, formatTime } from '@/utils/FormatDate'
 import {
   parseRequestRef,
@@ -80,6 +81,7 @@ function RequestRow({ request, appointment }) {
 }
 
 export default function AccountRequests() {
+  const { customerId } = useOwnCustomerId()
   const [requests, setRequests] = useState(null)
   const [appointments, setAppointments] = useState([])
   const [error, setError] = useState('')
@@ -88,11 +90,16 @@ export default function AccountRequests() {
     let cancelled = false
 
     const load = async () => {
+      if (customerId == null) {
+        setRequests([])
+        setAppointments([])
+        return
+      }
       try {
-        // /requests/mine and /appointments/mine both resolve the customer from the
-        // JWT, so no customer id is sent. 404 just means this account has no linked
-        // customer profile.
-        const [reqs, appts] = await Promise.allSettled([getMyRequests(), getMyAppointments()])
+        // /requests/mine resolves the customer from the JWT. Appointments have no
+        // such route, so the id from /customers/me is passed instead. 404 just
+        // means this account has no linked customer profile.
+        const [reqs, appts] = await Promise.allSettled([getMyRequests(), getMyAppointments(customerId)])
 
         if (cancelled) return
 
@@ -132,7 +139,7 @@ export default function AccountRequests() {
 
     void load()
     return () => { cancelled = true }
-  }, [])
+  }, [customerId])
 
   // Appointments carry no order_id, so the link back to a request is the
   // reference text in the notes (see utils/RequestOrder).

@@ -23,7 +23,7 @@ function AccountHeaderCard() {
   useEffect(() => {
     if (!user?.id) return
     let cancelled = false
-    getMyAttachments()
+    getMyAttachments(user.id)
       .then((items) => {
         if (!cancelled) setAvatar(pickImage(items)?.filePath || '')
       })
@@ -41,7 +41,7 @@ function AccountHeaderCard() {
     try {
       await uploadAttachment({ file, userId: user.id })
       toastSuccess('Profile picture updated successfully.')
-      const items = await getMyAttachments()
+      const items = await getMyAttachments(user.id)
       setAvatar(pickImage(items)?.filePath || '')
     } catch (err) {
       const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to upload picture'

@@ -52,6 +52,7 @@ import Contact from '@/pages/public/Contact'
 import PublicProductList from '@/pages/public/PublicProductList'
 import PublicProductDetail from '@/pages/public/PublicProductDetail'
 import PatientAccountPage from '@/pages/public/account/PatientAccountPage'
+import FavoritesPage from '@/pages/public/FavoritesPage'
 import CompleteProfilePage from '@/pages/public/CompleteProfilePage'
 import CartPage from '@/pages/public/CartPage'
 import CustomerRequestPage from '@/pages/public/CustomerRequestPage'
@@ -63,6 +64,7 @@ import { CustomerProvider } from '@/context/CustomerContext.jsx'
 import { PrescriptionProvider } from '@/context/PrescriptionContext.jsx'
 import { ToastProvider } from '@/context/ToastContext.jsx'
 import { ThemeProvider } from '@/context/ThemeContext.jsx'
+import { FavoritesProvider } from '@/context/FavoritesContext.jsx'
 import AosSetup from '@/components/ui/AosSetup'
 import ScrollToTop from '@/components/ui/ScrollToTop'
 
@@ -240,6 +242,9 @@ function App() {
           <ToastProvider>
             <CustomerProvider>
               <PrescriptionProvider>
+                {/* Inside AuthProvider: the wishlist loads only for a signed-in
+                    customer and is cleared on sign-out. */}
+                <FavoritesProvider>
               <Routes>
 
                 {/* Public pages */}
@@ -276,6 +281,17 @@ function App() {
                   }
                 />
 
+                {/* Wishlist. Customer-only because the backend scopes every
+                    favourite to the signed-in customer's own record. */}
+                <Route
+                  path="/favorites"
+                  element={
+                    <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                      <FavoritesPage />
+                    </ProtectedRoute>
+                  }
+                />
+
                 {/* Google signups land here until the customer profile exists,
                     because Google cannot supply the required phone number. */}
                 <Route
@@ -306,6 +322,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
 
               </Routes>
+                </FavoritesProvider>
             </PrescriptionProvider>
           </CustomerProvider>
           </ToastProvider>

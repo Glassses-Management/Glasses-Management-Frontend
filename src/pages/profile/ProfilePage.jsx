@@ -6,6 +6,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import { getMyOrders } from '@/api/orderApi'
+import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { formatDate } from '@/utils/FormatDate'
 import AvatarUploadSection from '@/pages/profile/AvatarUploadSection'
@@ -58,7 +59,9 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState(null)
   const [orderTotal, setOrderTotal] = useState(0)
 
-  const customerId = user?.customer_id ?? user?.id
+  // The customer-profile id, which is NOT the user id: /auth/me has no
+  // customer_id field, so it has to come from GET /api/customers/me.
+  const { customerId } = useOwnCustomerId()
 
   useEffect(() => {
     let cancelled = false
@@ -81,7 +84,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!customerId) return
     let cancelled = false
-    getMyOrders()
+    getMyOrders(customerId)
       .then((data) => {
         if (cancelled) return
         setOrders(Array.isArray(data) ? data : [])

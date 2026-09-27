@@ -1,5 +1,6 @@
 ﻿import { Bell, LogOut, Menu } from 'lucide-react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+import { useUserAvatar } from '@/hook/UseUserAvatar'
 
 const PAGE_TITLES = {
   dashboard: 'Dashboard',
@@ -18,6 +19,7 @@ const PAGE_TITLES = {
 export default function Header({ user, onToggleSidebar, onLogout, activeRoute }) {
   const title = PAGE_TITLES[activeRoute] || 'Optical Shop'
   const role = typeof user?.role === 'string' ? user.role : user?.role?.name || 'Administrator'
+  const avatar = useUserAvatar(user?.id)
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28] md:px-6">
@@ -47,9 +49,17 @@ export default function Header({ user, onToggleSidebar, onLogout, activeRoute })
 
         <div className="ml-1 flex items-center gap-2 border-l border-gray-200 pl-3 dark:border-neutral-700">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f] text-sm font-semibold text-white">
-              {(user?.name || 'A').charAt(0).toUpperCase()}
-            </div>
+            {avatar ? (
+              <img
+                src={avatar}
+                alt={`${user?.name || 'User'} profile picture`}
+                className="h-9 w-9 shrink-0 rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f] text-sm font-semibold text-white">
+                {(user?.name || 'A').charAt(0).toUpperCase()}
+              </div>
+            )}
             <div className="hidden text-left sm:block">
               <p className="text-sm font-medium leading-tight text-[#1a1a2e] dark:text-neutral-50">
                 {user?.name || 'Admin'}

@@ -15,10 +15,13 @@ export const getAttachmentsByUser = async (userId) => {
   return data
 }
 
-// The signed-in account's own files (avatar). Customer pages use this because
-// /attachments/by-user/{userId} is staff-only, and it accepted any userId.
-export const getMyAttachments = async () => {
-  const { data } = await axiosInstance.get('/attachments/mine')
+// The signed-in account's own files (avatar).
+//
+// There is no /attachments/mine route on the backend (confirmed against
+// /v3/api-docs), so the user id is required. /attachments/by-user/{userId} needs
+// only a valid token, not a staff role - API_DOCUMENT.md section 2.6.
+export const getMyAttachments = async (userId) => {
+  const { data } = await axiosInstance.get(`/attachments/by-user/${userId}`)
   return data
 }
 

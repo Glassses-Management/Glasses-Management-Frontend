@@ -15,12 +15,17 @@ export const getPrescriptionsByCustomer = async (customerId) => {
   return data
 }
 
-// The signed-in customer's own prescriptions. Customer pages use this because
-// GET /api/prescriptions/customer/{customerId} is staff-only, and letting a
-// customer pass any id there would expose other patients' medical data.
-export const getMyPrescriptions = async () => {
-  const { data } = await axiosInstance.get('/prescriptions/mine')
-  return data
+// The signed-in customer's own prescriptions.
+//
+// There is no /prescriptions/mine route (confirmed against /v3/api-docs): such a
+// request falls through to /prescriptions/{id} and Spring rejects "mine" as a
+// Long with 400. The documented /prescriptions/customer/{customerId} route is
+// used instead, with the id resolved from GET /api/customers/me because
+// /auth/me carries no customer_id field.
+export const getMyPrescriptions = async (customerId) => {
+  if (customerId == null) return []
+  const data = await getPrescriptionsByCustomer(customerId)
+  return Array.isArray(data) ? data : []
 }
 
 export const getPrescriptionsByUser = async (userId) => {

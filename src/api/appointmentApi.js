@@ -10,24 +10,33 @@ export const getAppointmentById = async (id) => {
   return data
 }
 
-export const getAppointmentsByCustomer = async (customerId) => {
-  const { data } = await axiosInstance.get(`/appointments/customer/${customerId}`)
-  return data
+// The backend has no /appointments/mine, /appointments/customer/{id} or
+// /appointments/optometrist/{id} route (confirmed against /v3/api-docs). A
+// request to any of them falls through to /appointments/{id}, and Spring cannot
+// bind "mine"/"customer" to a Long, so it answers 400.
+//
+// GET /api/appointments takes no filter parameters and returns the whole list,
+// so the scoping happens here on the one call that does exist.
+const fetchAllAppointments = async () => {
+  const { data } = await axiosInstance.get('/appointments')
+  return Array.isArray(data) ? data : data?.content || []
 }
 
-// The signed-in customer's own appointments.
-//
-// This also fixes a pre-existing break: /api/appointments/customer/{id} never
-// existed on the backend, so the old call fell through to /appointments/{id} and
-// failed to bind "customer" to a Long.
-export const getMyAppointments = async () => {
-  const { data } = await axiosInstance.get('/appointments/mine')
-  return data
+export const getAppointmentsByCustomer = async (customerId) => {
+  const all = await fetchAllAppointments()
+  return all.filter((a) => Number(a?.customer_id) === Number(customerId))
+}
+
+// The signed-in customer's own appointments. Needs the customer-profile id, which
+// /auth/me does not carry - see useOwnCustomerId.
+export const getMyAppointments = async (customerId) => {
+  if (customerId == null) return []
+  return getAppointmentsByCustomer(customerId)
 }
 
 export const getAppointmentsByOptometrist = async (optometristId) => {
-  const { data } = await axiosInstance.get(`/appointments/optometrist/${optometristId}`)
-  return data
+  const all = await fetchAllAppointments()
+  return all.filter((a) => Number(a?.optometrist_id) === Number(optometristId))
 }
 
 export const createAppointment = async (payload) => {

@@ -11,6 +11,7 @@ import AccountActiveOrder from '@/pages/public/account/AccountActiveOrder'
 import AccountAppointments from '@/pages/public/account/AccountAppointments'
 import AccountRequests from '@/pages/public/account/AccountRequests'
 import AccountOrders from '@/pages/public/account/AccountOrders'
+import AccountFavorites from '@/pages/public/account/AccountFavorites'
 import AccountVisionBenefits from '@/pages/public/account/AccountVisionBenefits'
 import AccountCarePass from '@/pages/public/account/AccountCarePass'
 import AccountContactDelivery from '@/pages/public/account/AccountContactDelivery'
@@ -46,6 +47,7 @@ const TAB_BLUEPRINTS = {
     title: 'Saved Eyewear',
     blurb: 'Frames you starred from the catalog will appear here for quick reorders and comparisons',
   },
+
   security: {
     icon: KeyRound,
     title: 'Security & MFA',
@@ -106,6 +108,10 @@ function PatientAccountPage() {
           ) : tab === 'orders' ? (
             <div className="mt-6">
               <AccountOrders {...customerOrders} />
+            </div>
+          ) : tab === 'saved' ? (
+            <div className="mt-6">
+              <AccountFavorites />
             </div>
           ) : (
             <AccountTabPlaceholder icon={blueprint.icon} title={blueprint.title} blurb={blueprint.blurb} />

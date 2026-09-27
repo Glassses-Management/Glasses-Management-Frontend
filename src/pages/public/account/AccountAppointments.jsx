@@ -10,17 +10,17 @@ import { formatDate, formatTime } from '@/utils/FormatDate'
 // The customer's real appointments. Appointments are created by the clinic when
 // a request is approved or a cart order is confirmed.
 export default function AccountAppointments() {
-  const { needsProfile, loading: customerLoading, error: customerError } = useOwnCustomerId()
+  const { customerId, needsProfile, loading: customerLoading, error: customerError } = useOwnCustomerId()
   const [appointments, setAppointments] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
     // Nothing to load until the account resolves to a profile. The empty state is
     // rendered from `visible`, so no state is set here.
-    if (needsProfile) return undefined
+    if (needsProfile || customerId == null) return undefined
     let cancelled = false
 
-    getMyAppointments()
+    getMyAppointments(customerId)
       .then((data) => {
         if (cancelled) return
         setAppointments(Array.isArray(data) ? data : [])
@@ -36,7 +36,7 @@ export default function AccountAppointments() {
       })
 
     return () => { cancelled = true }
-  }, [needsProfile])
+  }, [needsProfile, customerId])
 
   const visible = needsProfile ? [] : customerLoading ? [] : appointments
 

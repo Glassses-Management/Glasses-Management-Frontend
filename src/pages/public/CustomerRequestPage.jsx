@@ -9,6 +9,7 @@ import RequestDetailsCard from '@/components/request/RequestDetailsCard'
 import RequestPrescriptionSection from '@/components/request/RequestPrescriptionSection'
 import CustomerRequestSidebar from '@/components/request/CustomerRequestSidebar'
 import { useAuth } from '@/hook/UseAuth'
+import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { useToast } from '@/hook/UseToast'
 import { createRequest } from '@/api/requestApi'
 import { getMyPrescriptions } from '@/api/prescriptionApi'
@@ -81,6 +82,7 @@ function GuestPrompt({ from }) {
 
 export default function CustomerRequestPage() {
   const { token, user } = useAuth()
+  const { customerId } = useOwnCustomerId()
   const { success: toastSuccess, error: toastError } = useToast()
   const location = useLocation()
 
@@ -104,9 +106,9 @@ export default function CustomerRequestPage() {
   const [serverError, setServerError] = useState('')
 
   useEffect(() => {
-    if (!token) return
+    if (!token || customerId == null) return undefined
     let cancelled = false
-    getMyPrescriptions()
+    getMyPrescriptions(customerId)
       .then((data) => {
         if (!cancelled) setPrescriptions(Array.isArray(data) ? data : [])
       })
@@ -117,7 +119,7 @@ export default function CustomerRequestPage() {
         if (!cancelled) setRxLoading(false)
       })
     return () => { cancelled = true }
-  }, [token])
+  }, [token, customerId])
 
   // Only an eye exam / prescription change can be submitted here, so the notes
   // are always built from the exam fields.

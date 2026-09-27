@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
-  ArrowLeft, ArrowRight, BadgeCheck, Check, Circle, Gauge, Heart, Hexagon,
+  ArrowLeft, ArrowRight, BadgeCheck, Check, Circle, Gauge, Hexagon,
   Layers, RotateCw, ShieldCheck, ShoppingCart, Square, Star, Triangle,
   Truck, Weight, ZoomIn, ZoomOut,
 } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
+import FavoriteButton from '@/components/product/FavoriteButton'
 import HomeFooter from '@/pages/public/HomeFooter'
 import { GlassesFallback } from '@/components/product/ProductImage'
 import { getPublicProductById, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
@@ -114,7 +115,6 @@ export default function PublicProductDetail() {
   const [loading, setLoading] = useState(true)
   const [zoomed, setZoomed] = useState(false)
   const [rotated, setRotated] = useState(0)
-  const [liked, setLiked] = useState(false)
   const [finish, setFinish] = useState(FINISHES[0].label)
   const [geometry, setGeometry] = useState(GEOMETRIES[0].label)
   const [lensType, setLensType] = useState(LENS_TYPES[0])
@@ -344,15 +344,12 @@ export default function PublicProductDetail() {
                   <button type="button" onClick={handleAdd} className={`${cta} flex-1`}>
                     <ShoppingCart size={16} /> Configure Lenses &amp; Order
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setLiked((l) => !l)}
-                    aria-pressed={liked}
-                    aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
-                    className={`${softBtn} h-12 w-12 ${liked ? 'text-red-500 ring-red-300 dark:text-red-400 dark:ring-red-500/40' : ''}`}
-                  >
-                    <Heart size={18} className={liked ? 'fill-red-500' : ''} />
-                  </button>
+                  <FavoriteButton
+                    variant="label"
+                    productId={product?.id}
+                    productName={product?.model}
+                    className="shrink-0"
+                  />
                 </div>
 
                 <p className="mt-4 text-center">

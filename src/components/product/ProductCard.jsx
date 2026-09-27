@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import ProductImage from '@/components/product/ProductImage'
-import { Eye, Heart, ShoppingCart, Star } from 'lucide-react'
+import FavoriteButton from '@/components/product/FavoriteButton'
+import { Eye, ShoppingCart, Star } from 'lucide-react'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { useCart } from '@/hook/UseCart'
 import { useToast } from '@/hook/UseToast'
@@ -15,7 +15,6 @@ const BADGE_STYLES = {
 function ProductCard({ product, imageSrc, images, onClick }) {
   const { addItem } = useCart()
   const { success: toastSuccess } = useToast()
-  const [liked, setLiked] = useState(false)
 
   if (!product) return null
 
@@ -35,11 +34,6 @@ function ProductCard({ product, imageSrc, images, onClick }) {
   const inStock = product?.quantity == null ? true : Number(product.quantity) > 0
 
   const specLine = [product.material, product.color].filter(Boolean).join(' · ')
-
-  const handleWishlist = (e) => {
-    e.stopPropagation()
-    setLiked((prev) => !prev)
-  }
 
   const handleAddToCart = (e) => {
     e.stopPropagation()
@@ -71,17 +65,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
           </span>
         )}
 
-        <button
-          type="button"
-          onClick={handleWishlist}
-          aria-pressed={liked}
-          aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
-          className={`absolute right-5 top-5 rounded-full bg-white/90 p-2 text-neutral-500 shadow-sm backdrop-blur transition-colors hover:text-neutral-900 dark:bg-neutral-900/80 dark:text-neutral-300 dark:hover:text-white ${
-            liked ? 'text-red-500 hover:text-red-500 dark:text-red-500 dark:hover:text-red-500' : ''
-          }`}
-        >
-          <Heart size={16} className={`${liked ? 'fill-red-500' : ''}`} />
-        </button>
+        <FavoriteButton productId={product.id} productName={product.model} />
       </div>
 
       {/* Card body */}

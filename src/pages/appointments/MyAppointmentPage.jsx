@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { CalendarClock, Stethoscope, Clock, FileText } from 'lucide-react'
 import Badge from '@/components/ui/Badge'
 import { getMyAppointments } from '@/api/appointmentApi'
+import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { formatDate, formatDateTime } from '@/utils/format'
@@ -20,18 +21,19 @@ function row({ icon: Icon, label, value }) {
 
 function MyAppointmentPage() {
   const { user } = useAuth()
+  const { customerId } = useOwnCustomerId()
   const { error: toastError } = useToast()
   const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user?.id) {
+    if (!user?.id || customerId == null) {
       setLoading(false)
       return undefined
     }
     let cancelled = false
     setLoading(true)
-    getMyAppointments()
+    getMyAppointments(customerId)
       .then((data) => { if (!cancelled) setAppointments(Array.isArray(data) ? data : []) })
       .catch((err) => {
         if (cancelled) return
@@ -40,7 +42,7 @@ function MyAppointmentPage() {
       })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
-  }, [user?.id])
+  }, [user?.id, customerId])
 
   const sorted = [...appointments].sort((a, b) => {
     const da = (a.scheduled_at || a.created_at || '').toString()

@@ -146,7 +146,7 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
   useEffect(() => {
     if (!user?.id) return undefined
     let cancelled = false
-    getMyAttachments()
+    getMyAttachments(user.id)
       .then((items) => {
         if (!cancelled) setLoadedAvatar(pickImage(items)?.filePath || '')
       })

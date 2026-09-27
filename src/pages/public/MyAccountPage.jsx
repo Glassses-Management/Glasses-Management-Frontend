@@ -12,6 +12,7 @@ import ProfileEditModal from '@/pages/profile/ProfileEditModal'
 import ChangePasswordModal from '@/pages/profile/ChangePasswordModal'
 import MyRequestsSection from '@/pages/profile/MyRequestsSection'
 import { getMyOrders } from '@/api/orderApi'
+import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { formatDate } from '@/utils/FormatDate'
 
@@ -59,7 +60,9 @@ function MyAccountPage() {
   const [orders, setOrders] = useState(null)
   const [orderTotal, setOrderTotal] = useState(0)
 
-  const customerId = user?.customer_id ?? user?.id
+  // The customer-profile id, which is NOT the user id: /auth/me has no
+  // customer_id field, so it has to come from GET /api/customers/me.
+  const { customerId } = useOwnCustomerId()
 
   useEffect(() => {
     let cancelled = false
@@ -82,7 +85,7 @@ function MyAccountPage() {
   useEffect(() => {
     if (!customerId) return
     let cancelled = false
-    getMyOrders()
+    getMyOrders(customerId)
       .then((data) => {
         if (cancelled) return
         setOrders(Array.isArray(data) ? data : [])

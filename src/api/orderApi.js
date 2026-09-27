@@ -5,12 +5,20 @@ export const getOrders = async (params) => {
   return data
 }
 
-// The signed-in customer's own orders, newest first. Customer pages use this
-// because GET /api/orders is staff-only, and because passing a customerId there
-// would let any account read somebody else's orders.
-export const getMyOrders = async () => {
-  const { data } = await axiosInstance.get('/orders/mine')
-  return data
+// The signed-in customer's own orders, newest first.
+//
+// There is no /orders/mine route on the backend (confirmed against /v3/api-docs).
+// A request to it collides with /orders/{id}, and Spring fails converting "mine"
+// to a Long, so it answers 400 instead of 404.
+//
+// The documented customerId filter on GET /api/orders answers 500, so it is not
+// used: the list is fetched with the same query the staff order list sends
+// (sort=id,desc, which works) and narrowed here. Verified broken server-side, so
+// this is a workaround, not the intended shape.
+export const getMyOrders = async (customerId) => {
+  if (customerId == null) return []
+  const all = await getAllOrders()
+  return all.filter((order) => Number(order?.customer_id) === Number(customerId))
 }
 
 // GET /api/orders is paged and the server clamps size to
@@ -23,7 +31,7 @@ export const getAllOrders = async (params = {}) => {
 
   do {
     const { data } = await axiosInstance.get('/orders', {
-      params: { ...params, page, size: 100, sort: 'id,desc' },
+      params: { ...params, page, size: 100, sort: params.sort || 'id,desc' },
     })
 
     if (Array.isArray(data)) return data
