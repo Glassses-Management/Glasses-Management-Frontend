@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom'
 import { CalendarCheck, ClipboardList, Plus, Send } from 'lucide-react'
 import Badge from '@/components/ui/Badge'
 import AccountCard from '@/pages/public/account/AccountCard'
+import Pagination from '@/components/ui/Pagination'
 import RequestStepper from '@/components/request/RequestStepper'
 import { getMyRequests } from '@/api/requestApi'
 import { getMyAppointments } from '@/api/appointmentApi'
 import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
-import { formatDate, formatTime } from '@/utils/FormatDate'
+import { formatDate } from '@/utils/FormatDate'
 import {
   parseRequestRef,
   reachedStep,
@@ -17,9 +18,15 @@ import {
   REQUEST_REJECTED,
 } from '@/utils/RequestOrder'
 
+// Matches the other account lists. Paging is done here rather than on the server
+// because /api/requests/mine returns the whole list unpaginated.
+const ITEMS_PER_PAGE = 5
+
 // Plain-language status so the customer can see where their request is up to.
+// Kept to one or two words: the badge sits next to the type, and the stepper
+// below already spells out the progress.
 const STATUS_LABEL = {
-  PENDING: 'Waiting for clinic approval',
+  PENDING: 'Awaiting approval',
   APPROVED: 'Approved',
   REJECTED: 'Declined',
   COMPLETED: 'Completed',
@@ -28,9 +35,12 @@ const STATUS_LABEL = {
 function RequestRow({ request, appointment }) {
   const rejected = request.status === REQUEST_REJECTED
   const approved = request.status === REQUEST_APPROVED
+  // The backend creates the appointment as soon as the request is approved, with
+  // no date until staff schedule it, so an appointment here is not yet a booking.
+  const bookedAt = appointment?.scheduled_at
 
   return (
-    <li className="flex flex-col gap-3 px-6 py-5" data-aos="fade-up">
+    <li className="flex flex-col gap-2.5 px-6 py-5" data-aos="fade-up">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-50">
@@ -39,7 +49,7 @@ function RequestRow({ request, appointment }) {
             <span className="text-xs font-medium text-neutral-400">#{request.id}</span>
           </p>
           <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-            Submitted {formatDate(request.createdAt)}
+            {formatDate(request.createdAt)}
           </p>
         </div>
         <Badge
@@ -48,32 +58,27 @@ function RequestRow({ request, appointment }) {
         />
       </div>
 
+      {/* The customer's own words. Clamped to one line: this is free text of any
+          length, and one long note was enough to swamp the whole list. */}
       {request.notes && (
-        <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">{request.notes}</p>
+        <p className="line-clamp-1 text-sm text-neutral-700 dark:text-neutral-300" title={request.notes}>
+          {request.notes}
+        </p>
       )}
 
       <RequestStepper current={reachedStep(request, Boolean(appointment))} />
 
       {rejected && (
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-          Our team could not take this one forward. Give us a call if anything looks wrong.
-        </p>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">Give us a call if anything looks wrong.</p>
       )}
 
-      {approved && !appointment && (
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">
-          Approved. Our team will contact you to book your appointment.
-        </p>
-      )}
-
-      {appointment && (
+      {/* Approved-with-no-date needs no line of its own: the badge reads
+          "Approved" and the stepper's last pill is still grey. */}
+      {bookedAt && (
         <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-600 dark:text-neutral-300">
           <CalendarCheck size={13} className="text-forest dark:text-leaf" />
-          <span className="font-semibold">Appointment booked</span>
-          <span>
-            {formatDate(appointment.scheduled_at, { withTime: true })}
-            {formatTime(appointment.scheduled_at) && ` · ${formatTime(appointment.scheduled_at)}`}
-          </span>
+          <span className="font-semibold">Booked</span>
+          <span>{formatDate(bookedAt, { withTime: true })}</span>
         </p>
       )}
     </li>
@@ -85,6 +90,7 @@ export default function AccountRequests() {
   const [requests, setRequests] = useState(null)
   const [appointments, setAppointments] = useState([])
   const [error, setError] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     let cancelled = false
@@ -99,7 +105,7 @@ export default function AccountRequests() {
         // /requests/mine resolves the customer from the JWT. Appointments have no
         // such route, so the id from /customers/me is passed instead. 404 just
         // means this account has no linked customer profile.
-        const [reqs, appts] = await Promise.allSettled([getMyRequests(), getMyAppointments(customerId)])
+        const [reqs, appts] = await Promise.allSettled([getMyRequests(), getMyAppointments()])
 
         if (cancelled) return
 
@@ -152,6 +158,14 @@ export default function AccountRequests() {
     return map
   }, [appointments])
 
+  // requests is null until the first load settles, and this math runs on every
+  // render - before the loading branch below can guard it. Hence the fallback.
+  const list = requests ?? []
+  const totalPages = Math.max(1, Math.ceil(list.length / ITEMS_PER_PAGE))
+  // Clamped so the last page cannot end up showing nothing.
+  const effectivePage = Math.min(currentPage, totalPages)
+  const paged = list.slice((effectivePage - 1) * ITEMS_PER_PAGE, effectivePage * ITEMS_PER_PAGE)
+
   return (
     <AccountCard>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800" data-aos="fade-up">
@@ -194,8 +208,9 @@ export default function AccountRequests() {
           </p>
         </div>
       ) : (
+        <>
         <ul className="divide-y divide-neutral-100 dark:divide-neutral-800">
-          {requests.map((request) => (
+          {paged.map((request) => (
             <RequestRow
               key={request.id}
               request={request}
@@ -203,6 +218,21 @@ export default function AccountRequests() {
             />
           ))}
         </ul>
+
+          {/* One page needs no controls, and an empty bar reads as broken. */}
+          {totalPages > 1 && (
+            <div className="border-t border-neutral-100 px-6 py-4 dark:border-neutral-800">
+              <Pagination
+                currentPage={effectivePage}
+                totalPages={totalPages}
+                totalItems={list.length}
+                itemsPerPage={ITEMS_PER_PAGE}
+                onPageChange={setCurrentPage}
+                itemLabel="requests"
+              />
+            </div>
+          )}
+        </>
       )}
     </AccountCard>
   )

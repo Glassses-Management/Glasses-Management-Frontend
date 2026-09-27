@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Camera, CalendarPlus, Clock } from 'lucide-react'
+import { Camera, CalendarPlus } from 'lucide-react'
 import Avatar from '@/components/ui/Avatar'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { getMyAttachments, uploadAttachment } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
-import { PATIENT } from '@/pages/public/account/AccountData'
 
 function AccountHeaderCard() {
   const { user } = useAuth()
@@ -14,7 +13,7 @@ function AccountHeaderCard() {
   const fileInputRef = useRef(null)
   const [avatar, setAvatar] = useState('')
   const [uploading, setUploading] = useState(false)
-  const displayName = user?.name || PATIENT.name
+  const displayName = user?.name || 'Your account'
   const createdDate = user?.created_at || user?.createdAt
   const memberSince = createdDate
     ? new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(createdDate))
@@ -23,7 +22,7 @@ function AccountHeaderCard() {
   useEffect(() => {
     if (!user?.id) return
     let cancelled = false
-    getMyAttachments(user.id)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setAvatar(pickImage(items)?.filePath || '')
       })
@@ -41,7 +40,7 @@ function AccountHeaderCard() {
     try {
       await uploadAttachment({ file, userId: user.id })
       toastSuccess('Profile picture updated successfully.')
-      const items = await getMyAttachments(user.id)
+      const items = await getMyAttachments()
       setAvatar(pickImage(items)?.filePath || '')
     } catch (err) {
       const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to upload picture'
@@ -89,7 +88,8 @@ function AccountHeaderCard() {
               {displayName}
             </h2>
             <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-              {user ? 'Primary Care Patient' : PATIENT.accountType} · Assigned to {PATIENT.doctor} · Member since {user ? (memberSince || '—') : PATIENT.memberSince}
+              Customer {user?.id != null ? `#${user.id}` : ''}
+              {memberSince ? ` · Member since ${memberSince}` : ''}
             </p>
           </div>
         </div>
@@ -102,10 +102,6 @@ function AccountHeaderCard() {
             <CalendarPlus size={16} />
             Book Follow-up Exam
           </Link>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1 text-xs font-medium text-neutral-500 ring-1 ring-neutral-200 dark:bg-white/5 dark:text-neutral-400 dark:ring-neutral-700">
-            <Clock size={12} />
-            Offline for {PATIENT.offlineDays} Days
-          </span>
           <Link to="/contact" className="text-xs font-semibold text-forest hover:underline dark:text-leaf">
             Update availability
           </Link>

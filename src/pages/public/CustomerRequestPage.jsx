@@ -108,7 +108,7 @@ export default function CustomerRequestPage() {
   useEffect(() => {
     if (!token || customerId == null) return undefined
     let cancelled = false
-    getMyPrescriptions(customerId)
+    getMyPrescriptions()
       .then((data) => {
         if (!cancelled) setPrescriptions(Array.isArray(data) ? data : [])
       })

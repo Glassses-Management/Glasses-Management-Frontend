@@ -1,31 +1,22 @@
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 
+import StoreMap from '@/components/ui/StoreMap'
+import { ADDRESS_LINE, directionsUrl } from '@/components/ui/storeLocation'
+
 const HOURS = [
   { day: 'Monday – Friday', hours: '8:00 AM – 6:00 PM' },
   { day: 'Saturday', hours: '9:00 AM – 5:00 PM' },
   { day: 'Sunday & Public Holidays', hours: 'Closed' },
 ]
 
-function MapPlaceholder() {
+function MapPanel() {
   return (
-    <div
-      role="img"
-      aria-label="Stylised map of our optical store on Monivong Boulevard, Phnom Penh"
-      className="relative min-h-[320px] w-full overflow-hidden rounded-3xl border border-neutral-200 shadow-sm dark:border-neutral-700 lg:min-h-[420px]"
-      style={{
-        backgroundImage:
-          'linear-gradient(rgba(143,192,165,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(143,192,165,0.18) 1px, transparent 1px), linear-gradient(#F1F5F2, #F1F5F2)',
-        backgroundSize: '34px 34px, 34px 34px, auto',
-      }}
-    >
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <span className="relative flex size-14 items-center justify-center rounded-full bg-forest text-white shadow-lg ring-8 ring-forest/15">
-          <MapPin size={24} strokeWidth={2} />
-        </span>
-      </div>
+    <div className="relative min-h-[320px] w-full overflow-hidden rounded-3xl border border-neutral-200 shadow-sm lg:min-h-[420px] dark:border-neutral-700">
+      <StoreMap className="absolute inset-0 h-full w-full" title="Map showing the clinic on Monivong Boulevard, Phnom Penh" />
+
       <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-neutral-200 dark:bg-[#16271F] dark:ring-neutral-800">
         <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Optic Shop Store &amp; Clinic</p>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">Monivong Boulevard, Phnom Penh</p>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">{ADDRESS_LINE}</p>
       </div>
     </div>
   )
@@ -58,7 +49,7 @@ function AboutVisitStore() {
                   <div>
                     <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Address</p>
                     <p className="mt-0.5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-                      Monivong Boulevard, Phnom Penh
+                      {ADDRESS_LINE}
                     </p>
                   </div>
                 </li>
@@ -118,7 +109,7 @@ function AboutVisitStore() {
                   Visit Us
                 </a>
                 <a
-                  href="https://maps.google.com"
+                  href={directionsUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="rounded-full border border-forest bg-transparent px-6 py-3 text-sm font-medium text-forest transition-colors hover:bg-forest/5"
@@ -130,7 +121,7 @@ function AboutVisitStore() {
           </div>
 
           <div data-aos="fade-right" data-aos-delay="100" className="lg:sticky lg:top-6">
-            <MapPlaceholder />
+            <MapPanel />
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ export default function ProfileAvatar({ user, size = 'size-9', onClick }) {
   useEffect(() => {
     if (!user?.id) return
     let cancelled = false
-    getMyAttachments(user.id)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setAvatar(pickImage(items)?.filePath || '')
       })

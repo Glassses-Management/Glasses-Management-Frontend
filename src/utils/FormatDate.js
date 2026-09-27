@@ -1,17 +1,25 @@
 // Formatting helpers for dates and times.
 // The backend returns ISO strings like "2026-09-03T10:00:00".
 
-// Any extra Intl.DateTimeFormat options are merged in, so callers can ask for
-// just the day or just the month without a second helper.
-export const formatDate = (iso, { withTime = false, ...rest } = {}) => {
+// Any extra Intl.DateTimeFormat options are merged over the defaults.
+//
+// `only: true` drops the defaults instead, which is the only way to ask for a
+// single part. Intl falls back to its own default (a numeric year, a numeric
+// day) for any unit that is unset, so merging can never REMOVE one: asking for
+// { day: 'numeric' } would still print the month and the year. Pass `only` when
+// the caller wants exactly the parts it names and nothing else.
+export const formatDate = (iso, { withTime = false, only = false, ...rest } = {}) => {
   if (!iso) return ''
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return ''
 
-  const options = withTime
-    ? { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', ...rest }
-    : { year: 'numeric', month: 'short', day: 'numeric', ...rest }
-  return date.toLocaleDateString(undefined, options)
+  const defaults = only
+    ? {}
+    : withTime
+      ? { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+      : { year: 'numeric', month: 'short', day: 'numeric' }
+
+  return date.toLocaleDateString(undefined, { ...defaults, ...rest })
 }
 
 export const formatTime = (iso) => {

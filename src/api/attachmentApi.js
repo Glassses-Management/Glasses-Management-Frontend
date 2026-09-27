@@ -17,11 +17,11 @@ export const getAttachmentsByUser = async (userId) => {
 
 // The signed-in account's own files (avatar).
 //
-// There is no /attachments/mine route on the backend (confirmed against
-// /v3/api-docs), so the user id is required. /attachments/by-user/{userId} needs
-// only a valid token, not a staff role - API_DOCUMENT.md section 2.6.
-export const getMyAttachments = async (userId) => {
-  const { data } = await axiosInstance.get(`/attachments/by-user/${userId}`)
+// /attachments/mine resolves the owner from the JWT, so it needs no id and no
+// staff role. /attachments/by-user/{userId} is staff-only and answers 403 for a
+// customer token, which is why this one is used instead.
+export const getMyAttachments = async () => {
+  const { data } = await axiosInstance.get('/attachments/mine')
   return data
 }
 

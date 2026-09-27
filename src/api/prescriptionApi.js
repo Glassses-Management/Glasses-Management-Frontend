@@ -17,14 +17,11 @@ export const getPrescriptionsByCustomer = async (customerId) => {
 
 // The signed-in customer's own prescriptions.
 //
-// There is no /prescriptions/mine route (confirmed against /v3/api-docs): such a
-// request falls through to /prescriptions/{id} and Spring rejects "mine" as a
-// Long with 400. The documented /prescriptions/customer/{customerId} route is
-// used instead, with the id resolved from GET /api/customers/me because
-// /auth/me carries no customer_id field.
-export const getMyPrescriptions = async (customerId) => {
-  if (customerId == null) return []
-  const data = await getPrescriptionsByCustomer(customerId)
+// /prescriptions/mine resolves the customer from the JWT, so it needs no id and
+// no staff role. /prescriptions/customer/{customerId} is not usable from a
+// customer account, and /prescriptions is a staff list.
+export const getMyPrescriptions = async () => {
+  const { data } = await axiosInstance.get('/prescriptions/mine')
   return Array.isArray(data) ? data : []
 }
 

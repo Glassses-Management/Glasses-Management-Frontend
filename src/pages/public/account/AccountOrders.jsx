@@ -1,8 +1,14 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ShoppingBag } from 'lucide-react'
 
 import AccountCard from '@/pages/public/account/AccountCard'
 import AccountOrderRow from '@/pages/public/account/AccountOrderRow'
+import Pagination from '@/components/ui/Pagination'
+
+// A row carries a full summary plus its collection date, so fewer fit on screen
+// here than on the staff order table.
+const ITEMS_PER_PAGE = 5
 
 const cardHead =
   'flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-6 pt-6 pb-4 dark:border-neutral-800'
@@ -16,7 +22,17 @@ const cardHead =
 // The data is passed in rather than fetched here: PatientAccountPage loads it
 // once and shares it with the overview widgets, so opening this tab does not
 // re-request the same orders and appointments.
+//
+// Paging is done here rather than on the server because /api/orders/mine
+// returns the whole list unpaginated.
 export default function AccountOrders({ orders, appointmentByOrder, error, loading }) {
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const totalPages = Math.max(1, Math.ceil(orders.length / ITEMS_PER_PAGE))
+  // Clamped so deleting rows on the last page cannot leave the view empty.
+  const effectivePage = Math.min(currentPage, totalPages)
+  const paged = orders.slice((effectivePage - 1) * ITEMS_PER_PAGE, effectivePage * ITEMS_PER_PAGE)
+
   return (
     <AccountCard>
       <div className={cardHead} data-aos="fade-up">
@@ -56,11 +72,27 @@ export default function AccountOrders({ orders, appointmentByOrder, error, loadi
           </p>
         </div>
       ) : (
-        <ul className="divide-y divide-neutral-100 dark:divide-neutral-800">
-          {orders.map((order) => (
-            <AccountOrderRow key={order.id} order={order} appointment={appointmentByOrder.get(order.id)} />
-          ))}
-        </ul>
+        <>
+          <ul className="divide-y divide-neutral-100 dark:divide-neutral-800">
+            {paged.map((order) => (
+              <AccountOrderRow key={order.id} order={order} appointment={appointmentByOrder.get(order.id)} />
+            ))}
+          </ul>
+
+          {/* One page needs no controls, and an empty bar reads as broken. */}
+          {totalPages > 1 && (
+            <div className="border-t border-neutral-100 px-6 py-4 dark:border-neutral-800">
+              <Pagination
+                currentPage={effectivePage}
+                totalPages={totalPages}
+                totalItems={orders.length}
+                itemsPerPage={ITEMS_PER_PAGE}
+                onPageChange={setCurrentPage}
+                itemLabel="orders"
+              />
+            </div>
+          )}
+        </>
       )}
     </AccountCard>
   )

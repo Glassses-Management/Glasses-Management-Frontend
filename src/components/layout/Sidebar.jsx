@@ -88,7 +88,7 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
   useEffect(() => {
     if (!user?.id) return undefined
     let cancelled = false
-    getMyAttachments(user.id)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setAvatarImage(pickImage(items)?.filePath || '')
       })

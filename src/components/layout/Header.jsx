@@ -19,7 +19,7 @@ const PAGE_TITLES = {
 export default function Header({ user, onToggleSidebar, onLogout, activeRoute }) {
   const title = PAGE_TITLES[activeRoute] || 'Optical Shop'
   const role = typeof user?.role === 'string' ? user.role : user?.role?.name || 'Administrator'
-  const avatar = useUserAvatar(user?.id)
+  const avatar = useUserAvatar()
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28] md:px-6">

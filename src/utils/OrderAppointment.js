@@ -1,4 +1,4 @@
-import { requestReference } from '@/utils/RequestOrder'
+import { requestReference, parseRequestRef, APPOINTMENT_KIND } from '@/utils/RequestOrder'
 
 // Appointments have no order_id field, so the link between an appointment and
 // the order it was booked for lives in the appointment notes
@@ -53,4 +53,21 @@ export function isPrescriptionRequest(order) {
 // appointment instead, which never destroys existing data.
 export function findBookableAppointment({ linked = {}, id } = {}) {
   return linked[id] || null
+}
+
+// What the appointment is for, in words a customer understands.
+//
+// The backend creates an appointment only when an EXAM request is approved
+// (RequestService.approve), linking it through Appointment.request. A product
+// request never gets one. So an appointment carrying that link is an eye exam,
+// and one without it was booked by staff and is a fitting, a collection or a
+// walk-in.
+//
+// request_id is the reliable signal, but AppointmentResponse does not expose it
+// yet, so the notes reference is the fallback for rows already in the database.
+export function getAppointmentKind(appointment) {
+  if (appointment?.request_id != null) return APPOINTMENT_KIND.exam
+  if (parseRequestRef(appointment?.notes)) return APPOINTMENT_KIND.exam
+  if (parseOrderRef(appointment?.notes)) return APPOINTMENT_KIND.product
+  return APPOINTMENT_KIND.clinic
 }

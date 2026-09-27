@@ -10,33 +10,22 @@ export const getAppointmentById = async (id) => {
   return data
 }
 
-// The backend has no /appointments/mine, /appointments/customer/{id} or
-// /appointments/optometrist/{id} route (confirmed against /v3/api-docs). A
-// request to any of them falls through to /appointments/{id}, and Spring cannot
-// bind "mine"/"customer" to a Long, so it answers 400.
-//
-// GET /api/appointments takes no filter parameters and returns the whole list,
-// so the scoping happens here on the one call that does exist.
-const fetchAllAppointments = async () => {
-  const { data } = await axiosInstance.get('/appointments')
-  return Array.isArray(data) ? data : data?.content || []
-}
-
-export const getAppointmentsByCustomer = async (customerId) => {
-  const all = await fetchAllAppointments()
-  return all.filter((a) => Number(a?.customer_id) === Number(customerId))
-}
-
-// The signed-in customer's own appointments. Needs the customer-profile id, which
-// /auth/me does not carry - see useOwnCustomerId.
-export const getMyAppointments = async (customerId) => {
-  if (customerId == null) return []
-  return getAppointmentsByCustomer(customerId)
-}
-
+// Staff-only helper: there is no /appointments/optometrist/{id} route, and
+// GET /appointments takes no filter parameters, so the full staff list is
+// narrowed here. A customer token cannot call this - it gets 403.
 export const getAppointmentsByOptometrist = async (optometristId) => {
-  const all = await fetchAllAppointments()
-  return all.filter((a) => Number(a?.optometrist_id) === Number(optometristId))
+  const { data } = await axiosInstance.get('/appointments')
+  const list = Array.isArray(data) ? data : data?.content || []
+  return list.filter((a) => Number(a?.optometrist_id) === Number(optometristId))
+}
+
+// The backend has no /appointments/customer/{id} or /appointments/optometrist/{id}
+// route. /appointments/mine resolves the customer from the JWT, so it is the
+// route a customer can use; the unfiltered /appointments list is staff-only and
+// answers 403 for a customer token, so the scoping must not be done here.
+export const getMyAppointments = async () => {
+  const { data } = await axiosInstance.get('/appointments/mine')
+  return Array.isArray(data) ? data : []
 }
 
 export const createAppointment = async (payload) => {

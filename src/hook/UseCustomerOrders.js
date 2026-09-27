@@ -8,9 +8,11 @@ import { parseOrderRef } from '@/utils/OrderAppointment'
 // Loads the signed-in customer's orders, joined to the appointment that holds
 // their collection date.
 //
-// The customer's own id comes from GET /api/customers/me (useOwnCustomerId),
-// because /auth/me has no customer_id field. Orders are then read through the
-// paged /api/orders search filtered by that id.
+// Orders come from GET /api/orders/mine, which resolves the customer from the
+// JWT. Appointments have no such route, so they are read from the full list
+// filtered by the customer-profile id, which has to come from
+// GET /api/customers/me (useOwnCustomerId) because /auth/me has no customer_id
+// field.
 //
 // A collection date is NOT a field on the order - the backend has no pickup
 // column (API_DOCUMENT.md section 10.1). The date lives on the appointment staff
@@ -43,8 +45,8 @@ export function useCustomerOrders() {
 
       try {
         const [orderRes, apptRes] = await Promise.allSettled([
-          getMyOrders(customerId),
-          getMyAppointments(customerId),
+          getMyOrders(),
+          getMyAppointments(),
         ])
         if (cancelled) return
 

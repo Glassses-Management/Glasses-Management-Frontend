@@ -41,8 +41,12 @@ export const getVariantFromStatus = (status) => {
     case 'CONFIRMED':
     case 'IN_PROGRESS':
       return 'info'
+    // PENDING_SCHEDULING is the state an approved eye-exam request sits in until
+    // staff give it a date (RequestService.approve). Not a neutral grey: it is
+    // still waiting on the clinic.
     case 'PENDING':
     case 'PENDING_REVIEW':
+    case 'PENDING_SCHEDULING':
     case 'UNPAID':
       return 'warning'
     case 'CANCELLED':

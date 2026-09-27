@@ -3,11 +3,13 @@ import { CalendarClock, Stethoscope, Clock, FileText } from 'lucide-react'
 import Badge from '@/components/ui/Badge'
 import { getMyAppointments } from '@/api/appointmentApi'
 import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
+import { getAppointmentKind } from '@/utils/OrderAppointment'
+import { appointmentStatus, stripInternalRefs } from '@/utils/RequestOrder'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { formatDate, formatDateTime } from '@/utils/format'
 
-const STATUS_BADGE = { PENDING_REVIEW: 'warning', SCHEDULED: 'info', COMPLETED: 'success', CANCELLED: 'danger' }
+const STATUS_BADGE = { PENDING_REVIEW: 'warning', PENDING_SCHEDULING: 'warning', SCHEDULED: 'info', COMPLETED: 'success', CANCELLED: 'danger' }
 
 function row({ icon: Icon, label, value }) {
   return (
@@ -33,7 +35,7 @@ function MyAppointmentPage() {
     }
     let cancelled = false
     setLoading(true)
-    getMyAppointments(customerId)
+    getMyAppointments()
       .then((data) => { if (!cancelled) setAppointments(Array.isArray(data) ? data : []) })
       .catch((err) => {
         if (cancelled) return
@@ -75,12 +77,15 @@ function MyAppointmentPage() {
               key={a.id}
               className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]"
             >
-              <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="mb-4 flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-neutral-50">Appointment #{a.id}</p>
-                  <p className="text-xs text-gray-400 dark:text-neutral-500">Requested {formatDate(a.created_at)}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-neutral-50">{getAppointmentKind(a)}</p>
+                  <p className="text-xs text-gray-400 dark:text-neutral-500">Requested {formatDate(a.createdAt)}</p>
                 </div>
-                <Badge text={a.status} variant={STATUS_BADGE[a.status] || 'neutral'} />
+                <Badge
+                  text={appointmentStatus(a.status).label}
+                  variant={STATUS_BADGE[a.status] || appointmentStatus(a.status).variant}
+                />
               </div>
 
               <div className="space-y-2.5">
@@ -90,7 +95,8 @@ function MyAppointmentPage() {
                 {a.optometrist_name
                   ? row({ icon: Stethoscope, label: 'Optometrist', value: a.optometrist_name })
                   : row({ icon: Stethoscope, label: 'Optometrist', value: 'To be assigned' })}
-                {a.notes && row({ icon: FileText, label: 'Notes', value: a.notes })}
+                {stripInternalRefs(a.notes) &&
+                  row({ icon: FileText, label: 'Notes', value: stripInternalRefs(a.notes) })}
               </div>
             </div>
           ))}

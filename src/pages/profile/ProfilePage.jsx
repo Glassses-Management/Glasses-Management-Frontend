@@ -84,7 +84,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!customerId) return
     let cancelled = false
-    getMyOrders(customerId)
+    getMyOrders()
       .then((data) => {
         if (cancelled) return
         setOrders(Array.isArray(data) ? data : [])

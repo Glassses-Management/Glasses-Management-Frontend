@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { CalendarDays, Heart, KeyRound, Lock, Send, ShoppingBag, User } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
+import { CalendarDays, Heart, KeyRound, Send, ShoppingBag, User } from 'lucide-react'
 
 import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
@@ -12,13 +12,11 @@ import AccountAppointments from '@/pages/public/account/AccountAppointments'
 import AccountRequests from '@/pages/public/account/AccountRequests'
 import AccountOrders from '@/pages/public/account/AccountOrders'
 import AccountFavorites from '@/pages/public/account/AccountFavorites'
-import AccountVisionBenefits from '@/pages/public/account/AccountVisionBenefits'
-import AccountCarePass from '@/pages/public/account/AccountCarePass'
 import AccountContactDelivery from '@/pages/public/account/AccountContactDelivery'
 import AccountTabPlaceholder from '@/pages/public/account/AccountTabPlaceholder'
 import { useCustomerOrders } from '@/hook/UseCustomerOrders'
 
-import { ACCOUNT_TABS, COMPLIANCE } from '@/pages/public/account/AccountData'
+import { ACCOUNT_TABS } from '@/pages/public/account/AccountData'
 
 const TAB_BLUEPRINTS = {
   requests: {
@@ -55,12 +53,30 @@ const TAB_BLUEPRINTS = {
   },
 }
 
+const DEFAULT_TAB = 'overview'
+
 function PatientAccountPage() {
-  // Opens on Order History rather than Overview. Overview used to lead with a
-  // hard-coded lab progress bar for an order that did not exist, so the tab a
+  // The active tab lives in the URL, not in component state. State was lost on
+  // every refresh, so reloading /account always dropped the customer back on the
+  // default tab no matter which one they were reading. A query param also makes
+  // a tab linkable and puts the browser back button to work.
+  //
+  // Overview is the default because it is the account summary, and everything on
+  // it is real now: orders, appointments and the prescription all come from the
+  // API. It used to open on Order History instead, because Overview led with a
+  // hard-coded lab progress bar for an order that did not exist - the tab a
   // customer actually needed was two clicks away and the first thing they saw
   // was fiction.
-  const [tab, setTab] = useState('orders')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const requested = searchParams.get('tab')
+  const tab = ACCOUNT_TABS.some((entry) => entry.key === requested) ? requested : DEFAULT_TAB
+
+  const setTab = (key) => {
+    // replace, so working through the tabs does not fill the back button with
+    // every click. Back then leaves the account page as expected.
+    setSearchParams(key === DEFAULT_TAB ? {} : { tab: key }, { replace: true })
+  }
+
   const isOverview = tab === 'overview'
   const blueprint = isOverview ? null : TAB_BLUEPRINTS[tab]
 
@@ -96,8 +112,11 @@ function PatientAccountPage() {
                 <AccountAppointments />
               </div>
               <aside className="min-w-0 space-y-6">
-                <AccountVisionBenefits />
-                <AccountCarePass />
+                {/* The vision-benefits and care-pass cards were removed rather than
+                    left as fixtures: the backend has no insurance, plan or loyalty
+                    entity (14 models, none of them one of those), so they could
+                    only ever show invented coverage percentages and a fake
+                    membership number. Contact & Delivery below is real. */}
                 <AccountContactDelivery />
               </aside>
             </div>
@@ -109,6 +128,10 @@ function PatientAccountPage() {
             <div className="mt-6">
               <AccountOrders {...customerOrders} />
             </div>
+          ) : tab === 'appointments' ? (
+            <div className="mt-6">
+              <AccountAppointments />
+            </div>
           ) : tab === 'saved' ? (
             <div className="mt-6">
               <AccountFavorites />
@@ -116,14 +139,6 @@ function PatientAccountPage() {
           ) : (
             <AccountTabPlaceholder icon={blueprint.icon} title={blueprint.title} blurb={blueprint.blurb} />
           )}
-
-          <p className="mt-8 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-center text-xs text-neutral-400 dark:text-neutral-500">
-            <Lock size={12} />
-            {COMPLIANCE.label}:
-            <span className="font-medium text-neutral-600 dark:text-neutral-400">{COMPLIANCE.value}</span>
-            ·
-            {COMPLIANCE.doctor}
-          </p>
         </div>
       </section>
 

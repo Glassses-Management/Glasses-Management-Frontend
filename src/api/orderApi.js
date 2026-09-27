@@ -5,20 +5,16 @@ export const getOrders = async (params) => {
   return data
 }
 
-// The signed-in customer's own orders, newest first.
+// The signed-in customer's own orders.
 //
-// There is no /orders/mine route on the backend (confirmed against /v3/api-docs).
-// A request to it collides with /orders/{id}, and Spring fails converting "mine"
-// to a Long, so it answers 400 instead of 404.
-//
-// The documented customerId filter on GET /api/orders answers 500, so it is not
-// used: the list is fetched with the same query the staff order list sends
-// (sort=id,desc, which works) and narrowed here. Verified broken server-side, so
-// this is a workaround, not the intended shape.
-export const getMyOrders = async (customerId) => {
-  if (customerId == null) return []
-  const all = await getAllOrders()
-  return all.filter((order) => Number(order?.customer_id) === Number(customerId))
+// GET /api/orders/mine resolves the customer from the JWT, so it needs no id and
+// no staff role, and it returns the whole list unpaginated. The unfiltered
+// GET /api/orders is staff-only (403 for a customer token) and the customerId
+// filter on it is rejected too, so this is the only route available to a
+// customer.
+export const getMyOrders = async () => {
+  const { data } = await axiosInstance.get('/orders/mine')
+  return Array.isArray(data) ? data : []
 }
 
 // GET /api/orders is paged and the server clamps size to

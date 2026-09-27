@@ -62,7 +62,7 @@ function Ellipsis() {
   return <span className="inline-flex size-8 items-center justify-center text-sm text-gray-400 dark:text-neutral-500">…</span>
 }
 
-function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageChange }) {
+function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageChange, itemLabel = 'records' }) {
   const start = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1
   const end = Math.min(currentPage * itemsPerPage, totalItems)
   const pages = buildPageNumbers(currentPage, totalPages)
@@ -70,7 +70,7 @@ function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageC
   return (
     <nav className="flex items-center justify-between gap-4" aria-label="Pagination">
       <p className="shrink-0 text-sm text-gray-500 dark:text-neutral-400">
-        Showing {start}–{end} of {totalItems.toLocaleString()} records
+        Showing {start}–{end} of {totalItems.toLocaleString()} {itemLabel}
       </p>
 
       <div className="flex items-center gap-1">

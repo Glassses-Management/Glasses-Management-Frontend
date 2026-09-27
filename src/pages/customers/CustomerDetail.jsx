@@ -266,10 +266,10 @@ function CustomerDetail() {
                     <div className="flex items-start gap-4">
                       <div className="w-16 shrink-0">
                         <p className="text-sm font-semibold text-gray-900 dark:text-neutral-100">
-                          {formatDate(appt.scheduledAt, { month: 'short', day: 'numeric' })}
+                          {formatDate(appt.scheduledAt, { only: true, month: 'short', day: 'numeric' })}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-neutral-500">
-                          {formatDate(appt.scheduledAt, { year: 'numeric' })}
+                          {formatDate(appt.scheduledAt, { only: true, year: 'numeric' })}
                         </p>
                       </div>
                       <div className="min-w-0">

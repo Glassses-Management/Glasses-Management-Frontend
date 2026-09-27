@@ -16,7 +16,7 @@ export default function AvatarUploadSection({ userId, name }) {
   const loadAvatar = async () => {
     if (!userId) return
     try {
-      const items = await getMyAttachments(userId)
+      const items = await getMyAttachments()
       setAvatar(pickImage(items)?.filePath || '')
     } catch (err) {
       console.error('AvatarUploadSection: failed to load avatar:', err?.response?.status || err?.message || err)
@@ -26,7 +26,7 @@ export default function AvatarUploadSection({ userId, name }) {
   useEffect(() => {
     if (!userId) return
     let cancelled = false
-    getMyAttachments(userId)
+    getMyAttachments()
       .then((items) => {
         if (!cancelled) setAvatar(pickImage(items)?.filePath || '')
       })
@@ -45,7 +45,7 @@ export default function AvatarUploadSection({ userId, name }) {
     if (!avatar) return
     setSaving(true)
     try {
-      const items = await getMyAttachments(userId)
+      const items = await getMyAttachments()
       const pick = pickImage(items)
       if (pick?.id) await deleteAttachment(pick.id)
       toastSuccess('Profile picture removed.')
