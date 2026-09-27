@@ -39,6 +39,27 @@ export const requiredPassword = function requiredPassword(value) {
         : 'Password is required'
 }
 
+// Password rules for POST /api/user, which are stricter than the ones used when
+// changing your own password. Deliberately a separate validator: UserRequest
+// demands 8-20 characters with at least one letter and one number, while
+// ChangeMyPasswordRequest only asks for 6-100 with no complexity rule. Reusing
+// one rule for both is what let a six-character password pass the form and come
+// back from the server as a 400.
+export const newUserPassword = (value) => {
+  if (!value) return 'Password is required'
+  if (value.length < 8 || value.length > 20) return 'Password must be 8-20 characters'
+  if (!/[A-Za-z]/.test(value)) return 'Password must contain at least one letter'
+  if (!/\d/.test(value)) return 'Password must contain at least one number'
+  return ''
+}
+
+// UserRequest caps the display name at 20 characters.
+export const userName = (value) => {
+  const trimmed = String(value || '').trim()
+  if (!trimmed) return 'Name is required'
+  return trimmed.length > 20 ? 'Name must be 20 characters or fewer' : ''
+}
+
 export const composeValidators = (...validators) => (value) => {
   for (const validate of validators) {
     const error = validate(value)

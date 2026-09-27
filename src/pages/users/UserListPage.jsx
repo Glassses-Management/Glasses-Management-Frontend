@@ -1,16 +1,17 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { Search, Users, Trash2, Mail, User, Phone, Lock, Camera } from 'lucide-react'
 import { getUsers, deleteUser, updateUser, createUser } from '@/api/userApi'
 import { getAttachmentsByUser, uploadAttachment } from '@/api/attachmentApi'
 import { pickImage } from '@/components/product/ProductImage'
 import { useDebouce } from '@/hook/UseDebounce'
-import { usePagination } from '@/hook/UsePagination'
 import { useToast } from '@/hook/UseToast'
 import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
 import Button from '@/components/ui/Button'
 import Spinner from '@/components/ui/Spinner'
+import Pagination from '@/components/ui/Pagination'
 import { formatDate } from '@/utils/FormatDate'
+import { newUserPassword, userName } from '@/utils/Validators'
 
 const PAGE_SIZE = 10
 const ROLES = [
@@ -32,9 +33,8 @@ export default function UserListPage({ onNavigate }) {
   const [deleting, setDeleting] = useState(null)
   const [editing, setEditing] = useState(null)
   const [creating, setCreating] = useState(false)
-  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   const [editError, setEditError] = useState('')
-  const { page, next, prev, reset } = usePagination({ initialPage: 0 })
   const { success: toastSuccess, error: toastError } = useToast()
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', role: '' })
@@ -44,28 +44,21 @@ export default function UserListPage({ onNavigate }) {
 
   const debouncedSearch = useDebouce(search)
 
-  useEffect(() => {
-    reset()
-  }, [debouncedSearch])
-
-  const fetchUsers = useCallback(async (currentPage, searchTerm) => {
-    const params = { page: currentPage, size: PAGE_SIZE, sort: 'id,desc' }
-    if (searchTerm?.trim()) {
-      params.search = searchTerm.trim()
-    }
-    return getUsers(params)
-  }, [])
+  // GET /api/user is not pageable - it accepts no query parameters and returns the
+  // whole list (API_DOCUMENT.md: only customers, products, orders and attachments
+  // support Pageable). The previous version sent page/size/sort/search anyway and
+  // rendered the response unfiltered, so the pager re-fetched the identical list
+  // and the search box matched nothing. Searching and paging are done here.
+  const fetchUsers = useCallback(async () => getUsers(), [])
 
   useEffect(() => {
     let cancelled = false
     const load = async () => {
       setLoading(true)
       try {
-        const data = await fetchUsers(page, debouncedSearch)
+        const data = await fetchUsers()
         if (cancelled) return
-        const list = data?.content || data || []
-        setUsers(list)
-        setTotalPages(data?.totalPages || Math.ceil(list.length / PAGE_SIZE))
+        setUsers(Array.isArray(data) ? data : [])
       } catch (err) {
         console.error('UserListPage: failed to load users:', err?.response?.status || err?.message || err)
       } finally {
@@ -74,7 +67,19 @@ export default function UserListPage({ onNavigate }) {
     }
     load()
     return () => { cancelled = true }
-  }, [page, debouncedSearch, fetchUsers])
+  }, [fetchUsers])
+
+  const refresh = async () => {
+    setLoading(true)
+    try {
+      const data = await fetchUsers()
+      setUsers(Array.isArray(data) ? data : [])
+    } catch (err) {
+      console.error('UserListPage: failed to refresh users:', err?.response?.status || err?.message || err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (users.length === 0) return
@@ -95,20 +100,6 @@ export default function UserListPage({ onNavigate }) {
     loadAvatars()
     return () => { cancelled = true }
   }, [users])
-
-  const refresh = async () => {
-    setLoading(true)
-    try {
-      const data = await fetchUsers(page, debouncedSearch)
-      const list = data?.content || data || []
-      setUsers(list)
-      setTotalPages(data?.totalPages || Math.ceil(list.length / PAGE_SIZE))
-    } catch (err) {
-      console.error('UserListPage: failed to refresh users:', err?.response?.status || err?.message || err)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleRowClick = (id) => {
     onNavigate?.(`users/${id}`)
@@ -202,10 +193,10 @@ export default function UserListPage({ onNavigate }) {
 
   const handleCreateSave = async () => {
     const nextErrors = {
-      name: (createForm.name.trim() ? '' : 'Name is required'),
+      name: userName(createForm.name),
       email: (!createForm.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(createForm.email) ? 'Enter a valid email' : ''),
       phone: (createForm.phone.trim() && /^[0-9+\-\s()]{7,15}$/.test(createForm.phone.trim()) ? '' : 'Enter a valid phone number'),
-      password: (createForm.password.length < 6 ? 'Password must be at least 6 characters' : ''),
+      password: newUserPassword(createForm.password),
       confirmPassword: (createForm.confirmPassword !== createForm.password ? 'Passwords do not match' : ''),
       role: (createForm.role ? '' : 'Please select a role'),
     }
@@ -237,6 +228,32 @@ export default function UserListPage({ onNavigate }) {
   const getInitials = (name) => {
     if (!name) return '?'
     return name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2)
+  }
+
+  const filtered = useMemo(() => {
+    const q = debouncedSearch.trim().toLowerCase()
+    if (!q) return users
+    return users.filter((u) =>
+      String(u.name || '').toLowerCase().includes(q) ||
+      String(u.email || '').toLowerCase().includes(q) ||
+      getRoleLabel(u).toLowerCase().includes(q) ||
+      String(u.phone || '').toLowerCase().includes(q) ||
+      `#${u.id}`.includes(q),
+    )
+  }, [users, debouncedSearch])
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  // Clamped, so deleting the last row on a page cannot leave it empty.
+  const effectivePage = Math.min(currentPage, totalPages)
+  const paged = filtered.slice((effectivePage - 1) * PAGE_SIZE, effectivePage * PAGE_SIZE)
+
+  // A new search means a new result set, so go back to the first page. Done
+  // during render (a React-sanctioned state adjustment) rather than in an effect,
+  // which would show one frame of the wrong page.
+  const [lastSearch, setLastSearch] = useState(debouncedSearch)
+  if (lastSearch !== debouncedSearch) {
+    setLastSearch(debouncedSearch)
+    setCurrentPage(1)
   }
 
   return (
@@ -274,7 +291,7 @@ export default function UserListPage({ onNavigate }) {
               <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800" />
             ))}
           </div>
-        ) : users.length === 0 ? (
+        ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <Users size={40} className="mb-3 text-gray-300 dark:text-neutral-600" />
             <p className="text-sm font-medium text-gray-500 dark:text-neutral-400">
@@ -295,7 +312,7 @@ export default function UserListPage({ onNavigate }) {
                 </tr>
               </thead>
               <tbody>
-                {users.map((u) => (
+                {paged.map((u) => (
                   <tr
                     key={u.id}
                     onClick={() => handleRowClick(u.id)}
@@ -352,15 +369,16 @@ export default function UserListPage({ onNavigate }) {
         )}
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-neutral-800">
-            <p className="text-xs text-gray-400 dark:text-neutral-500">
-              Page {page + 1} of {totalPages}
-            </p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={prev} disabled={page === 0}>Previous</Button>
-              <Button variant="outline" size="sm" onClick={next} disabled={page >= totalPages - 1}>Next</Button>
-            </div>
+        {filtered.length > 0 && totalPages > 1 && (
+          <div className="border-t border-gray-100 px-5 py-3 dark:border-neutral-800">
+            <Pagination
+              currentPage={effectivePage}
+              totalPages={totalPages}
+              totalItems={filtered.length}
+              itemsPerPage={PAGE_SIZE}
+              onPageChange={setCurrentPage}
+              itemLabel="users"
+            />
           </div>
         )}
       </div>
@@ -485,9 +503,8 @@ export default function UserListPage({ onNavigate }) {
                 />
               </div>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <Field label="Password" icon={Lock} name="createPassword" type="password" required value={createForm.password} onChange={(e) => setCreateForm((prev) => ({ ...prev, password: e.target.value }))} error={createErrors.password} placeholder="••••••••" helper="Minimum 6 characters." />
-                <Field label="Confirm Password" icon={Lock} name="createConfirmPassword" type="password" required value={createForm.confirmPassword} onChange={(e) => setCreateForm((prev) => ({ ...prev, confirmPassword: e.target.value }))} error={createErrors.confirmPassword} placeholder="••••••••" />
-              </div>
+                <Field label="Password" icon={Lock} name="createPassword" type="password" required value={createForm.password} onChange={(e) => setCreateForm((prev) => ({ ...prev, password: e.target.value }))} error={createErrors.password} placeholder="••••••••" helper="8-20 characters, including at least one letter and one number." />
+                <Field label="Confirm Password" icon={Lock} name="createConfirmPassword" type="password" required value={createForm.confirmPassword} onChange={(e) => setCreateForm((prev) => ({ ...prev, confirmPassword: e.target.value }))} error={createErrors.confirmPassword} placeholder="••••••••" />              </div>
             </div>
 
             {/* Footer */}

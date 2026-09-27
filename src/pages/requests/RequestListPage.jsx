@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Download, FileText, PlusCircle, Search } from 'lucide-react'
+import { Download, FileText, PlusCircle, Search } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Select from '@/components/ui/Select'
+import Pagination from '@/components/ui/Pagination'
 import RequestCard from '@/components/request/RequestCard'
 import { getRequests } from '@/api/requestApi'
 import { getAppointments } from '@/api/appointmentApi'
 import { parseRequestRef, REQUEST_TYPE_LABEL } from '@/utils/RequestOrder'
+
+// Matches the other staff list pages. Paging is done here rather than on the
+// server because GET /api/requests returns the whole queue unpaginated.
+const ITEMS_PER_PAGE = 10
 
 function typeLabel(type) {
   return REQUEST_TYPE_LABEL[type] || type
@@ -38,6 +43,7 @@ export default function RequestListPage() {
   const [loadError, setLoadError] = useState('')
   const [query, setQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [currentPage, setCurrentPage] = useState(1)
 
   // Plain fetch, no setState, so it is safe to call from anywhere.
   const fetchAll = useCallback(async () => {
@@ -123,6 +129,11 @@ export default function RequestListPage() {
   const unscheduledCount = requests.filter(
     (r) => r.status === 'APPROVED' && !appointmentByRequest.get(r.id)?.scheduled_at,
   ).length
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
+  // Clamped, so filtering or approving the last row cannot leave an empty page.
+  const effectivePage = Math.min(currentPage, totalPages)
+  const paged = filtered.slice((effectivePage - 1) * ITEMS_PER_PAGE, effectivePage * ITEMS_PER_PAGE)
 
   if (loading) {
     return (
@@ -246,8 +257,9 @@ export default function RequestListPage() {
             Customer requests will appear here for review.
           </p>
         </div>
-      ) : (        <div className="space-y-3">
-          {filtered.map((req) => (
+      ) : (
+        <div className="space-y-3">
+          {paged.map((req) => (
             <RequestCard
               key={req.id}
               request={req}
@@ -258,37 +270,15 @@ export default function RequestListPage() {
         </div>
       )}
 
-      {filtered.length > 0 && (
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-1">
-          <p className="text-sm text-gray-500 dark:text-neutral-400">
-            Showing 1–{filtered.length} of {filtered.length} requests
-          </p>
-          <div className="flex items-center gap-1.5" aria-hidden="true">
-            <button
-              type="button"
-              tabIndex={-1}
-              disabled
-              className="flex size-8 items-center justify-center rounded-lg text-gray-400 disabled:opacity-40"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              type="button"
-              tabIndex={-1}
-              className="flex size-8 items-center justify-center rounded-lg bg-forest text-sm font-semibold text-white"
-            >
-              1
-            </button>
-            <button
-              type="button"
-              tabIndex={-1}
-              disabled
-              className="flex size-8 items-center justify-center rounded-lg text-gray-400 disabled:opacity-40"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
+      {filtered.length > 0 && totalPages > 1 && (
+        <Pagination
+          currentPage={effectivePage}
+          totalPages={totalPages}
+          totalItems={filtered.length}
+          itemsPerPage={ITEMS_PER_PAGE}
+          onPageChange={setCurrentPage}
+          itemLabel="requests"
+        />
       )}
     </div>
   )
