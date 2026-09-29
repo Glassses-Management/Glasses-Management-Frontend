@@ -1,296 +1,196 @@
-// Customer profile screen. Reads one customer by :id from mock data (nested
-// appointments/prescriptions/orders shape) and derives all display-only values.
+import { useMemo, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { AlertCircle, ClipboardList, FileText, Trash2 } from 'lucide-react'
 
-import { useMemo } from 'react'
-import { useParams, Link } from 'react-router-dom'
 import Button from '@/components/ui/Button'
-import Badge, { getVariantFromStatus } from '@/components/ui/Badge'
-import StatsCard from '@/components/ui/StatsCard'
+import CreateAppointmentModal from '@/components/appointment/CreateAppointmentModal'
+import { useToast } from '@/hook/UseToast'
 import { useCustomers } from '@/hook/UseCustomer'
-import { getInitials, getAvatarColors } from '@/utils/avatar'
-import {
-  deriveMemberId,
-  memberSince,
-  formatDate,
-  formatDateTime,
-  formatCurrency,
-  frameName,
-  frameDescription,
-} from '@/utils/format'
+import { useCustomerDetail } from '@/hook/UseCustomerDetail'
 
-const cardClass = 'rounded-2xl border border-gray-200 bg-white p-6 transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]'
-const cardTitleClass = 'text-base font-semibold text-gray-900 dark:text-neutral-50'
-const cardLinkClass = 'text-sm font-medium text-violet-600 hover:text-violet-700 transition-colors duration-300 dark:text-violet-400 dark:hover:text-violet-300'
+import CustomerProfileHeader from '@/pages/customers/CustomerProfileHeader'
+import CustomerSummaryCards from '@/pages/customers/CustomerSummaryCards'
+import CustomerTabs from '@/pages/customers/CustomerTabs'
+import ActivePrescriptionCard from '@/pages/customers/ActivePrescriptionCard'
+import CustomerOrdersTable from '@/pages/customers/CustomerOrdersTable'
+import CustomerRecordList from '@/pages/customers/CustomerRecordList'
+import RxQuickSnapshot from '@/pages/customers/RxQuickSnapshot'
+import CustomerNotesCard from '@/pages/customers/CustomerNotesCard'
+import CustomerActivityTimeline from '@/pages/customers/CustomerActivityTimeline'
+import { buildActivity, clinicalTags, staffObservation } from '@/pages/customers/customerDetailActivity'
+import { customerStatus, lensSummary, summaryStats } from '@/pages/customers/customerDetailData'
 
-const framesIcon = (
-  <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <circle cx="6" cy="15" r="3.5" />
-    <circle cx="18" cy="15" r="3.5" />
-    <path d="M9.5 15h5" />
-    <path d="m2.5 15 .5-6a2 2 0 0 1 2-2h3" />
-    <path d="m21.5 15-1-6a2 2 0 0 0-2-2h-3" />
-  </svg>
-)
+const TABS = [
+  { key: 'overview', label: 'Overview' },
+  { key: 'orders', label: 'Orders' },
+  { key: 'prescriptions', label: 'Prescriptions' },
+  { key: 'appointments', label: 'Appointments' },
+  { key: 'requests', label: 'Requests' },
+]
 
-function Avatar({ name, id, size = 'size-16 text-lg' }) {
-  const { bg, text } = getAvatarColors(id)
-  return (
-    <span
-      className={`flex ${size} shrink-0 items-center justify-center rounded-full font-semibold`}
-      style={{ backgroundColor: bg, color: text }}
-    >
-      {getInitials(name)}
-    </span>
-  )
+// Names for the failed-load banner, so it can say which section is empty because
+// of an error instead of because the customer has no records.
+const SECTION_LABELS = {
+  orders: 'orders',
+  prescriptions: 'prescriptions',
+  appointments: 'appointments',
+  requests: 'clinical requests',
 }
 
-function InfoRow({ label, value }) {
+function FailedBanner({ failed }) {
+  if (failed.length === 0) return null
+
   return (
-    <div className="flex items-center justify-between gap-3 text-sm">
-      <span className="text-gray-500 dark:text-neutral-400">{label}</span>
-      <span className="text-right text-gray-900 dark:text-neutral-100">{value}</span>
+    <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+      <AlertCircle size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
+      <p>
+        Could not load {failed.map((key) => SECTION_LABELS[key] || key).join(' and ')} for this customer. Those
+        sections are empty rather than showing data that may be out of date.
+      </p>
     </div>
   )
 }
 
-function CardHeader({ title, action }) {
-  return (
-    <div className="flex flex-wrap items-center justify-between gap-2">
-      <h3 className={cardTitleClass}>{title}</h3>
-      {action}
-    </div>
-  )
-}
-
-function CustomerDetail() {
+export default function CustomerDetail() {
   const { id } = useParams()
-  const { customers } = useCustomers()
-  const customer = customers.find((c) => c.id === Number(id))
+  const navigate = useNavigate()
+  const { success: toastSuccess, error: toastError } = useToast()
+  const { deleteCustomer } = useCustomers()
 
-  const appointments = useMemo(
-    () =>
-      [...(customer?.appointments || [])].sort(
-        (a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt),
-      ),
-    [customer],
+  const { customer, orders, prescriptions, appointments, requests, loading, failed, reload } = useCustomerDetail(id)
+  const [tab, setTab] = useState('overview')
+  const [booking, setBooking] = useState(false)
+
+  const currentRx = prescriptions[0] || null
+
+  // Every hook runs before the early return below, so moving between customers
+  // never changes the hook order.
+  const status = useMemo(() => customerStatus({ orders, appointments }), [orders, appointments])
+  const stats = useMemo(
+    () => summaryStats({ orders, appointments, requests }),
+    [orders, appointments, requests],
   )
-
-  const prescriptions = useMemo(
-    () =>
-      [...(customer?.prescriptions || [])].sort(
-        (a, b) => new Date(b.prescription_date) - new Date(a.prescription_date),
-      ),
-    [customer],
+  const activity = useMemo(
+    () => buildActivity({ customer, orders, appointments, prescriptions, requests, lensSummary }),
+    [customer, orders, appointments, prescriptions, requests],
   )
-
-  const orders = useMemo(
-    () =>
-      [...(customer?.orders || [])].sort(
-        (a, b) => new Date(b.order_date) - new Date(a.order_date),
-      ),
-    [customer],
+  const tags = useMemo(() => clinicalTags({ prescriptions, orders }), [prescriptions, orders])
+  const observation = useMemo(
+    () => staffObservation({ prescriptions, appointments, orders }),
+    [prescriptions, appointments, orders],
   )
 
   if (!customer) {
-    return <p className="text-sm text-gray-500 dark:text-neutral-400">Customer not found.</p>
+    return (
+      <div className="space-y-4">
+        <h1 className="text-xl font-bold text-gray-900 dark:text-neutral-50">Customer not found</h1>
+        <p className="text-sm text-gray-500 dark:text-neutral-400">
+          No client matches id {id}. It may have been deleted from the registry.
+        </p>
+        <Link to="/dashboard/customers">
+          <Button variant="outline">Back to Customers</Button>
+        </Link>
+      </div>
+    )
   }
 
-  const latestProvider = appointments[0]?.optometrist?.name
-  const latestOrderStatus = orders[0]?.status || null
-  const currentPrescription = prescriptions[0]
+  // OrderCreate already accepts a prefill through router state
+  // (pages/orders/OrderCreate.jsx), which is how the customer and the prescription
+  // travel to the form.
+  const startOrder = (prescriptionId) =>
+    navigate('/dashboard/orders/new', { state: { customerId: customer.id, prescriptionId } })
 
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0)
-  const completedOrders = orders.filter((order) => order.status === 'COMPLETED').length
-  const avgOrderValue = orders.length ? totalRevenue / orders.length : 0
+  const handleDelete = async () => {
+    const name = customer.name
+    try {
+      await deleteCustomer(customer.id)
+      toastSuccess(`${name} was removed from the registry.`)
+      navigate('/dashboard/customers')
+    } catch (err) {
+      const data = err?.response?.data
+      toastError(data?.error || data?.message || 'Could not delete this customer.')
+    }
+  }
 
-  const orderItems = orders.flatMap((order) =>
-    (order.items || []).map((item) => ({ ...item, order })),
-  )
+  const menuItems = [
+    {
+      label: 'Write Prescription',
+      icon: <FileText size={14} />,
+      onSelect: () => navigate('/dashboard/prescriptions/new'),
+    },
+    {
+      label: 'Log Clinical Request',
+      icon: <ClipboardList size={14} />,
+      onSelect: () => navigate('/dashboard/requests/add'),
+    },
+    { label: 'Delete Customer', icon: <Trash2 size={14} />, danger: true, onSelect: handleDelete },
+  ]
+
+  const counts = {
+    overview: null,
+    orders: orders.length,
+    prescriptions: prescriptions.length,
+    appointments: appointments.length,
+    requests: requests.length,
+  }
 
   return (
-    <div className="space-y-6">
-      <nav className="flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-neutral-400">
-        <Link to="/dashboard/customers" className="hover:text-gray-700 dark:text-neutral-300 dark:hover:text-neutral-100">
-          Customers
-        </Link>
-        <span aria-hidden="true">/</span>
-        <span className="font-medium text-gray-900 dark:text-neutral-100">{customer.name}</span>
-        {latestOrderStatus && (
-          <Badge text={latestOrderStatus} variant={getVariantFromStatus(latestOrderStatus)} />
-        )}
-        <div className="ml-auto flex flex-wrap gap-2">
-          <Button variant="outline">Edit Profile</Button>
-          <Button variant="outline">Book Appointment</Button>
-          <Button variant="outline">Write Prescription</Button>
-          <Button variant="primary">+ Log Dispensing Order</Button>
-        </div>
-      </nav>
+    <div className="space-y-5">
+      <CustomerProfileHeader
+        customer={customer}
+        status={status}
+        onNewOrder={() => startOrder()}
+        onBookAppointment={() => setBooking(true)}
+        onEdit={() => navigate(`/dashboard/customers/${customer.id}/edit`)}
+        menuItems={menuItems}
+      />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
-        <div className="space-y-6 lg:col-span-3">
-          <div className={cardClass}>
-            <div className="flex items-center gap-4">
-              <Avatar name={customer.name} id={customer.id} />
-              <div className="min-w-0">
-                <h2 className="truncate text-lg font-bold text-gray-900 dark:text-neutral-50">{customer.name}</h2>
-                <p className="text-sm text-gray-500 dark:text-neutral-400">{deriveMemberId(customer.id)}</p>
-                <p className="text-xs text-gray-400 dark:text-neutral-500">Member since {memberSince(customer.createdAt)}</p>
-              </div>
-            </div>
-            <div className="mt-6 space-y-3 border-t border-gray-100 pt-5 dark:border-neutral-800">
-              <InfoRow label="Phone" value={customer.phone} />
-              <InfoRow label="Email" value={customer.email} />
-              <InfoRow label="Address" value={customer.address} />
-              <InfoRow label="Date of Birth" value={formatDate(customer.dateOfBirth)} />
-            </div>
-          </div>
+      <FailedBanner failed={failed} />
 
-          <div className={cardClass}>
-            <h3 className={cardTitleClass}>Vision Care Provider</h3>
-            <p className="mt-4 text-lg font-semibold text-gray-900 dark:text-neutral-50">
-              {latestProvider || 'No visits yet'}
-            </p>
-            <Link to={`/dashboard/customers/${customer.id}/care-history`} className={`mt-2 inline-block ${cardLinkClass}`}>
-              View Care History
-            </Link>
-          </div>
+      <CustomerSummaryCards stats={stats} loading={loading} />
 
-          <div className={cardClass}>
-            <h3 className={cardTitleClass}>Dispensing Telemetry</h3>
-            <div className="mt-4 space-y-3">
-              <StatsCard label="Lifetime Value" value={formatCurrency(totalRevenue)} />
-              <StatsCard label="Completed Orders" value={completedOrders} />
-              <StatsCard label="Avg. Order Value" value={formatCurrency(avgOrderValue)} />
-            </div>
-          </div>
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
+        <div className="space-y-5 xl:col-span-8">
+          <CustomerTabs tabs={TABS} active={tab} counts={counts} onChange={setTab} />
+
+          {tab === 'overview' && (
+            <>
+              <ActivePrescriptionCard prescription={currentRx} onPrint={() => window.print()} />
+              <CustomerOrdersTable orders={orders} limit={5} />
+            </>
+          )}
+
+          {tab === 'orders' && <CustomerOrdersTable orders={orders} />}
+
+          {tab === 'prescriptions' && <CustomerRecordList kind="prescription" items={prescriptions} />}
+
+          {tab === 'appointments' && <CustomerRecordList kind="appointment" items={appointments} />}
+
+          {tab === 'requests' && <CustomerRecordList kind="request" items={requests} />}
         </div>
 
-        <div className="space-y-6 lg:col-span-7">
-          <div className={cardClass}>
-            <CardHeader
-              title="Current Valid Prescription"
-              action={
-                currentPrescription && (
-                  <span className="text-sm text-gray-500 dark:text-neutral-400">
-                    Valid from {formatDate(currentPrescription.prescription_date)}
-                  </span>
-                )
-              }
-            />
-            {currentPrescription ? (
-              <>
-                <table className="mt-4 w-full text-sm text-gray-900 dark:text-neutral-100">
-                  <thead>
-                    <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500 dark:border-neutral-800 dark:text-neutral-500">
-                      <th className="py-2 text-left font-medium">Eye</th>
-                      <th className="py-2 text-right font-medium">Sphere</th>
-                      <th className="py-2 text-right font-medium">Cylinder</th>
-                      <th className="py-2 text-right font-medium">Axis</th>
-                      <th className="py-2 text-right font-medium">Add</th>
-                      <th className="py-2 text-right font-medium">PD</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b border-gray-100 dark:border-neutral-800">
-                      <td className="py-3 font-semibold text-gray-900 dark:text-neutral-50">OD</td>
-                      <td className="py-3 text-right">{currentPrescription.od_sphere}</td>
-                      <td className="py-3 text-right">{currentPrescription.od_cylinder}</td>
-                      <td className="py-3 text-right">{currentPrescription.od_axis}&deg;</td>
-                      <td className="py-3 text-right" rowSpan={2}>{currentPrescription.near_addition}</td>
-                      <td className="py-3 text-right" rowSpan={2}>{currentPrescription.pupillary_distance}</td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 font-semibold text-gray-900 dark:text-neutral-50">OS</td>
-                      <td className="py-3 text-right">{currentPrescription.os_sphere}</td>
-                      <td className="py-3 text-right">{currentPrescription.os_cylinder}</td>
-                      <td className="py-3 text-right">{currentPrescription.os_axis}&deg;</td>
-                    </tr>
-                  </tbody>
-                </table>
-                {currentPrescription.notes && (
-                  <p className="mt-4 rounded-lg bg-gray-50 p-3 text-sm text-gray-600 transition-colors duration-300 dark:bg-white/5 dark:text-neutral-300">
-                    <span className="font-medium">Notes:</span> {currentPrescription.notes}
-                  </p>
-                )}
-              </>
-            ) : (
-              <p className="mt-4 text-sm text-gray-500 dark:text-neutral-400">No prescription on record.</p>
-            )}
-          </div>
-
-          <div className={cardClass}>
-            <CardHeader
-              title="Dispensing Orders & Bespoke Frames"
-              action={
-                <Link to={`/dashboard/customers/${customer.id}/orders`} className={cardLinkClass}>
-                  View Ordering History
-                </Link>
-              }
-            />
-            {orderItems.length > 0 ? (
-              <ul className="mt-4 divide-y divide-gray-100 dark:divide-neutral-800">
-                {orderItems.map((item, i) => (
-                  <li key={`${item.order.id}-${item.id}-${i}`} className="flex items-center gap-4 py-3">
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-colors duration-300 dark:bg-white/5 dark:text-neutral-400">
-                      {framesIcon}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium text-gray-900 dark:text-neutral-100">{frameName(item.product)}</p>
-                      <p className="truncate text-xs text-gray-500 dark:text-neutral-400">{frameDescription(item)}</p>
-                    </div>
-                    <div className="flex shrink-0 items-center gap-3">
-                      <p className="font-semibold text-gray-900 dark:text-neutral-100">{formatCurrency(item.total_price)}</p>
-                      <Badge text={item.order.status} variant={getVariantFromStatus(item.order.status)} />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-4 text-sm text-gray-500 dark:text-neutral-400">No orders yet.</p>
-            )}
-          </div>
-
-          <div className={cardClass}>
-            <CardHeader
-              title="Consultation & Exam Timeline"
-              action={
-                <Link to={`/dashboard/customers/${customer.id}/appointments/new`} className={cardLinkClass}>
-                  + Schedule New Visit
-                </Link>
-              }
-            />
-            {appointments.length > 0 ? (
-              <ul className="mt-4 divide-y divide-gray-100 dark:divide-neutral-800">
-                {appointments.map((appt) => (
-                  <li key={appt.id} className="flex items-start justify-between gap-4 py-3">
-                    <div className="flex items-start gap-4">
-                      <div className="w-16 shrink-0">
-                        <p className="text-sm font-semibold text-gray-900 dark:text-neutral-100">
-                          {formatDate(appt.scheduledAt, { only: true, month: 'short', day: 'numeric' })}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-neutral-500">
-                          {formatDate(appt.scheduledAt, { only: true, year: 'numeric' })}
-                        </p>
-                      </div>
-                      <div className="min-w-0">
-                        <p className="font-medium text-gray-900 dark:text-neutral-100">{appt.notes || 'Consultation'}</p>
-                        <p className="mt-0.5 text-xs text-gray-500 dark:text-neutral-400">
-                          {appt.optometrist?.name} · {formatDateTime(appt.scheduledAt)}
-                        </p>
-                      </div>
-                    </div>
-                    <Badge text={appt.status} variant={getVariantFromStatus(appt.status)} />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-4 text-sm text-gray-500 dark:text-neutral-400">No appointments yet.</p>
-            )}
-          </div>
-        </div>
+        <aside className="space-y-5 xl:col-span-4">
+          <RxQuickSnapshot
+            prescription={currentRx}
+            onDuplicateIntoOrder={() => startOrder(currentRx?.id)}
+            onDownload={() => window.print()}
+          />
+          <CustomerNotesCard observation={observation} tags={tags} prescriptionId={currentRx?.id} />
+          <CustomerActivityTimeline items={activity} />
+        </aside>
       </div>
+
+      <CreateAppointmentModal
+        open={booking}
+        customerId={customer.id}
+        customerName={customer.name}
+        context="Eye exam"
+        onClose={() => setBooking(false)}
+        onSaved={() => {
+          setBooking(false)
+          reload()
+        }}
+      />
     </div>
   )
 }
-
-export default CustomerDetail

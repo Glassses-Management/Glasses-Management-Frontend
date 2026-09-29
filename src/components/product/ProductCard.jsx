@@ -1,16 +1,10 @@
 import ProductImage from '@/components/product/ProductImage'
 import FavoriteButton from '@/components/product/FavoriteButton'
+import { BADGE_STYLES, DEFAULT_BADGE_STYLE } from '@/components/product/badgeStyles'
 import { Eye, ShoppingCart, Star } from 'lucide-react'
 import { formatCurrency } from '@/utils/FormatCurrency'
 import { useCart } from '@/hook/UseCart'
 import { useToast } from '@/hook/UseToast'
-
-const BADGE_STYLES = {
-  'BEST SELLER': 'bg-[#6f8a6f] text-white',
-  NEW: 'bg-[#6f8a6f] text-white',
-  SALE: 'bg-red-600 text-white',
-  'LOW STOCK': 'bg-amber-500 text-white',
-}
 
 function ProductCard({ product, imageSrc, images, onClick }) {
   const { addItem } = useCart()
@@ -49,7 +43,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
   return (
     <article
       onClick={onClick}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200/80 transition-all duration-200 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg hover:ring-neutral-300 dark:bg-neutral-800/90 dark:ring-neutral-700 dark:hover:shadow-neutral-900/50 dark:hover:ring-neutral-600"
+      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-neutral-200/80 transition-all duration-200 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg hover:ring-neutral-300 dark:bg-neutral-800/90 dark:ring-neutral-700 dark:hover:shadow-neutral-900/50 dark:hover:ring-neutral-600"
     >
       {/* Image area */}
       <div className="relative p-3 pb-0">
@@ -60,7 +54,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
         />
 
         {badge && (
-          <span className={`absolute left-5 top-5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${BADGE_STYLES[badge] || 'bg-neutral-900 text-white'}`}>
+          <span className={`absolute left-5 top-5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${BADGE_STYLES[badge] || DEFAULT_BADGE_STYLE}`}>
             {badge}
           </span>
         )}
@@ -111,7 +105,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#8fa88f] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#6f8a6f] active:scale-[0.98] lg:rounded-full"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-forest px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-forest/25 transition-all duration-200 hover:bg-forest-deep hover:shadow-md active:scale-[0.98] lg:rounded-full dark:bg-leaf dark:text-forest dark:shadow-none dark:hover:opacity-90"
               aria-label={`Add ${product.model} to cart`}
             >
               <ShoppingCart size={15} />

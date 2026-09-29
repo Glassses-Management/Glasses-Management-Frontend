@@ -12,7 +12,7 @@ import { useCustomers } from '@/hook/UseCustomer'
 function CustomerForm() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { success: toastSuccess } = useToast()
+  const { success: toastSuccess, error: toastError } = useToast()
   const { customers, addCustomer, updateCustomer } = useCustomers()
 
   const isEdit = Boolean(id)
@@ -20,6 +20,7 @@ function CustomerForm() {
 
   const [form, setForm] = useState({ name: '', phone: '', email: '', address: '' })
   const [errors, setErrors] = useState({})
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     if (existing) {
@@ -49,7 +50,17 @@ function CustomerForm() {
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
+  // Only the fields the backend CustomerRequest accepts. date_of_birth is
+  // kept from the existing record so a partial form never wipes it.
+  const payload = {
+    name: form.name,
+    phone: form.phone,
+    email: form.email,
+    address: form.address,
+    date_of_birth: existing?.date_of_birth || existing?.dateOfBirth || null,
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const nextErrors = {
       name: composeValidators(required)(form.name),
@@ -58,28 +69,27 @@ function CustomerForm() {
     }
     setErrors(nextErrors)
     if (Object.values(nextErrors).some((error) => error)) return
+    if (saving) return
 
-    if (isEdit) {
-      const updated = { ...existing, ...form, updatedAt: new Date().toISOString() }
-      updateCustomer(updated)
-      toastSuccess('Customer updated successfully.')
-      navigate(`/dashboard/customers/${updated.id}`)
-    } else {
-      const nextId = customers.reduce((max, c) => Math.max(max, c.id), 0) + 1
-      const now = new Date().toISOString()
-      const created = {
-        id: nextId,
-        ...form,
-        dateOfBirth: '',
-        createdAt: now,
-        updatedAt: now,
-        appointments: [],
-        prescriptions: [],
-        orders: [],
+    setSaving(true)
+    try {
+      if (isEdit) {
+        // The context takes (id, payload) - both arguments are required.
+        await updateCustomer(existing.id, payload)
+        toastSuccess('Customer updated successfully.')
+        navigate(`/dashboard/customers/${existing.id}`)
+      } else {
+        await addCustomer(payload)
+        toastSuccess('Customer created successfully.')
+        navigate('/dashboard/customers')
       }
-      addCustomer(created)
-      toastSuccess('Customer created successfully.')
-      navigate('/dashboard/customers')
+    } catch (err) {
+      const data = err?.response?.data
+      const serverMessage =
+        data?.error || data?.message || Object.values(data || {}).filter(Boolean)[0]
+      toastError(serverMessage || 'Could not save the customer. Please try again.')
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -135,8 +145,8 @@ function CustomerForm() {
             {isEdit ? 'Changes apply immediately.' : 'New clients appear in the registry right away.'}
           </p>
           <div className="flex items-center gap-3">
-            <Button type="button" variant="ghost" onClick={() => navigate(goBack)}>Cancel</Button>
-            <Button type="submit">{isEdit ? 'Save Changes' : 'Create Customer'}</Button>
+            <Button type="button" variant="ghost" onClick={() => navigate(goBack)} disabled={saving}>Cancel</Button>
+            <Button type="submit" loading={saving}>{isEdit ? 'Save Changes' : 'Create Customer'}</Button>
           </div>
         </div>
       </div>

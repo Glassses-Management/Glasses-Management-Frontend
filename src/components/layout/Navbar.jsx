@@ -11,7 +11,7 @@ import { pickImage } from '@/components/product/ProductImage'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Explore', href: '/explore' },
+  // { label: 'Explore', href: '/explore' },
   { label: 'Product', href: '/products' },
   { label: 'Contact', href: '/contact' },
   { label: 'About', href: '/about' },

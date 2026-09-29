@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { SearchX, X } from 'lucide-react'
+import { X } from 'lucide-react'
+import AOS from 'aos'
 import Navbar from '@/components/layout/Navbar'
 import HomeFooter from '@/pages/public/HomeFooter'
-import ProductCard from '@/components/product/ProductCard'
 import CatalogHeader from '@/pages/public/CatalogHeader'
 import CatalogToolbar from '@/pages/public/CatalogToolbar'
 import CatalogSidebar from '@/pages/public/CatalogSidebar'
+import CatalogResults from '@/pages/public/CatalogResults'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
 import {
   LENS_OPTIONS,
@@ -96,6 +97,17 @@ export default function PublicProductList() {
   const sorted = useMemo(() => applySort(filtered, filters.sort), [filtered, filters.sort])
   const visible = sorted.slice(0, visibleCount)
 
+  // AOS only measures on init + route change, but the cards mount later
+  // (after the API returns) and change on every filter/sort/load-more/view.
+  // Refresh after paint so the per-card fade-up triggers instead of
+  // leaving cards stuck at opacity 0. filterKey catches swaps that keep
+  // the same count (e.g. category A x12 -> category B x12).
+  useEffect(() => {
+    if (loading) return
+    const frame = requestAnimationFrame(() => AOS.refresh())
+    return () => cancelAnimationFrame(frame)
+  }, [loading, filterKey, visibleCount, visible.length, filters.view])
+
   const priceDisplay = {
     min: filters.price.min ?? priceBounds.min,
     max: filters.price.max ?? priceBounds.max,
@@ -180,7 +192,7 @@ export default function PublicProductList() {
     <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
       <Navbar />
 
-      <CatalogHeader totalCount={catalog.length} shownCount={filtered.length} data-aos="fade-up" />
+      <CatalogHeader totalCount={catalog.length} shownCount={filtered.length} />
 
       <div className="mx-auto max-w-6xl px-4 pb-16 pt-8 md:px-6 md:pt-10">
         <div className="grid items-start gap-8 lg:grid-cols-[260px_1fr]">
@@ -216,8 +228,10 @@ export default function PublicProductList() {
             </div>
           </div>
 
-          {/* Main content */}
-          <div data-aos="fade-up">
+          {/* Main content keeps no data-aos on purpose: the grid inside
+              CatalogResults already has the fade-up. Nesting two would
+              break offset measurement and hide the cards. */}
+          <div>
             <CatalogToolbar
               shownStart={visible.length === 0 ? 0 : 1}
               shownEnd={visible.length}
@@ -229,57 +243,16 @@ export default function PublicProductList() {
               onOpenFilters={() => setDrawerOpen(true)}
             />
 
-            {loading ? (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-[#16271F]">
-                    <div className="aspect-[4/3] rounded-2xl bg-neutral-200 dark:bg-[#1E332B]" />
-                    <div className="space-y-3 p-4">
-                      <div className="h-3 w-1/3 rounded bg-neutral-200 dark:bg-[#1E332B]" />
-                      <div className="h-4 w-2/3 rounded bg-neutral-200 dark:bg-[#1E332B]" />
-                      <div className="h-3 w-1/4 rounded bg-neutral-200 dark:bg-[#1E332B]" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : visible.length === 0 ? (
-              <div className="flex flex-col items-center rounded-2xl border border-dashed border-neutral-300 bg-white/60 py-20 text-center dark:border-neutral-700 dark:bg-[#16271F]/40">
-                <SearchX size={36} className="text-forest dark:text-leaf" />
-                <p className="mt-4 font-sans font-semibold text-neutral-900 dark:text-neutral-100">No frames match</p>
-                <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Try removing a filter or two.</p>
-                <button
-                  type="button"
-                  onClick={clearAll}
-                  className="mt-5 rounded-full bg-forest px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-forest-deep"
-                >
-                  Clear all filters
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className={filters.view === 'list' ? 'grid grid-cols-1 gap-6' : 'grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3'} data-aos="fade-up">
-                  {visible.map((p) => (
-                    <ProductCard
-                      key={p.id}
-                      product={p}
-                      images={images[p.id]}
-                      onClick={() => navigate(`/products/${p.id}`)}
-                    />
-                  ))}
-                </div>
-                {visibleCount < sorted.length && (
-                  <div className="mt-10 text-center">
-                    <button
-                      type="button"
-                      onClick={() => setVisibleCount((v) => v + PAGE_SIZE)}
-                      className="rounded-full bg-forest px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-forest-deep"
-                    >
-                      Load more frames
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+            <CatalogResults
+              loading={loading}
+              visible={visible}
+              hasMore={visibleCount < sorted.length}
+              view={filters.view}
+              images={images}
+              onSelect={(p) => navigate(`/products/${p.id}`)}
+              onLoadMore={() => setVisibleCount((v) => v + PAGE_SIZE)}
+              onClearAll={clearAll}
+            />
           </div>
         </div>
       </div>

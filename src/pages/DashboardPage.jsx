@@ -13,6 +13,7 @@ import QuickDeskCard from '@/pages/dashboard/QuickDeskCard'
 import StockAttentionCard from '@/pages/dashboard/StockAttentionCard'
 import StatusBar from '@/pages/dashboard/StatusBar'
 import RecentOrdersCard from '@/pages/dashboard/RecentOrdersCard'
+import BusinessOverviewCard from '@/pages/dashboard/BusinessOverviewCard'
 
 export default function DashboardPage() {
   const { user } = useAuth()
@@ -71,6 +72,8 @@ export default function DashboardPage() {
           </Button>
         </div>
       </div>
+
+      <BusinessOverviewCard />
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard icon={Users} label="Customers" value={customers} badge={{ text: '+12%', tone: 'green' }} />
