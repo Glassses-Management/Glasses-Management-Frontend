@@ -18,6 +18,7 @@ const EMPTY = {
   sale_price: '',
   supplier_name: '',
   supplier_contact: '',
+  quantity: '',
 }
 
 const FIELDS = [
@@ -28,10 +29,14 @@ const FIELDS = [
   { name: 'color', label: 'Color' },
   { name: 'material', label: 'Material' },
   { name: 'size', label: 'Size' },
-  { name: 'cost_price', label: 'Cost Price', type: 'number', min: '0.01', step: '0.01', required: true },
-  { name: 'sale_price', label: 'Sale Price', type: 'number', min: '0.01', step: '0.01', required: true },
+  { name: 'cost_price', label: 'Cost Price', type: 'number', min: '0.01', step: '0.01', required: true, price: true },
+  { name: 'sale_price', label: 'Sale Price', type: 'number', min: '0.01', step: '0.01', required: true, price: true },
   { name: 'supplier_name', label: 'Supplier' },
   { name: 'supplier_contact', label: 'Supplier Contact' },
+  // Opening stock. Only shown when adding, because on an existing product the
+  // quantity belongs to its inventory row and is changed from the inventory page.
+  // The reorder threshold is not asked for: the backend sets a default for it.
+  { name: 'quantity', label: 'Quantity', type: 'number', min: '0', step: '1', required: true, addOnly: true },
 ]
 
 const INPUT_CLASS =
@@ -70,15 +75,24 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
     if (submitting) return
     setError('')
 
-    const missing = FIELDS.filter((f) => f.required && !String(form[f.name]).trim())
+    const shown = FIELDS.filter((f) => !(f.addOnly && isEdit))
+    const missing = shown.filter((f) => f.required && !String(form[f.name]).trim())
     if (missing.length > 0) {
       setError(`Please fill in: ${missing.map((f) => f.label).join(', ')}`)
       return
     }
 
-    const badPrice = FIELDS.find((f) => f.type === 'number' && String(form[f.name]).trim() && !(Number(form[f.name]) > 0))
+    // Only the price fields must be greater than 0. Quantity is a count, so 0 is a
+    // valid answer (a product that is catalogued but not yet in stock).
+    const badPrice = shown.find((f) => f.price && String(form[f.name]).trim() && !(Number(form[f.name]) > 0))
     if (badPrice) {
       setError(`${badPrice.label} must be a number greater than 0.`)
+      return
+    }
+
+    const badQty = shown.find((f) => f.name === 'quantity' && !(Number.isInteger(Number(form[f.name])) && Number(form[f.name]) >= 0))
+    if (badQty) {
+      setError('Quantity must be a whole number of 0 or more.')
       return
     }
 
@@ -90,7 +104,7 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
     setSubmitting(true)
     try {
       const payload = {}
-      FIELDS.forEach((f) => {
+      shown.forEach((f) => {
         payload[f.name] = form[f.name]
         if (f.type === 'number' && String(form[f.name]).trim()) payload[f.name] = Number(form[f.name])
       })
@@ -151,7 +165,7 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
             <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Frame details and pricing.</p>
           </header>
           <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
-            {FIELDS.map((f) => (
+            {FIELDS.filter((f) => !(f.addOnly && isEdit)).map((f) => (
               <div key={f.name} className={gridClass(f.name)}>
                 <label htmlFor={`product-${f.name}`} className="mb-1 block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-neutral-400">
                   {f.label}{f.required && <span className="ml-0.5 text-red-500">*</span>}

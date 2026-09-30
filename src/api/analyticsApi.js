@@ -8,7 +8,7 @@ import { getCustomers } from '@/api/customerApi'
 // exist in the backend" - so this module composes the two list endpoints that
 // already support the date filtering the chart needs:
 //
-//   GET /api/orders     ?dateFrom&dateTo&sort=order_date,asc
+//   GET /api/orders     ?dateFrom&dateTo&sort=createdAt,asc
 //                        -> OrderResponse[] carrying `total` and `order_date`
 //   GET /api/customers  ?createdFrom&createdTo&page=0&size=1
 //                        -> Page; only totalElements is read, so the rows are
@@ -46,7 +46,13 @@ export const loadBusinessOverview = async ({ current, previous }) => {
   const ordersTo = current.to > previous.to ? current.to : previous.to
 
   const [orders, newCustomers, newCustomersPrevious] = await Promise.all([
-    getAllOrders({ dateFrom: ordersFrom, dateTo: ordersTo, sort: 'order_date,asc' }),
+    // Sorted by createdAt, never by order_date. The backend's assertSortAllowed
+    // lists order_date as a legal sort, but Spring Data then fails to resolve it
+    // and the whole request answers 500 (PropertyReferenceException: No property
+    // 'order' found for type 'Order'). id, status, createdAt and updatedAt are
+    // verified working. Order does not matter to the chart anyway - bucketize
+    // looks each order up by its own day key rather than walking the array.
+    getAllOrders({ dateFrom: ordersFrom, dateTo: ordersTo, sort: 'createdAt,asc' }),
     countCustomersBetween(current.from, current.to),
     countCustomersBetween(previous.from, previous.to),
   ])
