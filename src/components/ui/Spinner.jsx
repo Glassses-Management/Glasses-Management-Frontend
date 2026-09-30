@@ -1,7 +1,5 @@
 // join class names, ignoring falsy values so callers can conditionally pass classes
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { cn } from '@/utils/cn'
 
 const sizeMap = {
   sm: 'size-4',
@@ -10,12 +8,12 @@ const sizeMap = {
 }
 
 const colorMap = {
-  violet: 'text-violet-600',
+  forest: 'text-forest-600',
   gray: 'text-gray-400',
   current: 'text-current',
 }
 
-function Spinner({ size = 'md', color = 'violet', className = '' }) {
+function Spinner({ size = 'md', color = 'forest', className = '' }) {
   return (
     <span
       className={cn(

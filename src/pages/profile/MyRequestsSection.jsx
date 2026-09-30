@@ -53,7 +53,7 @@ export default function MyRequestsSection() {
     <section className="py-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">My Requests</p>
+          <p className="text-sm font-semibold text-surface-ink dark:text-neutral-100">My Requests</p>
           <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Requests you have submitted</p>
         </div>
         <Button size="sm" icon={<PlusCircle size={14} />} onClick={() => setModalOpen(true)}>
@@ -79,7 +79,7 @@ export default function MyRequestsSection() {
               className="rounded-xl border border-gray-100 p-4 transition-colors duration-300 dark:border-neutral-800"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-sm font-medium text-[#1a1a2e] dark:text-neutral-100">
+                <p className="text-sm font-medium text-surface-ink dark:text-neutral-100">
                   {TYPE_LABEL[req.type] || req.type}
                 </p>
                 <Badge text={req.status || 'PENDING'} variant={STATUS_VARIANT[req.status] || 'neutral'} />

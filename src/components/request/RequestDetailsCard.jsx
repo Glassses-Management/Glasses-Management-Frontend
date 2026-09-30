@@ -1,4 +1,5 @@
 import { AlertCircle, StickyNote } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
 const EXAM_REASONS = [
   'New eye examination',
@@ -22,9 +23,6 @@ const CONTACT_METHODS = ['Phone', 'Email']
 
 const NOTES_MAX = 900
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 // Reusable pill-style option chooser used for reason / product type / contact method.
 function PillGroup({ options, value, name, onChange }) {
@@ -40,7 +38,7 @@ function PillGroup({ options, value, name, onChange }) {
           className={cn(
             'rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200',
             value === opt
-              ? 'border-[#6f8a6f] bg-[#6f8a6f]/10 text-[#6f8a6f] dark:border-[#8fa88f] dark:bg-[#8fa88f]/15 dark:text-[#a8c2a8]'
+              ? 'border-sage-deep bg-sage-deep/10 text-sage-deep dark:border-sage dark:bg-sage/15 dark:text-sage-light'
               : 'border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-500',
           )}
         >
@@ -92,7 +90,7 @@ export default function RequestDetailsCard({ type, value, onChange, error }) {
           placeholder="Tell us anything else our optical staff should know..."
           aria-invalid={Boolean(error?.notes)}
           className={cn(
-            'w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors duration-300 placeholder:text-neutral-400 focus:border-[#8fa88f] focus:ring-2 focus:ring-[#8fa88f]/30',
+            'w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition-colors duration-300 placeholder:text-neutral-400 focus:border-sage focus:ring-2 focus:ring-sage/30',
             error?.notes
               ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20'
               : 'border-neutral-300 dark:border-neutral-600',

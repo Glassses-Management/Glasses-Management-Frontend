@@ -1,9 +1,6 @@
 import { forwardRef } from 'react'
+import { cn } from '@/utils/cn'
 
-// join class names, ignoring falsy values so callers can conditionally pass classes
-function cn(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
 
 // Reusable input so every form shares the same look; forwardRef makes it work with
 // react-hook-form's register()/controller without wrapping props.
@@ -27,7 +24,7 @@ const Input = forwardRef(function Input(
 ) {
     return (
         <div className="w-full">
-{label && (
+            {label && (
                 <label htmlFor={name} className="mb-1 block text-sm font-medium text-gray-700 dark:text-neutral-300">
                     {label}
                     {required && <span className="ml-1 text-red-500">*</span>}
@@ -54,9 +51,9 @@ const Input = forwardRef(function Input(
                     aria-invalid={Boolean(error)}
                     className={cn(
                         'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm',
-                        'transition-colors duration-300 focus:outline-none focus:ring-2 focus:border-violet-500 focus:ring-violet-500',
+                        'transition-colors duration-300 focus:outline-none focus:ring-2 focus:border-forest-500 focus:ring-forest-500',
                         'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-70',
-                        'dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500',
+                        'dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500',
                         'dark:disabled:bg-neutral-800',
                         icon && 'pl-10',
                         error &&

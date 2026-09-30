@@ -39,7 +39,7 @@ function SideCard({ title, children, icon: Icon }) {
   return (
     <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-neutral-200/70 dark:bg-neutral-800/60 dark:ring-neutral-700/70">
       <div className="mb-4 flex items-center gap-2">
-        {Icon && <Icon size={15} className="text-[#6f8a6f]" />}
+        {Icon && <Icon size={15} className="text-sage-deep" />}
         <h2 className="font-sans text-sm font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-50">
           {title}
         </h2>
@@ -104,7 +104,7 @@ function RecentRequests() {
 
       <Link
         to="/account"
-        className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#6f8a6f] transition-colors hover:text-[#55705a]"
+        className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-sage-deep transition-colors hover:text-sage-muted"
       >
         View all requests <ArrowRight size={14} />
       </Link>
@@ -119,7 +119,7 @@ export default function CustomerRequestSidebar() {
         <ol className="space-y-4">
           {STEPS.map((step, i) => (
             <li key={step.title} className="flex gap-3">
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#8fa88f]/15 text-xs font-semibold text-[#6f8a6f]">
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-sage/15 text-xs font-semibold text-sage-deep">
                 {i + 1}
               </span>
               <div>
@@ -135,13 +135,13 @@ export default function CustomerRequestSidebar() {
         <ul className="space-y-3">
           {HELP.map(({ icon: Icon, label, value, href }) => (
             <li key={label} className="flex items-center gap-3">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#8fa88f]/15 text-[#6f8a6f]">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-sage/15 text-sage-deep">
                 <Icon size={16} />
               </span>
               <div className="min-w-0">
                 <p className="text-xs text-neutral-400 dark:text-neutral-500">{label}</p>
                 {href ? (
-                  <a href={href} className="text-sm font-medium text-neutral-900 transition-colors hover:text-[#6f8a6f] dark:text-neutral-100">
+                  <a href={href} className="text-sm font-medium text-neutral-900 transition-colors hover:text-sage-deep dark:text-neutral-100">
                     {value}
                   </a>
                 ) : (

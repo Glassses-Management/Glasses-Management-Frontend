@@ -16,7 +16,7 @@ export default function PendingScheduleRow({ order, appointment = null, focused,
 
   return (
     <li
-      className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-white p-3 dark:bg-[#1c1c28] ${
+      className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-white p-3 dark:bg-surface-dark ${
         focused
           ? 'border-blue-400 ring-2 ring-blue-300 dark:border-blue-600 dark:ring-blue-800'
           : 'border-blue-100 dark:border-neutral-800'

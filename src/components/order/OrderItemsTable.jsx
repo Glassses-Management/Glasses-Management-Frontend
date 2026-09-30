@@ -12,7 +12,7 @@ function productLabel(item) {
 // already-loaded images map keyed by product id.
 export default function OrderItemsTable({ items = [], total, images = {} }) {
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-sm dark:bg-[#1c1c28]">
+    <div className="overflow-hidden rounded-2xl bg-white shadow-sm dark:bg-surface-dark">
       <div className="border-b border-gray-100 px-6 py-4 dark:border-neutral-800">
         <h2 className="text-base font-semibold text-gray-900 dark:text-neutral-50">Items</h2>
       </div>

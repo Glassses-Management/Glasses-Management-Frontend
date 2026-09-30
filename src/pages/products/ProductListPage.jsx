@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Plus, Search } from 'lucide-react'
 import { getProducts } from '@/api/productApi'
 import { getAttachmentsByProduct } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 import ProductStats from '@/components/product/ProductStats'
 import ProductTable from '@/components/product/ProductTable'
 import DeleteProductModal from '@/components/product/DeleteProductModal'
@@ -136,13 +136,13 @@ export default function ProductListPage({ onNavigate }) {
       </div>
 
       {loading ? (
-        <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+        <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
           {[0, 1, 2, 3, 4].map((i) => (
             <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-50 dark:bg-neutral-800/50" />
           ))}
         </div>
       ) : visible.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-white py-16 text-center shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+        <div className="rounded-2xl border border-gray-200 bg-white py-16 text-center shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
           <p className="text-sm font-medium text-gray-500 dark:text-neutral-400">
             {search || category !== 'all' || brand !== 'all' ? 'No products match your filters.' : 'No products yet.'}
           </p>

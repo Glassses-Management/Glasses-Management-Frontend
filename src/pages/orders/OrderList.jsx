@@ -38,8 +38,11 @@ function OrderList() {
   const [deleting, setDeleting] = useState(null)
   const [deletingLoading, setDeletingLoading] = useState(false)
 
+  // No setLoading(true) at the top on purpose: calling it synchronously here
+  // would be a cascading render on every mount. `loading` starts true, and the
+  // post-mutation reloads below happen while the row/modal spinner is already
+  // showing, so the table never blanks out mid-interaction.
   const loadOrders = useCallback(async () => {
-    setLoading(true)
     try {
       const data = await getOrders({ page: 0, size: 100, sort: 'id,desc' })
       setOrders(Array.isArray(data?.content) ? data.content : [])
@@ -51,7 +54,10 @@ function OrderList() {
   }, [])
 
   useEffect(() => {
-    loadOrders()
+    // Deferred by one microtask (the same trick AuthContext uses) so the state
+    // updates inside loadOrders land in a promise callback rather than
+    // synchronously in the effect body, which would be a cascading render.
+    void Promise.resolve().then(loadOrders)
   }, [location.pathname, loadOrders])
 
   const customerOptions = useMemo(() => {
@@ -155,7 +161,7 @@ function OrderList() {
       />
 
       {loading ? (
-        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-[#1c1c28] dark:text-neutral-400">
+        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-surface-dark dark:text-neutral-400">
           Loading orders...
         </div>
       ) : (
@@ -201,7 +207,7 @@ function OrderList() {
           id="order-status"
           value={editing?.status || 'PENDING'}
           onChange={(e) => setEditing((prev) => (prev ? { ...prev, status: e.target.value } : prev))}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors focus:border-forest-500 focus:ring-2 focus:ring-forest-500 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100"
         >
           {STATUS_OPTIONS.map((s) => (
             <option key={s.value} value={s.value}>{s.label}</option>

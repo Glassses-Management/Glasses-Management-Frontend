@@ -40,7 +40,7 @@ function HomeFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-[#0E1A15]">
+    <footer className="border-t border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-canvas">
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
         <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2 lg:grid-cols-[2.2fr_1fr_1fr_1.2fr]" data-aos="fade-up">
           {/* Brand column */}

@@ -141,12 +141,12 @@ export default function CustomerRequestModal({ open, onClose }) {
           rows={3}
           maxLength={NOTES_MAX}
           placeholder="Tell us anything we should know about your request…"
-          className="h-20 w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500"
+          className="h-20 w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-forest-500 focus:ring-2 focus:ring-forest-500 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500"
         />
         {errors.notes && <p className="mt-1 text-xs text-red-500 dark:text-red-400">{errors.notes}</p>}
       </Field>
 
-      <div className="sticky bottom-0 -mx-6 border-t border-gray-100 bg-white px-6 py-3 dark:border-neutral-800 dark:bg-[#1c1c28]">
+      <div className="sticky bottom-0 -mx-6 border-t border-gray-100 bg-white px-6 py-3 dark:border-neutral-800 dark:bg-surface-dark">
         <div className="flex items-center justify-between gap-3">
           <Button type="button" variant="ghost" onClick={handleClose} disabled={submitting}>Cancel</Button>
           <Button type="submit" loading={submitting}>

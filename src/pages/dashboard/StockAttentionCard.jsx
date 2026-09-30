@@ -40,7 +40,7 @@ export default function StockAttentionCard() {
   const pct = Math.min(100, Math.round(((item?.quantity ?? 0) / max) * 100))
 
   return (
-    <div className="flex flex-col rounded-2xl border border-red-200 bg-white p-5 shadow-sm ring-1 ring-red-100 transition-colors duration-300 dark:border-red-500/25 dark:bg-[#1c1c28] dark:ring-red-500/10">
+    <div className="flex flex-col rounded-2xl border border-red-200 bg-white p-5 shadow-sm ring-1 ring-red-100 transition-colors duration-300 dark:border-red-500/25 dark:bg-surface-dark dark:ring-red-500/10">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <PriorityIcon tone="red">
@@ -76,7 +76,7 @@ export default function StockAttentionCard() {
           </div>
 
           <div className="mt-4 flex flex-col gap-2">
-            <Button variant="forest" size="md" icon={<RefreshCw size={16} />}>Reorder From Supplier</Button>
+            <Button variant="primary" size="md" icon={<RefreshCw size={16} />}>Reorder From Supplier</Button>
             <Button variant="outline" size="md" icon={<SlidersHorizontal size={16} />}>Adjust Stock</Button>
           </div>
         </>

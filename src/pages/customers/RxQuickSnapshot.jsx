@@ -74,7 +74,7 @@ export default function RxQuickSnapshot({ prescription, onDuplicateIntoOrder, on
                 sphere={prescription.os_sphere}
                 cylinder={prescription.os_cylinder}
                 axis={prescription.os_axis}
-                tone="text-violet-600 dark:text-violet-400"
+                tone="text-forest-600 dark:text-forest-400"
               />
             </div>
 
@@ -100,7 +100,7 @@ export default function RxQuickSnapshot({ prescription, onDuplicateIntoOrder, on
             type="button"
             onClick={onDuplicateIntoOrder}
             disabled={!prescription}
-            className="flex items-center justify-center gap-1.5 rounded-lg bg-violet-600 px-3 py-2 text-xs font-semibold text-white transition-colors duration-300 hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center justify-center gap-1.5 rounded-lg bg-forest px-3 py-2 text-xs font-semibold text-white transition-colors duration-300 hover:bg-forest-deep disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Copy size={13} />
             Duplicate Into New Order

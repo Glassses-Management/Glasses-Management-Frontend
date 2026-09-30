@@ -19,7 +19,7 @@ function typeLabel(type) {
 
 function StatusPill({ dot, label }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-300">
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm dark:border-neutral-700 dark:bg-surface-dark dark:text-neutral-300">
       <span className={`size-2 rounded-full ${dot}`} aria-hidden="true" />
       {label}
     </span>
@@ -139,7 +139,7 @@ export default function RequestListPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold tracking-tight text-[#1a1a2e] dark:text-neutral-50">Requests</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-surface-ink dark:text-neutral-50">Requests</h1>
         </div>
         <div className="flex items-center justify-center py-20 text-gray-500 dark:text-neutral-400">
           Loading requests...
@@ -153,7 +153,7 @@ export default function RequestListPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-[#1a1a2e] dark:text-neutral-50">Requests</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-surface-ink dark:text-neutral-50">Requests</h1>
             <span className="rounded-full bg-gray-200/70 px-3 py-1 text-xs font-semibold text-gray-600 dark:bg-neutral-700 dark:text-neutral-300">
               {requests.length} Total
             </span>
@@ -168,7 +168,7 @@ export default function RequestListPage() {
           {unscheduledCount > 0 && <StatusPill dot="bg-amber-500" label={`${unscheduledCount} Need Scheduling`} />}
           <StatusPill dot="bg-red-500" label={`${declinedCount} Declined`} />
           <Button
-            variant="forest"
+            variant="primary"
             className="shadow-sm"
             icon={<PlusCircle size={16} />}
             onClick={() => navigate('/dashboard/requests/add')}
@@ -186,7 +186,7 @@ export default function RequestListPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search Rx, frames, barcode, or patient..."
-            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm shadow-sm outline-none transition-colors duration-300 focus:border-[#8fa88f] focus:ring-2 focus:ring-[#8fa88f]/20 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500"
+            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm shadow-sm outline-none transition-colors duration-300 focus:border-sage focus:ring-2 focus:ring-sage/20 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500"
           />
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
@@ -218,7 +218,7 @@ export default function RequestListPage() {
             type="button"
             aria-hidden="true"
             tabIndex={-1}
-            className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-colors duration-300 hover:bg-gray-50 dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-300 dark:hover:bg-neutral-800"
+            className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-colors duration-300 hover:bg-gray-50 dark:border-neutral-700 dark:bg-surface-dark dark:text-neutral-300 dark:hover:bg-neutral-800"
           >
             <Download size={16} className="text-gray-400 dark:text-neutral-500" />
             Export
@@ -248,7 +248,7 @@ export default function RequestListPage() {
       )}
 
       {!loadError && filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+        <div className="rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
           <FileText size={40} className="mx-auto mb-3 text-gray-300 dark:text-neutral-600" />
           <p className="text-base font-medium text-gray-600 dark:text-neutral-300">
             {query || statusFilter !== 'all' ? 'No requests match your filters' : 'No requests found'}

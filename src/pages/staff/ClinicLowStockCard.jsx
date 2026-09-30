@@ -26,7 +26,7 @@ function ClinicLowStockCard({ items, products }) {
   const list = useMemo(() => (Array.isArray(items) ? items : []), [items])
 
   return (
-    <div className="rounded-xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]">
+    <div className="rounded-xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-storefront">
       <div className="flex items-center justify-between gap-2 border-b border-edge px-5 py-4 dark:border-neutral-800">
         <h2 className="flex items-center gap-2 text-base font-semibold text-ink dark:text-neutral-50">
           <Package size={16} className="text-amber-500" />

@@ -11,7 +11,7 @@ const FEATURES = [
 
 function AboutGuarantee() {
   return (
-    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div
           data-aos="fade-up"

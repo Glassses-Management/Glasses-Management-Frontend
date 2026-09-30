@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { Search, Users, Trash2, Mail, User, Phone, Lock, Camera } from 'lucide-react'
 import { getUsers, deleteUser, updateUser, createUser } from '@/api/userApi'
 import { getAttachmentsByUser, uploadAttachment } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
-import { useDebouce } from '@/hook/UseDebounce'
+import { pickImage } from '@/components/product/productImageUtils'
+import { useDebounce } from '@/hook/UseDebounce'
 import { useToast } from '@/hook/UseToast'
 import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
@@ -12,14 +12,9 @@ import Spinner from '@/components/ui/Spinner'
 import Pagination from '@/components/ui/Pagination'
 import { formatDate } from '@/utils/FormatDate'
 import { newUserPassword, userName } from '@/utils/Validators'
+import { ROLE_OPTIONS } from '@/utils/Roles'
 
 const PAGE_SIZE = 10
-const ROLES = [
-  { value: 'ADMIN', label: 'Admin' },
-  { value: 'STAFF', label: 'Staff' },
-  { value: 'OPTOMETRIST', label: 'Optometrist' },
-  { value: 'CUSTOMER', label: 'Customer' },
-]
 
 export default function UserListPage({ onNavigate }) {
   const [users, setUsers] = useState([])
@@ -42,7 +37,7 @@ export default function UserListPage({ onNavigate }) {
   const [createForm, setCreateForm] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '', role: '' })
   const [createErrors, setCreateErrors] = useState({})
 
-  const debouncedSearch = useDebouce(search)
+  const debouncedSearch = useDebounce(search)
 
   // GET /api/user is not pageable - it accepts no query parameters and returns the
   // whole list (API_DOCUMENT.md: only customers, products, orders and attachments
@@ -260,7 +255,7 @@ export default function UserListPage({ onNavigate }) {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Users</h1>
+          <h1 className="text-2xl font-bold text-surface-ink dark:text-neutral-50">Users</h1>
           <p className="text-sm text-gray-400 dark:text-neutral-500">Manage user accounts and roles</p>
         </div>
         <Button
@@ -279,12 +274,12 @@ export default function UserListPage({ onNavigate }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name, email, or role..."
-          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]"
+          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-surface-ink outline-none transition-colors focus:border-sage dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-sage"
         />
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+      <div className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
         {loading ? (
           <div className="space-y-4 p-5">
             {[0, 1, 2, 3, 4].map((i) => (
@@ -318,17 +313,17 @@ export default function UserListPage({ onNavigate }) {
                     onClick={() => handleRowClick(u.id)}
                     className="cursor-pointer border-b border-gray-50 last:border-0 transition-colors hover:bg-gray-50 dark:border-neutral-800 dark:hover:bg-white/5"
                   >
-                    <td className="px-5 py-3 font-medium text-[#1a1a2e] dark:text-neutral-50">#{u.id}</td>
+                    <td className="px-5 py-3 font-medium text-surface-ink dark:text-neutral-50">#{u.id}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         {avatars[u.id] ? (
                           <img src={avatars[u.id]} alt={`${u.name}'s profile picture`} className="h-9 w-9 shrink-0 rounded-full object-cover" />
                         ) : (
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f]/20 font-semibold text-[#1a1a2e] dark:text-neutral-900">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage/20 font-semibold text-surface-ink dark:text-neutral-900">
                             {getInitials(u.name)}
                           </div>
                         )}
-                        <span className="font-medium text-[#1a1a2e] dark:text-neutral-50">{u.name}</span>
+                        <span className="font-medium text-surface-ink dark:text-neutral-50">{u.name}</span>
                       </div>
                     </td>
                     <td className="px-5 py-3 text-gray-500 dark:text-neutral-400">{u.email || '—'}</td>
@@ -387,9 +382,9 @@ export default function UserListPage({ onNavigate }) {
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm dark:bg-black/70" onClick={handleEditClose} />
-          <div className="relative w-full max-w-lg animate-in fade-in-0 zoom-in-95 duration-200 rounded-2xl border border-gray-100 bg-white shadow-2xl dark:border-neutral-800 dark:bg-[#1c1c28]">
+          <div className="relative w-full max-w-lg animate-in fade-in-0 zoom-in-95 duration-200 rounded-2xl border border-gray-100 bg-white shadow-2xl dark:border-neutral-800 dark:bg-surface-dark">
             {/* Gradient Header */}
-            <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-r from-[#8fa88f] to-[#6b8f6b] px-6 py-5 text-white">
+            <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-r from-sage to-sage-soft px-6 py-5 text-white">
               <div className="flex items-center gap-4">
                 <input
                   ref={editAvatarInputRef}
@@ -442,7 +437,7 @@ export default function UserListPage({ onNavigate }) {
                   label="Role"
                   name="editRole"
                   required
-                  options={ROLES}
+                  options={ROLE_OPTIONS}
                   value={form.role}
                   onChange={(e) => setForm((prev) => ({ ...prev, role: e.target.value }))}
                   error={errors.role}
@@ -464,9 +459,9 @@ export default function UserListPage({ onNavigate }) {
       {creating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm dark:bg-black/70" onClick={handleCreateClose} />
-          <div className="relative w-full max-w-lg animate-in fade-in-0 zoom-in-95 duration-200 rounded-2xl border border-gray-100 bg-white shadow-2xl dark:border-neutral-800 dark:bg-[#1c1c28]">
+          <div className="relative w-full max-w-lg animate-in fade-in-0 zoom-in-95 duration-200 rounded-2xl border border-gray-100 bg-white shadow-2xl dark:border-neutral-800 dark:bg-surface-dark">
             {/* Gradient Header */}
-            <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-r from-[#8fa88f] to-[#6b8f6b] px-6 py-5 text-white">
+            <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-r from-sage to-sage-soft px-6 py-5 text-white">
               <div className="flex items-center gap-4">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-xl font-bold backdrop-blur-sm">
                   +
@@ -495,7 +490,7 @@ export default function UserListPage({ onNavigate }) {
                   label="Role"
                   name="createRole"
                   required
-                  options={ROLES}
+                  options={ROLE_OPTIONS}
                   value={createForm.role}
                   onChange={(e) => setCreateForm((prev) => ({ ...prev, role: e.target.value }))}
                   error={createErrors.role}
@@ -520,7 +515,7 @@ export default function UserListPage({ onNavigate }) {
       {deleting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm dark:bg-black/70" onClick={() => setDeleting(null)} />
-          <div className="relative w-full max-w-sm animate-in fade-in-0 zoom-in-95 duration-200 rounded-2xl border border-gray-100 bg-white shadow-2xl dark:border-neutral-800 dark:bg-[#1c1c28]">
+          <div className="relative w-full max-w-sm animate-in fade-in-0 zoom-in-95 duration-200 rounded-2xl border border-gray-100 bg-white shadow-2xl dark:border-neutral-800 dark:bg-surface-dark">
             {/* Accent Header */}
             <div className="rounded-t-2xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 text-white">
               <div className="flex items-center gap-3">
@@ -535,7 +530,7 @@ export default function UserListPage({ onNavigate }) {
             <div className="px-6 py-5">
               <p className="text-sm text-gray-500 dark:text-neutral-400">
                 Are you sure you want to delete{' '}
-                <span className="font-semibold text-[#1a1a2e] dark:text-neutral-200">{users.find((u) => u.id === deleting)?.name || 'this user'}</span>?
+                <span className="font-semibold text-surface-ink dark:text-neutral-200">{users.find((u) => u.id === deleting)?.name || 'this user'}</span>?
               </p>
               <p className="mt-1 text-xs text-gray-400 dark:text-neutral-500">This action cannot be undone.</p>
               {deleteError && (

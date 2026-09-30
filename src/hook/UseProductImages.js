@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getAttachmentsByProduct } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 
 // Loads one image url per product id and returns a { [productId]: filePath } map.
 //

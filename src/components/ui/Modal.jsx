@@ -1,9 +1,7 @@
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 function Modal({ open, onClose, title, children, maxWidth = 'max-w-md', footer }) {
   if (!open) return null
@@ -19,7 +17,7 @@ function Modal({ open, onClose, title, children, maxWidth = 'max-w-md', footer }
       <div className="flex min-h-full items-center justify-center">
         <div
           className={cn(
-            'my-auto w-full rounded-2xl bg-white p-6 shadow-xl transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800',
+            'my-auto w-full rounded-2xl bg-white p-6 shadow-xl transition-colors duration-300 dark:bg-surface-dark dark:ring-1 dark:ring-neutral-800',
             maxWidth,
           )}
           onClick={(e) => e.stopPropagation()}

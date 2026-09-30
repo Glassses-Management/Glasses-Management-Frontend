@@ -4,7 +4,7 @@ import { ArrowLeft, SearchX } from 'lucide-react'
 import ProductForm from '@/components/form/ProductForm'
 import { getProductById } from '@/api/productApi'
 import { getAttachmentsByProduct } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 import Button from '@/components/ui/Button'
 
 export default function ProductEditPage() {
@@ -52,7 +52,7 @@ export default function ProductEditPage() {
 
   if (notFound || error || !product) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white py-16 text-center shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white py-16 text-center shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
         <SearchX size={40} className="mb-3 text-gray-300 dark:text-neutral-600" />
         <p className="text-sm font-medium text-gray-500 dark:text-neutral-400">
           {notFound ? 'Product not found.' : error || 'Product not found.'}

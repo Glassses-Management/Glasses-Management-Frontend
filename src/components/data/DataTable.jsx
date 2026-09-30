@@ -3,7 +3,7 @@
 
 function DataTable({ columns, data, onRowClick }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="bg-gray-50 dark:bg-white/5">

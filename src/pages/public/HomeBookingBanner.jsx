@@ -31,7 +31,7 @@ export default function HomeBookingBanner() {
   const book = () => toastSuccess('Appointment slot selected — booking opens at checkout shortly.')
 
   return (
-    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="grid overflow-hidden rounded-3xl shadow-sm ring-1 ring-edge lg:grid-cols-2 dark:ring-neutral-800">
           {/* Brand panel */}
@@ -58,7 +58,7 @@ export default function HomeBookingBanner() {
           </div>
 
           {/* Quick scheduling panel */}
-          <div className="bg-mist-soft p-8 md:p-10 dark:bg-[#101E18]" data-aos="fade-right" data-aos-delay="100">
+          <div className="bg-mist-soft p-8 md:p-10 dark:bg-surface-deepest" data-aos="fade-right" data-aos-delay="100">
             <h3 className="font-sans text-lg font-semibold text-neutral-900 dark:text-neutral-100">Quick Scheduling</h3>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">Pick a day and a time slot.</p>
 
@@ -99,7 +99,7 @@ export default function HomeBookingBanner() {
               ))}
             </div>
 
-            <div className="mt-5 flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-edge dark:bg-[#15261F] dark:ring-neutral-800" data-aos="fade-up" data-aos-delay="200">
+            <div className="mt-5 flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-edge dark:bg-surface-sunken dark:ring-neutral-800" data-aos="fade-up" data-aos-delay="200">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-forest font-sans text-sm font-bold text-white">
                 SP
               </span>

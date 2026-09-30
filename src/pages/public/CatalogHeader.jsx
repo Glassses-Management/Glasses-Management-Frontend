@@ -29,7 +29,7 @@ export default function CatalogHeader({ totalCount, shownCount }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-3 divide-x divide-neutral-200 rounded-2xl border border-neutral-200 bg-white px-2 py-4 text-center shadow-sm dark:divide-neutral-700 dark:border-neutral-700 dark:bg-[#16271F]">
+        <div className="grid grid-cols-3 divide-x divide-neutral-200 rounded-2xl border border-neutral-200 bg-white px-2 py-4 text-center shadow-sm dark:divide-neutral-700 dark:border-neutral-700 dark:bg-surface-storefront">
           {STATS.map(({ value, label, countKey }) => (
             <div key={label} className="px-3 sm:px-5">
               <p className="font-sans text-lg font-bold text-neutral-900 sm:text-2xl dark:text-neutral-50">

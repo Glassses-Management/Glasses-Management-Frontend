@@ -38,7 +38,7 @@ function About() {
   const [imageError, setImageError] = useState(false)
 
   return (
-    <div className="min-h-screen bg-white text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
+    <div className="min-h-screen bg-white text-neutral-800 antialiased transition-colors duration-300 dark:bg-surface-canvas dark:text-neutral-200">
       {/* Hero */}
       <Navbar />
       <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-16 pb-6 md:px-6 md:pt-24 md:pb-10 lg:grid-cols-2">
@@ -75,7 +75,7 @@ function About() {
         </div>
 
         <div data-aos="fade-right" className="mx-auto w-full max-w-md">
-          <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-[#15261F] dark:ring-neutral-800">
+          <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-surface-sunken dark:ring-neutral-800">
             {imageError ? (
               <div className="flex h-full w-full items-center justify-center font-sans font-semibold text-lg text-leaf/70">
 Optic Shop
@@ -100,7 +100,7 @@ Optic Shop
       </section>
 
       {/* What We Do */}
-      <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+      <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
             Our Services
@@ -115,7 +115,7 @@ Optic Shop
                 key={service.title}
                 data-aos="fade-up"
                 data-aos-delay={`${i * 100}`}
-                className="flex h-full flex-col rounded-2xl bg-mist p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 dark:bg-[#16271F]"
+                className="flex h-full flex-col rounded-2xl bg-mist p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 dark:bg-surface-storefront"
               >
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
                   <service.icon className="h-6 w-6" strokeWidth={1.8} />
@@ -131,9 +131,9 @@ Optic Shop
       </section>
 
       {/* Who It's For */}
-      <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-[#121F18]">
+      <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-surface-deep">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
-          <div className="grid items-center gap-8 rounded-3xl bg-white p-8 shadow-sm ring-1 ring-forest/20 md:grid-cols-[1fr_auto] md:p-12 dark:bg-[#16271F] dark:ring-leaf/20">
+          <div className="grid items-center gap-8 rounded-3xl bg-white p-8 shadow-sm ring-1 ring-forest/20 md:grid-cols-[1fr_auto] md:p-12 dark:bg-surface-storefront dark:ring-leaf/20">
             <div data-aos="fade-left">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
                 Who We Serve

@@ -10,7 +10,7 @@ const CATEGORIES = [
 
 export default function HomeCategories() {
   return (
-    <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-[#121F18]">
+    <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-surface-deep">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" data-aos="fade-up">
           <div>
@@ -31,13 +31,13 @@ export default function HomeCategories() {
             <div
               key={title}
               data-aos-delay={`${i * 100}`}
-              className="group relative rounded-2xl bg-white p-5 ring-1 ring-edge shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-[#16271F] dark:ring-neutral-800"
+              className="group relative rounded-2xl bg-white p-5 ring-1 ring-edge shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-storefront dark:ring-neutral-800"
             >
               <ArrowUpRight
                 size={16}
                 className="absolute right-4 top-4 text-neutral-300 transition-colors group-hover:text-forest dark:group-hover:text-leaf"
               />
-              <span className="flex size-11 items-center justify-center rounded-lg bg-mist text-forest dark:bg-[#1E332B] dark:text-leaf">
+              <span className="flex size-11 items-center justify-center rounded-lg bg-mist text-forest dark:bg-surface-raised dark:text-leaf">
                 <Icon size={20} />
               </span>
               <h3 className="mt-4 font-sans text-sm font-semibold text-neutral-900 dark:text-neutral-100">{title}</h3>

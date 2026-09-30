@@ -1,10 +1,8 @@
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { cn } from '@/utils/cn'
 
 function RegistrationCard({ step, title, status, tone = 'neutral', errors, children }) {
   return (
-    <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]">
+    <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-storefront">
       <div className="flex items-center justify-between gap-3 border-b border-neutral-100 pb-4 dark:border-neutral-800">
         <div className="flex items-center gap-3">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-forest text-sm font-semibold text-white dark:bg-leaf dark:text-forest">

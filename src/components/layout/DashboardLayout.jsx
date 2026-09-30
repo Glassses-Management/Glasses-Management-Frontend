@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import Sidebar from '@/components/layout/Sidebar'
 import Header from '@/components/layout/Header'
@@ -12,7 +11,7 @@ export default function DashboardLayout({ activeRoute, onNavigate, user, onLogou
   }
 
   return (
-    <div className="flex min-h-screen bg-[#f5f6fb] transition-colors duration-300 dark:bg-[#111118]">
+    <div className="flex min-h-screen bg-canvas-light transition-colors duration-300 dark:bg-surface-ink-deep">
       <Sidebar
         activeRoute={activeRoute}
         onNavigate={handleNavigate}

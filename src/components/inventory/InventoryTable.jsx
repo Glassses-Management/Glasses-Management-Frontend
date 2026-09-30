@@ -27,14 +27,14 @@ function StatusBadge({ status }) {
 function InventoryTable({ products, onEdit, onDelete }) {
   if (!products.length) {
     return (
-      <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28] dark:text-neutral-400">
+      <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm transition-colors duration-300 dark:bg-surface-dark dark:text-neutral-400">
         No inventory found
       </div>
     )
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-sm transition-colors duration-300 dark:bg-[#1c1c28]">
+    <div className="overflow-hidden rounded-2xl bg-white shadow-sm transition-colors duration-300 dark:bg-surface-dark">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>

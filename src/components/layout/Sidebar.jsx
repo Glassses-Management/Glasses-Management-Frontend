@@ -11,10 +11,13 @@ import {
   Send,
   UserRound,
   Activity,
+  Stethoscope,
+  Eye,
   ChevronLeft,
 } from 'lucide-react'
 import { getMyAttachments } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
+import { ROLES, hasRole } from '@/utils/Roles'
 
 const NAV_SECTIONS = [
   {
@@ -40,7 +43,13 @@ const NAV_SECTIONS = [
   },
   {
     label: 'Clinical',
-    items: [{ key: 'clinician', label: 'Clinician', icon: Activity }],
+    items: [
+      { key: 'clinician', label: 'Clinician', icon: Activity },
+      // Role-specific desks. Each is gated again by RoleRoute in App.jsx, so a
+      // user who cannot open one simply never sees it work.
+      { key: 'staff', label: 'Staff Desk', icon: Stethoscope, roles: [ROLES.ADMIN, ROLES.STAFF] },
+      { key: 'optometrist', label: 'Optometrist Desk', icon: Eye, roles: [ROLES.OPTOMETRIST] },
+    ],
   },
   {
     label: 'Account',
@@ -62,7 +71,7 @@ function SidebarItem({ item, active, collapsed, onNavigate }) {
         collapsed ? 'justify-center' : ''
       } ${
         active
-          ? 'bg-[#8fa88f]/15 text-[#6f8a6f] dark:bg-[#8fa88f]/20 dark:text-white'
+          ? 'bg-sage/15 text-sage-deep dark:bg-sage/20 dark:text-white'
           : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800 dark:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-neutral-100'
       }`}
     >
@@ -70,8 +79,8 @@ function SidebarItem({ item, active, collapsed, onNavigate }) {
         size={20}
         className={
           active
-            ? 'text-[#8fa88f]'
-            : 'text-gray-400 group-hover:text-[#8fa88f] dark:text-neutral-500 dark:group-hover:text-[#8fa88f]'
+            ? 'text-sage'
+            : 'text-gray-400 group-hover:text-sage dark:text-neutral-500 dark:group-hover:text-sage'
         }
       />
       {!collapsed && <span className="truncate">{item.label}</span>}
@@ -122,24 +131,24 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
   }
 
   const sidebarContent = (
-    <div className="flex h-full flex-col bg-white transition-colors duration-300 dark:bg-[#1c1c28]">
+    <div className="flex h-full flex-col bg-white transition-colors duration-300 dark:bg-surface-dark">
 <div
         className={`flex items-center gap-3 border-b border-gray-100 px-4 py-4 transition-all duration-200 ${
           collapsed ? 'justify-center' : 'justify-between'
         }`}
       >
         <Link to="/" className="flex items-center gap-2" title="Back to home">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1a1a2e]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface-ink">
             <Glasses size={18} className="text-white" />
           </div>
           {!collapsed && (
-            <span className="text-lg font-bold text-[#1a1a2e] transition-colors duration-300 dark:text-neutral-50">Optic Shop</span>
+            <span className="text-lg font-bold text-surface-ink transition-colors duration-300 dark:text-neutral-50">Optic Shop</span>
           )}
         </Link>
         <button
           type="button"
           onClick={handleCollapseToggle}
-          className="hidden rounded-lg p-1.5 text-gray-400 transition-colors duration-300 hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100 md:block"
+          className="hidden rounded-lg p-1.5 text-gray-400 transition-colors duration-300 hover:bg-gray-100 hover:text-surface-ink dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100 md:block"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <ChevronLeft
@@ -150,26 +159,34 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        {NAV_SECTIONS.map((section, index) => (
-          <div key={section.label} className={index > 0 ? 'mt-4' : ''}>
-            {!collapsed && (
-              <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
-                {section.label}
-              </p>
-            )}
-            <div className="flex flex-col gap-0.5">
-              {section.items.map((item) => (
-                <SidebarItem
-                  key={item.key}
-                  item={item}
-                  active={activeRoute === item.key}
-                  collapsed={collapsed}
-                  onNavigate={goTo}
-                />
-              ))}
+        {NAV_SECTIONS.map((section, index) => {
+          // Items may declare `roles`; hide the ones this user cannot open so
+          // the nav never offers a link that RoleRoute would immediately bounce.
+          const visibleItems = section.items.filter(
+            (item) => !item.roles || item.roles.some((role) => hasRole(user, role)),
+          )
+          if (visibleItems.length === 0) return null
+          return (
+            <div key={section.label} className={index > 0 ? 'mt-4' : ''}>
+              {!collapsed && (
+                <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
+                  {section.label}
+                </p>
+              )}
+              <div className="flex flex-col gap-0.5">
+                {visibleItems.map((item) => (
+                  <SidebarItem
+                    key={item.key}
+                    item={item}
+                    active={activeRoute === item.key}
+                    collapsed={collapsed}
+                    onNavigate={goTo}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </nav>
 
       <div className={`border-t border-gray-100 p-3 dark:border-neutral-800 ${collapsed ? 'text-center' : ''}`}>
@@ -189,13 +206,13 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
               className="h-9 w-9 shrink-0 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#8fa88f] font-semibold text-white">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage font-semibold text-white">
               {(user?.name || 'A').charAt(0).toUpperCase()}
             </div>
           )}
           {!collapsed && (
             <div className="min-w-0 flex-1 text-left">
-              <p className="truncate text-sm font-medium text-[#1a1a2e] dark:text-neutral-50">{user?.name || 'Guest'}</p>
+              <p className="truncate text-sm font-medium text-surface-ink dark:text-neutral-50">{user?.name || 'Guest'}</p>
               <p className="truncate text-xs text-gray-400 dark:text-neutral-500">
                 {typeof user?.role === 'string' ? user.role : user?.role?.name || 'Administrator'}
               </p>
@@ -233,7 +250,7 @@ export default function Sidebar({ activeRoute, onNavigate, mobileOpen, onMobileC
       <button
         type="button"
         onClick={openMobile}
-        className={`fixed left-3 top-3 z-50 rounded-lg bg-white p-2 text-[#1a1a2e] shadow-sm transition-colors duration-300 dark:bg-[#1c1c28] dark:text-neutral-100 dark:ring-1 dark:ring-neutral-700 md:hidden ${
+        className={`fixed left-3 top-3 z-50 rounded-lg bg-white p-2 text-surface-ink shadow-sm transition-colors duration-300 dark:bg-surface-dark dark:text-neutral-100 dark:ring-1 dark:ring-neutral-700 md:hidden ${
           mobileOpen !== undefined ? 'hidden' : ''
         }`}
         aria-label="Open sidebar"

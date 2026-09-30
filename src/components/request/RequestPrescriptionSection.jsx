@@ -1,9 +1,7 @@
 import { Check, FileText, Info } from 'lucide-react'
 import { formatDate } from '@/utils/FormatDate'
+import { cn } from '@/utils/cn'
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 // Formats a prescription summary line: OD x.xx / OS x.xx.
 function rxSummary(p) {
@@ -51,7 +49,7 @@ export default function RequestPrescriptionSection({
           type="checkbox"
           checked={enabled}
           onChange={onToggle}
-          className="mt-0.5 size-4 shrink-0 rounded border-neutral-300 accent-[#6f8a6f]"
+          className="mt-0.5 size-4 shrink-0 rounded border-neutral-300 accent-sage-deep"
         />
         <span>
           <span className="block text-sm font-medium text-neutral-800 dark:text-neutral-200">{title}</span>
@@ -91,13 +89,13 @@ export default function RequestPrescriptionSection({
                     className={cn(
                       'flex items-center justify-between gap-3 rounded-xl border bg-white p-4 text-left transition-colors duration-200 dark:bg-neutral-900',
                       selected
-                        ? 'border-[#8fa88f] bg-[#8fa88f]/5 ring-1 ring-[#8fa88f]'
-                        : 'border-neutral-200 hover:border-[#8fa88f]/60 dark:border-neutral-700 dark:hover:border-neutral-500',
+                        ? 'border-sage bg-sage/5 ring-1 ring-sage'
+                        : 'border-neutral-200 hover:border-sage/60 dark:border-neutral-700 dark:hover:border-neutral-500',
                     )}
                   >
                     <span className="min-w-0">
                       <span className="flex items-center gap-1.5 text-sm font-medium text-neutral-900 dark:text-neutral-50">
-                        <FileText size={14} className="shrink-0 text-[#6f8a6f]" />
+                        <FileText size={14} className="shrink-0 text-sage-deep" />
                         Prescription #{p.id}
                       </span>
                       <span className="mt-0.5 block text-xs text-neutral-500 dark:text-neutral-400">
@@ -108,7 +106,7 @@ export default function RequestPrescriptionSection({
                       </span>
                     </span>
                     {selected && (
-                      <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[#6f8a6f] text-white">
+                      <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-sage-deep text-white">
                         <Check size={12} strokeWidth={3} />
                       </span>
                     )}

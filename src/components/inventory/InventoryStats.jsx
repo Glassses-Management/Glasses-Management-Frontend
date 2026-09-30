@@ -35,7 +35,7 @@ function InventoryStats({ stats }) {
                 return (
                     <div
                         key={card.key}
-                        className="rounded-2xl bg-white p-5 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28]"
+                        className="rounded-2xl bg-white p-5 shadow-sm transition-colors duration-300 dark:bg-surface-dark"
                     >
                         <div className="flex items-start justify-between gap-3">
                             <div>

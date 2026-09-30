@@ -14,7 +14,7 @@ function CategoryPill({ children }) {
 function ProductTable({ products, images, onDelete }) {
   const navigate = useNavigate()
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[760px] text-left text-sm">
           <thead>

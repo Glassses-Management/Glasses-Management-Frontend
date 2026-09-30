@@ -8,13 +8,7 @@ import Select from '@/components/ui/Select'
 import { composeValidators, required, email, requiredPassword } from '@/utils/Validators'
 import { useToast } from '@/hook/UseToast'
 import { createUser, updateUser, getUserById } from '@/api/userApi'
-
-const ROLES = [
-  { value: 'ADMIN', label: 'Admin' },
-  { value: 'STAFF', label: 'Staff' },
-  { value: 'OPTOMETRIST', label: 'Optometrist' },
-  { value: 'CUSTOMER', label: 'Customer' },
-]
+import { ROLE_OPTIONS } from '@/utils/Roles'
 
 export default function UserFormPage({ onNavigate }) {
   const { id } = useParams()
@@ -42,14 +36,14 @@ export default function UserFormPage({ onNavigate }) {
         } catch (err) {
           console.error('Failed to load user:', err)
           toastError('Failed to load user data.')
-onNavigate?.('users')
+          onNavigate?.('users')
         } finally {
           setLoading(false)
         }
       }
       loadUser()
     }
-  }, [isEdit, id])
+  }, [isEdit, id, onNavigate, toastError])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -99,7 +93,7 @@ onNavigate?.('users')
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Loading user...</h1>
+        <h1 className="text-2xl font-bold text-surface-ink dark:text-neutral-50">Loading user...</h1>
         <div className="space-y-4 p-5">
           {[0, 1, 2].map((i) => (
             <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800" />
@@ -148,7 +142,7 @@ onNavigate?.('users')
               label="Role"
               name="role"
               required
-              options={ROLES}
+              options={ROLE_OPTIONS}
               value={form.role}
               onChange={handleChange}
               error={errors.role}
@@ -158,7 +152,7 @@ onNavigate?.('users')
         </Card>
       </div>
 
-      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-[#1c1c28]/80 md:-mx-6 md:px-6 md:py-5">
+      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-surface-dark/80 md:-mx-6 md:px-6 md:py-5">
         <div className="flex items-center justify-between gap-3">
           <p className="hidden text-xs text-gray-400 dark:text-neutral-500 sm:block">
             {isEdit ? 'Changes apply immediately.' : 'New users appear in the list right away.'}

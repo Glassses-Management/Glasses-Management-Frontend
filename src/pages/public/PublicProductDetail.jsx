@@ -14,11 +14,11 @@ import { formatCurrency } from '@/utils/FormatCurrency'
 import { useCart } from '@/hook/UseCart'
 import { useToast } from '@/hook/UseToast'
 
-const card = 'rounded-2xl bg-white ring-1 ring-neutral-200/60 transition-colors duration-300 dark:bg-[#16271F] dark:ring-neutral-800'
+const card = 'rounded-2xl bg-white ring-1 ring-neutral-200/60 transition-colors duration-300 dark:bg-surface-storefront dark:ring-neutral-800'
 const eyebrow = 'text-xs font-semibold uppercase tracking-[0.25em] text-forest dark:text-leaf'
 const muted = 'text-neutral-500 dark:text-neutral-400'
 const cta = 'inline-flex items-center justify-center gap-2 rounded-xl bg-forest px-6 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-forest-deep dark:bg-leaf dark:text-forest dark:hover:opacity-90'
-const softBtn = 'inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-neutral-600 ring-1 ring-neutral-200 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:bg-[#16271F] dark:text-neutral-300 dark:ring-neutral-700 dark:hover:bg-white/10'
+const softBtn = 'inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-neutral-600 ring-1 ring-neutral-200 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:bg-surface-storefront dark:text-neutral-300 dark:ring-neutral-700 dark:hover:bg-white/10'
 
 const FINISHES = [
   { label: 'Matte Gold', swatch: '#c8a96a' },
@@ -153,7 +153,7 @@ export default function PublicProductDetail() {
   const monthly = Math.max(4, Math.round((Number(product?.sale_price) || 0) / 12))
 
   return (
-    <div className="min-h-screen bg-mist-soft font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
+    <div className="min-h-screen bg-mist-soft font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-surface-canvas dark:text-neutral-200">
       <Navbar />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
@@ -312,7 +312,7 @@ export default function PublicProductDetail() {
                         className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium ring-1 transition-colors ${
                           selected === g.label
                             ? 'bg-forest text-white ring-forest dark:bg-leaf dark:text-forest dark:ring-leaf'
-                            : 'bg-white text-neutral-600 ring-neutral-200 hover:ring-neutral-300 dark:bg-[#16271F] dark:text-neutral-300 dark:ring-neutral-700 dark:hover:ring-neutral-500'
+                            : 'bg-white text-neutral-600 ring-neutral-200 hover:ring-neutral-300 dark:bg-surface-storefront dark:text-neutral-300 dark:ring-neutral-700 dark:hover:ring-neutral-500'
                         }`}
                       >
                         <Icon size={15} />
@@ -332,7 +332,7 @@ export default function PublicProductDetail() {
                       className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium ring-1 transition-colors ${
                         selected === t
                           ? 'bg-forest text-white ring-forest dark:bg-leaf dark:text-forest dark:ring-leaf'
-                          : 'bg-white text-neutral-600 ring-neutral-200 hover:ring-neutral-300 dark:bg-[#16271F] dark:text-neutral-300 dark:ring-neutral-700 dark:hover:ring-neutral-500'
+                          : 'bg-white text-neutral-600 ring-neutral-200 hover:ring-neutral-300 dark:bg-surface-storefront dark:text-neutral-300 dark:ring-neutral-700 dark:hover:ring-neutral-500'
                       }`}
                     >
                       {t}

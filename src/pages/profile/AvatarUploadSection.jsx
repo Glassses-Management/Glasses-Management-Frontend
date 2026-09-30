@@ -4,7 +4,7 @@ import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
 import { useToast } from '@/hook/UseToast'
 import { getMyAttachments, deleteAttachment } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 import AttachmentUploader from '@/components/uploads/AttachmentUploader'
 
 export default function AvatarUploadSection({ userId, name }) {
@@ -77,7 +77,7 @@ export default function AvatarUploadSection({ userId, name }) {
       />
 
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">{name || 'My Profile'}</p>
+        <p className="text-sm font-semibold text-surface-ink dark:text-neutral-100">{name || 'My Profile'}</p>
         <p className="mt-1 text-xs text-gray-400 dark:text-neutral-500">
           Click your picture to upload or change it (PNGs, JPEGs and GIFs under 10MB)
         </p>

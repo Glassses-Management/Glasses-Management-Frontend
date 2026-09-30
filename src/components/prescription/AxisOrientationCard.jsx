@@ -63,7 +63,7 @@ function AxisDial({ eye, sub, dot, axis, cylinder }) {
 
 function AxisOrientationCard({ prescription }) {
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
       <div className="flex items-start gap-3">
         <span className="mt-1 h-4 w-1 shrink-0 rounded-full bg-emerald-500" />
         <div>

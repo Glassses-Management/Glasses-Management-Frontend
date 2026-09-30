@@ -21,7 +21,7 @@ const RANGE_CLASS = [
 ].join(' ')
 
 const numInputClass =
-  'w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#0E1A15] dark:text-neutral-100 dark:focus:border-leaf'
+  'w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-surface-canvas dark:text-neutral-100 dark:focus:border-leaf'
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
 

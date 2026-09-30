@@ -1,9 +1,7 @@
 // Pagination bar used on list pages. The parent manages the page state and
 // computes totalPages / totalItems — this component only renders controls.
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { cn } from '@/utils/cn'
 
 function buildPageNumbers(currentPage, totalPages) {
   if (totalPages <= 7) {
@@ -46,12 +44,12 @@ function PageButton({ page, isCurrent, onClick }) {
       type="button"
       onClick={onClick}
       disabled={isCurrent}
-className={cn(
-          'inline-flex size-8 items-center justify-center rounded-full text-sm font-medium transition-colors duration-300',
-          isCurrent
-            ? 'bg-violet-600 text-white'
-            : 'text-gray-600 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-white/10',
-        )}
+      className={cn(
+        'inline-flex size-8 items-center justify-center rounded-full text-sm font-medium transition-colors duration-300',
+        isCurrent
+          ? 'bg-forest text-white'
+          : 'text-gray-600 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-white/10',
+      )}
     >
       {page}
     </button>

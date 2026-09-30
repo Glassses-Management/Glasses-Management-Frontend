@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, CreditCard, Glasses, Server, ShieldCheck } from 'lucide-react'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 import { formatCurrency } from '@/utils/FormatCurrency'
 
 const TRUST = [
@@ -15,7 +15,7 @@ const formatPrice = (value) => formatCurrency(value)
 
 function HeroFallbackArt() {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-mist dark:bg-[#15261F]">
+    <div className="flex h-full w-full items-center justify-center bg-mist dark:bg-surface-sunken">
       <Glasses size={72} strokeWidth={1} className="text-leaf dark:text-forest" />
     </div>
   )
@@ -51,7 +51,7 @@ export default function HomeHero() {
   const inStock = featuredProduct?.quantity == null ? true : Number(featuredProduct.quantity) > 0
 
   return (
-    <section className="bg-white py-14 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+    <section className="bg-white py-14 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 md:px-6 lg:grid-cols-2">
         {/* Copy */}
         <div data-aos="fade-left">
@@ -98,7 +98,7 @@ export default function HomeHero() {
 
         {/* Hero image + floating product card */}
         <div className="relative" data-aos="fade-right" data-aos-delay="100">
-          <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-edge dark:bg-[#15261F] dark:ring-neutral-800">
+          <div className="aspect-[4/3] w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-edge dark:bg-surface-sunken dark:ring-neutral-800">
             {imageError || !featuredImage ? (
               <HeroFallbackArt />
             ) : (
@@ -112,8 +112,8 @@ export default function HomeHero() {
           </div>
 
           {featuredProduct && (
-            <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-xl bg-white p-3 pr-4 shadow-xl ring-1 ring-edge sm:right-auto sm:pr-3 dark:bg-[#15261F] dark:ring-neutral-800">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-mist dark:bg-[#1E332B]">
+            <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-xl bg-white p-3 pr-4 shadow-xl ring-1 ring-edge sm:right-auto sm:pr-3 dark:bg-surface-sunken dark:ring-neutral-800">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-mist dark:bg-surface-raised">
                 {featuredImage && !imageError ? (
                   <img src={featuredImage} alt="" className="h-full w-full object-cover" />
                 ) : (

@@ -7,7 +7,7 @@ import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
 import { isGoogleConfigured } from '@/lib/googleIdentity'
 
 const inputClass =
-  'w-full rounded-xl border border-neutral-200 bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-900 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#0E1A15] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
+  'w-full rounded-xl border border-neutral-200 bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-900 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-surface-canvas dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
 
 function AuthSignInPanel() {
   const { login, loginWithGoogle } = useAuth()
@@ -81,7 +81,7 @@ function AuthSignInPanel() {
 
   return (
     <div className="flex items-center justify-center p-5 md:p-10">
-      <div className="w-full max-w-[440px] rounded-2xl bg-white p-7 shadow-lg ring-1 ring-neutral-200/60 transition-colors duration-300 md:p-8 dark:bg-[#16271F] dark:ring-neutral-800">
+      <div className="w-full max-w-[440px] rounded-2xl bg-white p-7 shadow-lg ring-1 ring-neutral-200/60 transition-colors duration-300 md:p-8 dark:bg-surface-storefront dark:ring-neutral-800">
         <h1 className="mb-5 font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
           Sign in to your account
         </h1>

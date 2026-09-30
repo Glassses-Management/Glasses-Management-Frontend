@@ -85,7 +85,7 @@ function DeleteProductModal({ product, onClose, onDeleted }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 dark:bg-black/60" onClick={closeDelete} />
-      <div className="relative w-full max-w-sm rounded-2xl border border-gray-100 bg-white p-6 shadow-xl dark:border-neutral-700 dark:bg-[#1c1c28]">
+      <div className="relative w-full max-w-sm rounded-2xl border border-gray-100 bg-white p-6 shadow-xl dark:border-neutral-700 dark:bg-surface-dark">
         <h2 className="text-lg font-bold text-gray-900 dark:text-neutral-50">Delete Product</h2>
         <p className="mt-2 text-sm text-gray-500 dark:text-neutral-400">
           Are you sure you want to delete <span className="font-medium text-gray-900 dark:text-neutral-200">{product.model}</span>? This action cannot be undone.

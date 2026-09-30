@@ -7,7 +7,7 @@ import { useCart } from '@/hook/UseCart'
 import { getInitials } from '@/utils/avatar'
 import { ROLES } from '@/utils/Roles'
 import { getMyAttachments } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
@@ -97,7 +97,7 @@ function CartIcon({ count }) {
     >
       <ShoppingCart size={18} strokeWidth={1.75} />
       {notify && count > 0 && (
-        <span className={`absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-forest px-1 text-[11px] font-bold text-white ring-2 ring-white dark:ring-[#0E1A15] ${animating ? 'animate-bounce' : ''}`}>
+        <span className={`absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-forest px-1 text-[11px] font-bold text-white ring-2 ring-white dark:ring-surface-canvas ${animating ? 'animate-bounce' : ''}`}>
           {count}
         </span>
       )}
@@ -210,7 +210,7 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-md transition-colors duration-300 dark:border-neutral-800 dark:bg-[#0E1A15]/90">
+    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-md transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-canvas/90">
       <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-4 md:px-6">
         {/* Column 1 — logo (left). "Shop" stays italic for the brand. */}
         <Link to="/" onClick={() => setMenuOpen(false)} className="col-start-1 justify-self-start text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
@@ -282,7 +282,7 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
 
                   {/* Dropdown card, right-aligned under the avatar. */}
                   {accountOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-[#16271F]">
+                    <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-neutral-200 bg-white p-2 shadow-lg dark:border-neutral-700 dark:bg-surface-storefront">
                       {name && (
                         <p className="truncate px-3 py-2 text-xs text-neutral-400 dark:text-neutral-500">{name}</p>
                       )}
@@ -327,7 +327,7 @@ export default function Navbar({ isLoggedIn, currentPath, onLogout, userInitials
 
       {/* Mobile dropdown: links + the same action buttons, stacked. */}
       {menuOpen && (
-        <nav className="border-t border-neutral-200 bg-white px-4 py-3 dark:border-neutral-800 dark:bg-[#0E1A15] lg:hidden">
+        <nav className="border-t border-neutral-200 bg-white px-4 py-3 dark:border-neutral-800 dark:bg-surface-canvas lg:hidden">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}

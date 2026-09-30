@@ -72,7 +72,7 @@ export default function AccountContactDelivery() {
       {loading ? (
         <div className="mt-4 space-y-3">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-5 animate-pulse rounded bg-mist dark:bg-[#1E332B]" />
+            <div key={i} className="h-5 animate-pulse rounded bg-mist dark:bg-surface-raised" />
           ))}
         </div>
       ) : error ? (
@@ -104,7 +104,7 @@ export default function AccountContactDelivery() {
       )}
 
       {customer?.id != null && (
-        <div className="mt-5 flex items-center gap-4 rounded-xl bg-mist-soft p-4 dark:bg-[#1E332B]">
+        <div className="mt-5 flex items-center gap-4 rounded-xl bg-mist-soft p-4 dark:bg-surface-raised">
           <div className="flex h-10 items-end gap-[3px]" aria-hidden="true">
             {BAR_WIDTHS.map((width, index) => (
               <span key={index} className="bg-neutral-700 dark:bg-neutral-300" style={{ width: `${width}px` }} />

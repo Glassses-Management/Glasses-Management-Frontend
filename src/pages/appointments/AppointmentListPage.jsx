@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Pagination from '@/components/ui/Pagination'
 import Modal from '@/components/ui/Modal'
 import Button from '@/components/ui/Button'
@@ -50,8 +50,11 @@ function AppointmentListPage() {
     return map
   }, [optometrists])
 
-  const loadAppointments = async () => {
-    setLoading(true)
+  // setLoading(true) is deliberately not called here: doing it synchronously
+  // from the mount effect would be a cascading render. `loading` starts true and
+  // every reload below is triggered by a user action that already shows its own
+  // spinner, so the list never blanks out underneath them.
+  const loadAppointments = useCallback(async () => {
     try {
       const [apptData, custData, optData] = await Promise.all([
         getAppointments(),
@@ -70,15 +73,13 @@ function AppointmentListPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [toastError])
 
   useEffect(() => {
-    let cancelled = false
-    loadAppointments().then(() => {
-      if (cancelled) return
-    })
-    return () => { cancelled = true }
-  }, [])
+    // Deferred by one microtask so the state updates inside loadAppointments land
+    // in a promise callback instead of synchronously in the effect body.
+    void Promise.resolve().then(loadAppointments)
+  }, [loadAppointments])
 
   const stats = useMemo(
     () => ({
@@ -188,7 +189,7 @@ function AppointmentListPage() {
       />
 
       {loading ? (
-        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-[#1c1c28] dark:text-neutral-400">
+        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-surface-dark dark:text-neutral-400">
           Loading appointments…
         </div>
       ) : (

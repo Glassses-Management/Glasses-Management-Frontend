@@ -2,11 +2,11 @@ import { Info, Search, X } from 'lucide-react'
 import CatalogFilterGroups from '@/pages/public/CatalogFilterGroups'
 
 const inputClass =
-  'w-full rounded-xl border border-neutral-300 bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-800 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#0E1A15] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
+  'w-full rounded-xl border border-neutral-300 bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-800 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-surface-canvas dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
 
 export default function CatalogSidebar({ search, onSearchChange, hasActive, onClearAll, chips, groupProps, className = '' }) {
   return (
-    <div className={`rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-[#16271F] ${className}`}>
+    <div className={`rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-neutral-700 dark:bg-surface-storefront ${className}`}>
       {/* Quick search */}
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Quick Search</p>

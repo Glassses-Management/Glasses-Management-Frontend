@@ -21,7 +21,7 @@ export default function AccountActiveOrder({ orders, appointmentByOrder }) {
     return (
       <AccountCard>
         <div className="flex items-start gap-3 px-6 py-6" data-aos="fade-up">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-mist text-forest dark:bg-[#1E332B] dark:text-leaf">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-mist text-forest dark:bg-surface-raised dark:text-leaf">
             <PackageCheck size={16} />
           </span>
           <div>

@@ -28,7 +28,7 @@ function MapPanel() {
     <div className="relative min-h-[420px] w-full overflow-hidden rounded-3xl border border-neutral-200 shadow-sm dark:border-neutral-700">
       <StoreMap className="absolute inset-0 h-full w-full" title="Map showing the clinic on Monivong Boulevard, Phnom Penh" />
 
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-neutral-200 dark:bg-[#16271F] dark:ring-neutral-800 sm:right-auto">
+      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-neutral-200 dark:bg-surface-storefront dark:ring-neutral-800 sm:right-auto">
         <div>
           <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Optic Shop Showroom &amp; Clinic</p>
           <p className="text-xs text-neutral-500 dark:text-neutral-400">{ADDRESS_LINE}</p>
@@ -53,7 +53,7 @@ export default function ContactVisitUs() {
             <MapPanel />
           </div>
 
-          <div data-aos="fade-right" className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#16271F] lg:col-span-2">
+          <div data-aos="fade-right" className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-surface-storefront lg:col-span-2">
             <h3 className="font-sans text-base font-semibold text-neutral-900 dark:text-neutral-100">Getting here</h3>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
               Free parking and step-free access throughout the clinic and showroom.

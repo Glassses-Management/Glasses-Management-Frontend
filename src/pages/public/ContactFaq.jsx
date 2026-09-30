@@ -52,7 +52,7 @@ export default function ContactFaq() {
                 key={q}
                 data-aos="fade-up"
                 data-aos-delay={`${i * 100}`}
-                className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 dark:border-neutral-700 dark:bg-[#16271F]"
+                className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 dark:border-neutral-700 dark:bg-surface-storefront"
               >
                 <button
                   type="button"

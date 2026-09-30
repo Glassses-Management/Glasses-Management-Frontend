@@ -1,4 +1,5 @@
 import { card } from '@/pages/customers/customerDetailStyles'
+import { cn } from '@/utils/cn'
 
 // Segmented control above the main column. Each tab filters the same four
 // collections, so the count travels with the label and staff can see where the
@@ -7,9 +8,6 @@ import { card } from '@/pages/customers/customerDetailStyles'
 // Counts come from the loaded arrays, so they read 0 while loading rather than
 // flashing a wrong number.
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export default function CustomerTabs({ tabs, active, counts, onChange }) {
   return (
@@ -29,7 +27,7 @@ export default function CustomerTabs({ tabs, active, counts, onChange }) {
               className={cn(
                 'flex items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2 text-sm font-medium transition-colors duration-300',
                 isActive
-                  ? 'bg-violet-600 text-white shadow-sm dark:bg-violet-500'
+                  ? 'bg-forest text-white shadow-sm dark:bg-forest-500'
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-neutral-100',
               )}
             >

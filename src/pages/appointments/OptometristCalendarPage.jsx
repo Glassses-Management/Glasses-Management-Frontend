@@ -64,7 +64,7 @@ function OptometristCalendarPage() {
       })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
-  }, [user?.id])
+  }, [user?.id, toastError])
 
   const days = useMemo(() => {
     const cells = []
@@ -124,7 +124,7 @@ function OptometristCalendarPage() {
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
         <div className="flex items-center justify-between gap-3 border-b border-gray-100 px-4 py-3 dark:border-neutral-800">
           <h2 className="text-base font-semibold text-gray-900 dark:text-neutral-50">{monthLabel(month)}</h2>
           <div className="flex items-center gap-1.5">
@@ -158,7 +158,7 @@ function OptometristCalendarPage() {
                       <span
                         className={`inline-flex size-6 items-center justify-center rounded-full text-xs ${
                           cell.key === todayKey
-                            ? 'bg-violet-600 font-semibold text-white'
+                            ? 'bg-forest font-semibold text-white'
                             : 'text-gray-600 dark:text-neutral-300'
                         }`}
                       >

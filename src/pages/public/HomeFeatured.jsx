@@ -59,7 +59,7 @@ export default function HomeFeatured() {
   const shown = useMemo(() => pool.filter((p) => matchesTab(p, tab)).slice(0, 8), [pool, tab])
 
   return (
-    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>

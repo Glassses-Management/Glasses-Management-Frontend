@@ -67,7 +67,7 @@ function CustomerPicker({ customers, value, onChange }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search customer by name, phone or email..."
-          className="w-full rounded-lg border border-gray-200 py-2 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-leaf focus:outline-none dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500"
+          className="w-full rounded-lg border border-gray-200 py-2 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-leaf focus:outline-none dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500"
         />
       </div>
       <ul className="mt-3 divide-y divide-edge overflow-hidden rounded-lg border border-edge dark:divide-neutral-800">

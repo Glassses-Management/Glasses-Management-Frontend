@@ -14,7 +14,7 @@ function MapPanel() {
     <div className="relative min-h-[320px] w-full overflow-hidden rounded-3xl border border-neutral-200 shadow-sm lg:min-h-[420px] dark:border-neutral-700">
       <StoreMap className="absolute inset-0 h-full w-full" title="Map showing the clinic on Monivong Boulevard, Phnom Penh" />
 
-      <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-neutral-200 dark:bg-[#16271F] dark:ring-neutral-800">
+      <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-neutral-200 dark:bg-surface-storefront dark:ring-neutral-800">
         <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">Optic Shop Store &amp; Clinic</p>
         <p className="text-xs text-neutral-500 dark:text-neutral-400">{ADDRESS_LINE}</p>
       </div>
@@ -24,7 +24,7 @@ function MapPanel() {
 
 function AboutVisitStore() {
   return (
-    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="grid items-start gap-10 lg:grid-cols-2">
           <div data-aos="fade-left">
@@ -40,7 +40,7 @@ function AboutVisitStore() {
               make sure every pair works for you.
             </p>
 
-            <div className="mt-8 rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#16271F]">
+            <div className="mt-8 rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-surface-storefront">
               <ul className="space-y-5">
                 <li className="flex items-start gap-3">
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">

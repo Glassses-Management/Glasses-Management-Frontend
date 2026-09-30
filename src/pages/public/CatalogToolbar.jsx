@@ -62,7 +62,7 @@ export default function CatalogToolbar({
         <button
           type="button"
           onClick={onOpenFilters}
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:bg-[#16271F] dark:text-neutral-300 dark:hover:border-leaf dark:hover:text-leaf lg:hidden"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:border-forest hover:text-forest dark:border-neutral-600 dark:bg-surface-storefront dark:text-neutral-300 dark:hover:border-leaf dark:hover:text-leaf lg:hidden"
         >
           <SlidersHorizontal size={15} />
           Filters
@@ -73,7 +73,7 @@ export default function CatalogToolbar({
             value={sort}
             onChange={(e) => onSortChange(e.target.value)}
             aria-label="Sort products"
-            className="appearance-none rounded-full border border-neutral-300 bg-white py-2 pl-4 pr-9 text-sm font-medium text-neutral-700 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#16271F] dark:text-neutral-300 dark:focus:border-leaf"
+            className="appearance-none rounded-full border border-neutral-300 bg-white py-2 pl-4 pr-9 text-sm font-medium text-neutral-700 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-surface-storefront dark:text-neutral-300 dark:focus:border-leaf"
           >
             {SORTS.map(({ value, label }) => (
               <option key={value} value={value}>{label}</option>

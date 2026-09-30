@@ -47,7 +47,7 @@ function Change({ value }) {
 
 function KpiCell({ slot, kpi, pending }) {
   return (
-    <div className="bg-white px-4 py-3 dark:bg-[#1c1c28]">
+    <div className="bg-white px-4 py-3 dark:bg-surface-dark">
       <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400 dark:text-neutral-500">{slot.label}</p>
       {pending ? (
         <div className="mt-1.5 h-6 w-20 animate-pulse rounded bg-gray-100 dark:bg-white/5" />

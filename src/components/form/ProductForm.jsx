@@ -40,7 +40,7 @@ const FIELDS = [
 ]
 
 const INPUT_CLASS =
-  'w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-[#8fa88f]'
+  'w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-surface-ink outline-none transition-colors focus:border-sage dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-sage'
 
 export default function ProductForm({ product, existingImage, onCancel, onSaved }) {
   const isEdit = !!product
@@ -143,13 +143,13 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100"
+          className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-surface-ink dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100"
           aria-label="Back to products"
         >
           <ArrowLeft size={20} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">{isEdit ? 'Edit Product' : 'Add Product'}</h1>
+          <h1 className="text-2xl font-bold text-surface-ink dark:text-neutral-50">{isEdit ? 'Edit Product' : 'Add Product'}</h1>
           <p className="text-sm text-gray-400 dark:text-neutral-500">
             {isEdit ? 'Update the details of your optical product.' : 'Create a new product for your inventory.'}
           </p>
@@ -159,9 +159,9 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
       {/* Form + Image side by side on desktop */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Product Information */}
-        <section className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28] lg:col-span-2">
+        <section className="rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark lg:col-span-2">
           <header className="border-b border-gray-100 px-5 py-4 dark:border-neutral-800">
-            <h2 className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Product Information</h2>
+            <h2 className="text-sm font-semibold text-surface-ink dark:text-neutral-100">Product Information</h2>
             <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Frame details and pricing.</p>
           </header>
           <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
@@ -184,9 +184,9 @@ export default function ProductForm({ product, existingImage, onCancel, onSaved 
         </section>
 
         {/* Product Image */}
-        <section className="h-max rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28] lg:sticky lg:top-6">
+        <section className="h-max rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark lg:sticky lg:top-6">
           <header className="border-b border-gray-100 px-5 py-4 dark:border-neutral-800">
-            <h2 className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Product Image</h2>
+            <h2 className="text-sm font-semibold text-surface-ink dark:text-neutral-100">Product Image</h2>
             <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Upload a photo for the product catalog.</p>
           </header>
           <div className="p-5">

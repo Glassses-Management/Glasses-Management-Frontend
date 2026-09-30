@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Save, Package } from 'lucide-react'
+import { Package } from 'lucide-react'
 import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
 import Button from '@/components/ui/Button'
@@ -60,7 +60,7 @@ export default function InventoryForm() {
       }
       loadInventory()
     }
-  }, [isEdit, id])
+  }, [isEdit, id, navigate, toastError])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -110,7 +110,7 @@ export default function InventoryForm() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Loading inventory...</h1>
+        <h1 className="text-2xl font-bold text-surface-ink dark:text-neutral-50">Loading inventory...</h1>
         {[0, 1, 2].map((i) => (
           <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800" />
         ))}
@@ -191,7 +191,7 @@ export default function InventoryForm() {
         </div>
       </Card>
 
-      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-[#1c1c28]/80 md:-mx-6 md:px-6 md:py-5">
+      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-surface-dark/80 md:-mx-6 md:px-6 md:py-5">
         <div className="flex items-center justify-between gap-3">
           <Button type="button" variant="ghost" onClick={() => navigate('/dashboard/inventory')}>Cancel</Button>
           <Button type="submit" loading={submitting}>

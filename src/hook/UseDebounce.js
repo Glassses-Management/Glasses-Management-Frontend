@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
-export function useDebouce(value, delay = 300){
-    const [debounce, setDebounce] = useState(value);
+// Returns `value` only after it has stopped changing for `delay` ms, so callers
+// can filter or search on the settled value instead of every keystroke.
+export function useDebounce(value, delay = 300) {
+    const [debounced, setDebounced] = useState(value);
 
     useEffect(() => {
-        const handler = setTimeout(() => setDebounce(value), delay);
+        const handler = setTimeout(() => setDebounced(value), delay);
 
         return () => clearTimeout(handler);
     }, [value, delay])
 
-    return debounce;
+    return debounced;
 }

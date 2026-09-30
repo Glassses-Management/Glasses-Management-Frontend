@@ -39,9 +39,15 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
   const [form, setForm] = useState({ optometrist_id: '', scheduled_at: '', status: 'SCHEDULED', notes: '' })
   const [errors, setErrors] = useState({})
   const [saving, setSaving] = useState(false)
+  const [syncedFor, setSyncedFor] = useState(null)
 
-  useEffect(() => {
-    if (!open) return
+  // Reset the form during render rather than in an effect, so opening the modal
+  // never paints a stale appointment's values first. React explicitly endorses
+  // this "adjust state when props change" pattern, and it also resets the error
+  // map, which a form that was left invalid would otherwise keep.
+  const syncKey = open ? `${appointment?.id ?? 'new'}:${mode}` : null
+  if (syncKey !== syncedFor) {
+    setSyncedFor(syncKey)
     setForm({
       optometrist_id: appointment?.optometrist_id != null ? String(appointment.optometrist_id) : '',
       scheduled_at: appointment?.scheduled_at ? toDateTimeLocal(appointment.scheduled_at) : '',
@@ -49,7 +55,7 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
       notes: appointment?.notes || '',
     })
     setErrors({})
-  }, [open, appointment])
+  }
 
   useEffect(() => {
     if (!open) return
@@ -63,7 +69,7 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
         if (!cancelled) setOptometrists([])
       })
     return () => { cancelled = true }
-  }, [open])
+  }, [open, toastError])
 
   const set = (name, value) => setForm((prev) => ({ ...prev, [name]: value }))
 
@@ -132,7 +138,7 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
             name="optometrist_id"
             value={form.optometrist_id}
             onChange={(e) => set('optometrist_id', e.target.value)}
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-forest-500 focus:ring-2 focus:ring-forest-500 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100"
           >
             <option value="">{isSchedule ? 'Select an optometrist…' : 'Unassigned'}</option>
             {optometrists.map((opt) => (
@@ -165,7 +171,7 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
               name="status"
               value={form.status}
               onChange={(e) => set('status', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-forest-500 focus:ring-2 focus:ring-forest-500 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100"
             >
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -181,7 +187,7 @@ function ScheduleAppointmentModal({ open, appointment, mode = 'edit', onClose, o
             onChange={(e) => set('notes', e.target.value)}
             rows={3}
             placeholder="Add any relevant notes about this appointment…"
-            className="w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500 h-20 overflow-y-auto"
+            className="w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-forest-500 focus:ring-2 focus:ring-forest-500 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500 h-20 overflow-y-auto"
           />
         </Field>
       </form>

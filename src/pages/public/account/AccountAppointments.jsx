@@ -87,7 +87,7 @@ export default function AccountAppointments() {
       ) : visible === null ? (
         <div className="space-y-3 px-6 py-6">
           {[0, 1].map((i) => (
-            <div key={i} className="h-16 animate-pulse rounded-xl bg-mist dark:bg-[#1E332B]" />
+            <div key={i} className="h-16 animate-pulse rounded-xl bg-mist dark:bg-surface-raised" />
           ))}
         </div>
       ) : visible.length === 0 ? (
@@ -104,7 +104,7 @@ export default function AccountAppointments() {
 
             return (
             <li key={appointment.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center">
-              <div className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-mist dark:bg-[#1E332B]">
+              <div className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-mist dark:bg-surface-raised">
                 {awaiting ? (
                   // The backend creates the appointment the moment an eye-exam
                   // request is approved, with no date until staff schedule it

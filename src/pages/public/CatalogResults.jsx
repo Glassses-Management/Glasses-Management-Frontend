@@ -18,12 +18,12 @@ export default function CatalogResults({
     return (
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {[0, 1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-[#16271F]">
-            <div className="aspect-[4/3] rounded-2xl bg-neutral-200 dark:bg-[#1E332B]" />
+          <div key={i} className="animate-pulse rounded-2xl bg-neutral-100 dark:bg-surface-storefront">
+            <div className="aspect-[4/3] rounded-2xl bg-neutral-200 dark:bg-surface-raised" />
             <div className="space-y-3 p-4">
-              <div className="h-3 w-1/3 rounded bg-neutral-200 dark:bg-[#1E332B]" />
-              <div className="h-4 w-2/3 rounded bg-neutral-200 dark:bg-[#1E332B]" />
-              <div className="h-3 w-1/4 rounded bg-neutral-200 dark:bg-[#1E332B]" />
+              <div className="h-3 w-1/3 rounded bg-neutral-200 dark:bg-surface-raised" />
+              <div className="h-4 w-2/3 rounded bg-neutral-200 dark:bg-surface-raised" />
+              <div className="h-3 w-1/4 rounded bg-neutral-200 dark:bg-surface-raised" />
             </div>
           </div>
         ))}
@@ -33,7 +33,7 @@ export default function CatalogResults({
 
   if (visible.length === 0) {
     return (
-      <div className="flex flex-col items-center rounded-2xl border border-dashed border-neutral-300 bg-white/60 py-20 text-center dark:border-neutral-700 dark:bg-[#16271F]/40">
+      <div className="flex flex-col items-center rounded-2xl border border-dashed border-neutral-300 bg-white/60 py-20 text-center dark:border-neutral-700 dark:bg-surface-storefront/40">
         <SearchX size={36} className="text-forest dark:text-leaf" />
         <p className="mt-4 font-sans font-semibold text-neutral-900 dark:text-neutral-100">No frames match</p>
         <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Try removing a filter or two.</p>

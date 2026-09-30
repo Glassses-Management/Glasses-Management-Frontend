@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AlarmClock, BadgeCheck, ChevronRight, Sparkles, Star, ShieldCheck } from 'lucide-react'
 import { getPublicProducts, getPublicAttachmentsByProduct } from '@/api/publicProductApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 
 const BADGES = [
   { icon: BadgeCheck, label: 'Doctor-Led Eyecare' },
@@ -148,7 +148,7 @@ export default function ContactHero() {
           </div>
 
           <div data-aos="fade-right" data-aos-delay="100" className="relative mx-auto w-full max-w-xs sm:max-w-md">
-            <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-[#15261F] dark:ring-neutral-800">
+            <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-mist shadow-sm ring-1 ring-neutral-200 transition-colors duration-300 dark:bg-surface-sunken dark:ring-neutral-800">
               {imageError || !featuredImage ? (
                 <HeroArt />
               ) : (
@@ -166,7 +166,7 @@ export default function ContactHero() {
             </div>
 
             <div
-              className="absolute bottom-4 right-4 w-56 cursor-pointer overflow-hidden rounded-2xl bg-white p-4 shadow-xl ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-[#15261F] dark:ring-neutral-800"
+              className="absolute bottom-4 right-4 w-56 cursor-pointer overflow-hidden rounded-2xl bg-white p-4 shadow-xl ring-1 ring-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-surface-sunken dark:ring-neutral-800"
               onClick={() => featuredProduct && navigate(`/products/${featuredProduct.id}`)}
               onKeyDown={(e) => { if (e.key === 'Enter' && featuredProduct) navigate(`/products/${featuredProduct.id}`) }}
               role="link"

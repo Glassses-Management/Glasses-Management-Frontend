@@ -15,7 +15,7 @@ const ICONS = {
 }
 
 const TONES = {
-  orders: 'bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-300',
+  orders: 'bg-forest-50 text-forest-600 dark:bg-forest-500/10 dark:text-forest-300',
   appointments: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300',
   requests: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300',
   spent: 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-300',

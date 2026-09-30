@@ -1,9 +1,6 @@
 import { getInitials, getAvatarColors } from '@/utils/avatar'
+import { cn } from '@/utils/cn'
 
-// join class names, ignoring falsy values so callers can conditionally pass classes
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 // When `src` is provided renders the profile photo, otherwise a colored
 // initials circle derived from a name + id, same look as the table rows.

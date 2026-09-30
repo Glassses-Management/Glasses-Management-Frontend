@@ -32,7 +32,7 @@ function Stars() {
 
 export default function HomeTestimonials() {
   return (
-    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="mx-auto max-w-2xl text-center" data-aos="fade-up">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
@@ -52,19 +52,19 @@ export default function HomeTestimonials() {
             <figure
               key={initials}
               data-aos-delay={`${i * 100}`}
-              className="flex flex-col rounded-2xl bg-white p-6 ring-1 ring-edge shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-[#16271F] dark:ring-neutral-800"
+              className="flex flex-col rounded-2xl bg-white p-6 ring-1 ring-edge shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-storefront dark:ring-neutral-800"
             >
               <Stars />
               <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
                 “{quote}”
               </blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-mist font-sans text-xs font-bold text-forest dark:bg-[#1E332B] dark:text-leaf">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-mist font-sans text-xs font-bold text-forest dark:bg-surface-raised dark:text-leaf">
                   {initials}
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">{name}</p>
-                  <p className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-mist px-2 py-0.5 text-[10px] font-semibold text-forest dark:bg-[#1E332B] dark:text-leaf">
+                  <p className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-mist px-2 py-0.5 text-[10px] font-semibold text-forest dark:bg-surface-raised dark:text-leaf">
                     <BadgeCheck size={11} />
                     Verified Patient
                   </p>

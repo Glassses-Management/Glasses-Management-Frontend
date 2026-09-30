@@ -119,7 +119,7 @@ function ClinicianDashboardPage() {
       </section>
 
       {loading ? (
-        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-[#1c1c28] dark:text-neutral-400">
+        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-surface-dark dark:text-neutral-400">
           Loading clinic overview...
         </div>
       ) : (

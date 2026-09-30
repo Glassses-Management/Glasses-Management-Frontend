@@ -13,10 +13,8 @@ import { useOwnCustomerId } from '@/hook/UseOwnCustomerId'
 import { useToast } from '@/hook/UseToast'
 import { createRequest } from '@/api/requestApi'
 import { getMyPrescriptions } from '@/api/prescriptionApi'
+import { cn } from '@/utils/cn'
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 function SectionHeader({ icon: Icon, title, required }) {
   return (
@@ -47,11 +45,11 @@ function InfoRow({ icon: Icon, label, value }) {
 }
 
 const cardClass =
-  'rounded-2xl bg-white p-5 shadow-sm ring-1 ring-neutral-200/70 sm:p-6 dark:bg-[#16271F]/60 dark:ring-neutral-800'
+  'rounded-2xl bg-white p-5 shadow-sm ring-1 ring-neutral-200/70 sm:p-6 dark:bg-surface-storefront/60 dark:ring-neutral-800'
 
 function GuestPrompt({ from }) {
   return (
-    <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800" data-aos="fade-up">
+    <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-surface-storefront/60 dark:ring-neutral-800" data-aos="fade-up">
       <span className="flex size-14 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
         <Lock size={24} strokeWidth={1.8} />
       </span>
@@ -205,7 +203,7 @@ export default function CustomerRequestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
+    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-surface-canvas dark:text-neutral-200">
       <Navbar />
 
       <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-12">
@@ -222,7 +220,7 @@ export default function CustomerRequestPage() {
         {!isAuthenticated ? (
           <GuestPrompt from={location} />
         ) : submitted ? (
-          <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-[#16271F]/60 dark:ring-neutral-800" data-aos="fade-up">
+          <div className="mt-8 flex flex-col items-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-neutral-200/70 dark:bg-surface-storefront/60 dark:ring-neutral-800" data-aos="fade-up">
             <span className="flex size-16 items-center justify-center rounded-full bg-forest/10 text-forest ring-8 ring-forest/10 dark:bg-leaf/10 dark:text-leaf dark:ring-leaf/10">
               <Check size={30} strokeWidth={2.5} />
             </span>

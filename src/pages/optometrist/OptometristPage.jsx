@@ -1,24 +1,18 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle, XCircle, Calendar, FileText, Send, Eye } from 'lucide-react'
+import { CheckCircle, Calendar, Send } from 'lucide-react'
 import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
-import { composeValidators, required } from '@/utils/Validators'
 import { useToast } from '@/hook/UseToast'
 import { useCustomers } from '@/hook/UseCustomer'
-import { usePrescriptions } from '@/hook/UsePrescription'
 import { useAuth } from '@/hook/UseAuth'
 import { getAppointmentsByOptometrist, updateAppointment } from '@/api/appointmentApi'
 import { createPrescription } from '@/api/prescriptionApi'
-import { getOptometrists } from '@/api/userApi'
 
 export default function OptometristPage() {
-    const navigate = useNavigate()
     const { success: toastSuccess, error: toastError } = useToast()
     const { customers } = useCustomers()
-    const { prescriptions, addPrescription } = usePrescriptions()
     const { user } = useAuth()
 
     const [activeTab, setActiveTab] = useState('appointments') // 'appointments' | 'prescriptions'
@@ -143,7 +137,7 @@ export default function OptometristPage() {
                         onClick={() => setActiveTab(tab.key)}
                         className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                             activeTab === tab.key
-                                ? 'bg-white text-[#1a1a2e] shadow-sm dark:bg-neutral-900 dark:text-neutral-50'
+                                ? 'bg-white text-surface-ink shadow-sm dark:bg-neutral-900 dark:text-neutral-50'
                                 : 'text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-100'
                         }`}
                     >
@@ -157,18 +151,18 @@ export default function OptometristPage() {
             {activeTab === 'appointments' && (
                 <section>
                     {loading ? (
-                        <div className="rounded-2xl bg-white p-10 text-center dark:bg-[#1c1c28]">Loading appointments...</div>
+                        <div className="rounded-2xl bg-white p-10 text-center dark:bg-surface-dark">Loading appointments...</div>
                     ) : (
                         <div className="space-y-4">
                             {appointments.length === 0 ? (
-                                <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-neutral-800 dark:bg-[#1c1c28]">
+                                <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-neutral-800 dark:bg-surface-dark">
                                     <Calendar size={48} className="mx-auto mb-4 text-gray-300 dark:text-neutral-600" />
                                     <p className="text-gray-500 dark:text-neutral-400">No appointments scheduled.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                     {appointments.map((apt) => (
-                                        <div key={apt.id} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-[#1c1c28]">
+                                        <div key={apt.id} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-surface-dark">
                                             <div className="mb-4 flex items-center justify-between">
                                                 <div>
                                                     <p className="font-semibold text-gray-900 dark:text-neutral-100">

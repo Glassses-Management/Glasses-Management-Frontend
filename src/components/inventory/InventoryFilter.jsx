@@ -28,7 +28,7 @@ function InventoryFilter({
     }
 
     return (
-        <div className="rounded-2xl bg-white p-4 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28]">
+        <div className="rounded-2xl bg-white p-4 shadow-sm transition-colors duration-300 dark:bg-surface-dark">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
                 <div className="w-full shrink-0 lg:max-w-xs">
                     {/* <label className="mb-1 block text-xs font-medium text-gray-500 dark:text-neutral-400">Search</label> */}
@@ -39,7 +39,7 @@ function InventoryFilter({
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search by SKU, model, or brand..."
-                            className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none transition-colors duration-300 dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-violet-400"
+                            className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-forest-400 focus:ring-2 focus:ring-forest-100 focus:outline-none transition-colors duration-300 dark:border-neutral-700 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-forest-400"
                         />
                     </div>
                 </div>

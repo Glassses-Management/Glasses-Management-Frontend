@@ -1,9 +1,7 @@
 import { forwardRef, useMemo } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
-function cn(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
 
 const Select = forwardRef(function Select(
     {
@@ -58,9 +56,9 @@ const Select = forwardRef(function Select(
                     className={cn(
                         'w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm pr-10',
                         'transition-all duration-300 outline-none',
-                        'focus:border-[#8fa88f] focus:ring-2 focus:ring-[#8fa88f]/20',
-                        'dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500',
-                        'dark:focus:border-[#8fa88f] dark:focus:ring-[#8fa88f]/20',
+                        'focus:border-sage focus:ring-2 focus:ring-sage/20',
+                        'dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500',
+                        'dark:focus:border-sage dark:focus:ring-sage/20',
                         'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60 dark:disabled:bg-neutral-800',
                         error && 'border-red-400 focus:border-red-400 focus:ring-red-400/20',
                         className,

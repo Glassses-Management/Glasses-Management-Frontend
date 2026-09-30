@@ -2,7 +2,7 @@ import { Boxes, Image, Layers, Tag } from 'lucide-react'
 
 function StatCard({ icon: Icon, label, value, tint }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
       <div className="flex items-center gap-2">
         <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${tint}`}>
           <Icon size={16} />
@@ -33,7 +33,7 @@ function ProductStats({ total, categories, brands, withImages }) {
         icon={Tag}
         label="Brands"
         value={brands}
-        tint="bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300"
+        tint="bg-forest-50 text-forest-700 dark:bg-forest-500/10 dark:text-forest-300"
       />
       <StatCard
         icon={Image}

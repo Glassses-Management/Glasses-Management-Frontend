@@ -25,9 +25,9 @@ function QuickDeskCard({ deskName = 'Optical Desk 1', onAction }) {
   }
 
   return (
-    <div className="rounded-xl border border-edge bg-white p-4 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <div className="rounded-xl border border-edge bg-white p-4 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-50">Quick Optical Desk</h3>
+        <h3 className="text-sm font-semibold text-surface-ink dark:text-neutral-50">Quick Optical Desk</h3>
         <span className="inline-flex items-center gap-1 rounded-full bg-leaf/15 px-2 py-0.5 text-xs font-medium text-forest dark:bg-leaf/10 dark:text-leaf">
           <Zap size={12} /> {deskName}
         </span>
@@ -52,7 +52,7 @@ function QuickDeskCard({ deskName = 'Optical Desk 1', onAction }) {
               <span className={cn('flex h-9 w-9 items-center justify-center rounded-lg', tones[action.tone])}>
                 <Icon size={16} />
               </span>
-              <span className="text-xs font-medium text-[#1a1a2e] dark:text-neutral-100">{action.label}</span>
+              <span className="text-xs font-medium text-surface-ink dark:text-neutral-100">{action.label}</span>
               <span className="text-[11px] leading-tight text-gray-400 dark:text-neutral-500">{action.sublabel}</span>
             </button>
           )

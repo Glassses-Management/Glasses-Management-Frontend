@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react'
-import { CheckCircle, XCircle, Calendar, Send } from 'lucide-react'
 import Field from '@/components/ui/Field'
 import Select from '@/components/ui/Select'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import Card from '@/components/ui/Card'
-import { composeValidators, required } from '@/utils/Validators'
 import { useToast } from '@/hook/UseToast'
 import { useCustomers } from '@/hook/UseCustomer'
-import { usePrescriptions } from '@/hook/UsePrescription'
-import { useAuth } from '@/hook/UseAuth'
 import { getRequests, approveRequest, rejectRequest } from '@/api/requestApi'
 import { createPrescription } from '@/api/prescriptionApi'
 import { updateAppointment } from '@/api/appointmentApi'
@@ -24,8 +20,6 @@ const minDateTime = () => {
 export default function StaffPage() {
     const { success: toastSuccess, error: toastError } = useToast()
     const { customers } = useCustomers()
-    const { prescriptions, addPrescription } = usePrescriptions()
-    const { user } = useAuth()
 
     const [activeTab, setActiveTab] = useState('requests')
     const [requests, setRequests] = useState([])
@@ -78,7 +72,12 @@ export default function StaffPage() {
             try {
                 const data = await getOptometrists()
                 if (!cancelled) setOptometrists(data)
-            } catch {}
+            } catch (err) {
+                // Optometrist list is only a dropdown convenience here, so a
+                // failure must not break the page - the picker just stays empty.
+                console.error('StaffPage: failed to load optometrists:', err?.response?.status || err?.message || err)
+                if (!cancelled) setOptometrists([])
+            }
         }
         void load()
         return () => { cancelled = true }
@@ -208,7 +207,7 @@ export default function StaffPage() {
                         onClick={() => setActiveTab(tab.key)}
                         className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                             activeTab === tab.key
-                                ? 'bg-white text-[#1a1a2e] shadow-sm dark:bg-neutral-900 dark:text-neutral-50'
+                                ? 'bg-white text-surface-ink shadow-sm dark:bg-neutral-900 dark:text-neutral-50'
                                 : 'text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-100'
                         }`}
                     >
@@ -220,16 +219,16 @@ export default function StaffPage() {
             {activeTab === 'requests' && (
                 <section>
                     {loading ? (
-                        <div className="rounded-2xl bg-white p-10 text-center dark:bg-[#1c1c28]">Loading requests...</div>
+                        <div className="rounded-2xl bg-white p-10 text-center dark:bg-surface-dark">Loading requests...</div>
                     ) : (
                         <div className="space-y-4">
                             {pendingRequests.length > 0 ? (
                                 pendingRequests.map((req) => {
                                     const customer = customerById[req.customer_id]
                                     return (
-                                        <div key={req.id} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-[#1c1c28]">
+                                        <div key={req.id} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-surface-dark">
                                             <div className="flex flex-wrap items-center gap-3">
-                                                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#8fa88f]/15 font-semibold text-[#6f8a6f] dark:bg-[#8fa88f]/20 dark:text-white">
+                                                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sage/15 font-semibold text-sage-deep dark:bg-sage/20 dark:text-white">
                                                     {customer?.name?.charAt(0) || '?'}
                                                 </span>
                                                 <div className="flex-1 min-w-0">
@@ -255,7 +254,7 @@ export default function StaffPage() {
                                     )
                                 })
                             ) : (
-                                <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-neutral-800 dark:bg-[#1c1c28]">
+                                <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-neutral-800 dark:bg-surface-dark">
                                     <p className="text-gray-500 dark:text-neutral-400">No pending requests.</p>
                                 </div>
                             )}
@@ -264,7 +263,7 @@ export default function StaffPage() {
                                     {approvedRequests.map((req) => {
                                         const customer = customerById[req.customer_id]
                                         return (
-                                            <div key={req.id} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-[#1c1c28]">
+                                            <div key={req.id} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-surface-dark">
                                                 <div className="flex items-center gap-3">
                                                     <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-green-100 font-semibold text-green-600 dark:bg-green-500/20 dark:text-green-300">
                                                         {customer?.name?.charAt(0) || '?'}

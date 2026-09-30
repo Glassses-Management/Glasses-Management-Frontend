@@ -63,7 +63,7 @@ export default function RequestApprovalActions({ request, onChanged }) {
     return (
       <Button
         size="sm"
-        variant="forest"
+        variant="primary"
         icon={<CalendarPlus size={14} />}
         onClick={() => navigate('/dashboard/appointments', { state: { scheduleId: request.id } })}
       >

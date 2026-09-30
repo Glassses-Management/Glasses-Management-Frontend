@@ -6,7 +6,8 @@ import { getProductById } from '@/api/productApi'
 import { useToast } from '@/hook/UseToast'
 import { frameName } from '@/utils/format'
 import Button from '@/components/ui/Button'
-import ProductImage, { pickImage } from '@/components/product/ProductImage'
+import ProductImage from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 
 const toList = (data) => (Array.isArray(data?.content) ? data.content : Array.isArray(data) ? data : [])
 
@@ -53,7 +54,7 @@ function SavedFrameCard({ customerId, prescriptionId }) {
     toastWarning('Lab dispatch is not wired up yet — create the order from the frame first.')
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-surface-dark">
       <div className="flex items-start gap-3">
         <span className="mt-1 h-4 w-1 shrink-0 rounded-full bg-emerald-500" />
         <div>
@@ -105,7 +106,7 @@ function SavedFrameCard({ customerId, prescriptionId }) {
       </div>
 
       <div className="mt-5 flex flex-col gap-2">
-        <Button variant="forest" icon={<ShoppingBag size={16} />} className="w-full" onClick={goOrder}>
+        <Button variant="primary" icon={<ShoppingBag size={16} />} className="w-full" onClick={goOrder}>
           Order Glasses with this RX
         </Button>
         <Button variant="outline" icon={<Send size={16} />} className="w-full" onClick={sendToLab}>

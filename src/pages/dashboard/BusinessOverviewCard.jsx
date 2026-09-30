@@ -17,7 +17,7 @@ export default function BusinessOverviewCard() {
   const { period, periodLabel, setPeriod, series, kpis, loading, error, reload, hasActivity } = useBusinessOverview()
 
   return (
-    <section className="mb-6 flex flex-col rounded-2xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <section className="mb-6 flex flex-col rounded-2xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-edge px-5 py-4">
         <div className="flex items-center gap-2">
           <BarChart3 size={16} className="text-leaf" aria-hidden="true" />
@@ -31,7 +31,7 @@ export default function BusinessOverviewCard() {
           value={period}
           onChange={(event) => setPeriod(event.target.value)}
           aria-label="Time period"
-          className="rounded-lg border border-edge bg-white px-3 py-1.5 text-sm text-ink outline-none transition-colors duration-300 focus:border-forest focus:ring-2 focus:ring-forest/20 dark:border-neutral-700 dark:bg-[#14141e] dark:text-neutral-200"
+          className="rounded-lg border border-edge bg-white px-3 py-1.5 text-sm text-ink outline-none transition-colors duration-300 focus:border-forest focus:ring-2 focus:ring-forest/20 dark:border-neutral-700 dark:bg-surface-ink-soft dark:text-neutral-200"
         >
           {PERIODS.map((option) => (
             <option key={option.key} value={option.key}>{option.label}</option>

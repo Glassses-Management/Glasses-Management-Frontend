@@ -2,10 +2,8 @@ import { Fragment } from 'react'
 import { Check } from 'lucide-react'
 
 import { ORDER_FLOW, orderFlowIndex } from '@/utils/OrderStatus'
+import { cn } from '@/utils/cn'
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 // The order's journey, drawn from the real status. Shared by the order history
 // rows and the overview card.

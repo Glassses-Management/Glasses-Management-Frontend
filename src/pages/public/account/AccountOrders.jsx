@@ -60,7 +60,7 @@ export default function AccountOrders({ orders, appointmentByOrder, error, loadi
       ) : loading ? (
         <div className="space-y-3 px-6 py-6">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-28 animate-pulse rounded-xl bg-mist dark:bg-[#1E332B]" />
+            <div key={i} className="h-28 animate-pulse rounded-xl bg-mist dark:bg-surface-raised" />
           ))}
         </div>
       ) : orders.length === 0 ? (

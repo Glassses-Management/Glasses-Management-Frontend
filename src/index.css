@@ -12,6 +12,56 @@
   --color-mist: #f1f5f2;        /* light gray-green section background */
   --color-mist-soft: #f7f9f8;   /* alternating lighter section background */
   --color-edge: #e5e7eb;        /* thin gray card / divider borders */
+
+  /* Full green ramp anchored on --color-forest. The staff dashboard needs
+     lighter tints (icon backgrounds, focus rings, active tabs) that the flat
+     tokens above cannot express, so the scale is spelled out here rather than
+     left as violet/indigo utilities from an earlier theme. */
+  --color-forest-50: #f2f7f4;
+  --color-forest-100: #e4efe9;
+  --color-forest-200: #c8dfd2;
+  --color-forest-300: #a3c9b3;
+  --color-forest-400: #74ab8d;
+  --color-forest-500: #4b8c6b;
+  --color-forest-600: #2c6a4e;
+  --color-forest-700: #1b3b2f; /* same value as --color-forest */
+  --color-forest-800: #16302a; /* same value as --color-forest-deep */
+
+  /* Dark-mode surfaces. Previously hardcoded as arbitrary hex values
+     (`dark:bg-[#1c1c28]` etc.) in ~100 places, which made the layering
+     impossible to see. Values are unchanged - only the names are new.
+       surface-dark      dashboard card / panel fill
+       surface-ink       dashboard page fill (slightly blue-black)
+       surface-ink-soft  dashboard raised panel on surface-ink
+       surface-ink-deep  dashboard modal / popover fill
+       surface-storefront  storefront card fill
+       surface-canvas     storefront page fill
+       surface-raised     storefront raised card on surface-storefront
+       surface-sunken     storefront inset / media well
+       surface-deep       storefront footer
+       surface-deepest    storefront deepest inset */
+  --color-surface-dark: #1c1c28;
+  --color-surface-ink: #1a1a2e;
+  --color-surface-ink-soft: #14141e;
+  --color-surface-ink-deep: #111118;
+  --color-surface-storefront: #16271f;
+  --color-surface-canvas: #0e1a15;
+  --color-surface-raised: #1e332b;
+  --color-surface-sunken: #15261f;
+  --color-surface-deep: #121f18;
+  --color-surface-deepest: #101e18;
+  --color-canvas-light: #f5f6fb;
+  --color-canvas-dark: #15151f;
+
+  /* Muted sage greens used for storefront accents and legacy dashboard chrome. */
+  --color-sage: #8fa88f;
+  --color-sage-deep: #6f8a6f;
+  --color-sage-soft: #6b8f6b;
+  --color-sage-muted: #55705a;
+  --color-sage-light: #a8c2a8;
+
+  /* Warm off-white used for storefront light sections. */
+  --color-cream: #f7f5f0;
 }
 
 /* Class-based dark mode (Tailwind v4): `.dark` on <html> activates `dark:` variants. */
@@ -19,10 +69,10 @@
 
 /* Prevent a white flash while the theme script decides the initial mode. */
 html {
-  background-color: #f5f6fb;
+  background-color: var(--color-canvas-light);
 }
 html.dark {
-  background-color: #15151f;
+  background-color: var(--color-canvas-dark);
 }
 html.theme-ready {
   transition: background-color 300ms ease, color 300ms ease;

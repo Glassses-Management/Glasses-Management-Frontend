@@ -40,7 +40,7 @@ const ROWS = [
 
 function AboutStandards() {
   return (
-    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-[#0E1A15]">
+    <section className="bg-white py-16 transition-colors duration-300 md:py-20 dark:bg-surface-canvas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
           Why Choose Us
@@ -57,9 +57,9 @@ function AboutStandards() {
         <div
           data-aos="fade-up"
           data-aos-delay="150"
-          className="mt-12 overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-[#16271F]"
+          className="mt-12 overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-surface-storefront"
         >
-          <div className="hidden grid-cols-[minmax(0,1.2fr)_1fr_1fr] gap-6 border-b border-neutral-200 bg-mist px-6 py-4 lg:grid dark:border-neutral-700 dark:bg-[#121F18]">
+          <div className="hidden grid-cols-[minmax(0,1.2fr)_1fr_1fr] gap-6 border-b border-neutral-200 bg-mist px-6 py-4 lg:grid dark:border-neutral-700 dark:bg-surface-deep">
             <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
               What matters
             </span>

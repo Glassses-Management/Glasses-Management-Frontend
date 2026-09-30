@@ -50,7 +50,7 @@ function ProductCard({ product, imageSrc, images, onClick }) {
         <ProductImage
           src={src}
           alt={product.model}
-          className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#f7f5f0] object-cover dark:bg-neutral-800/80"
+          className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-cream object-cover dark:bg-neutral-800/80"
         />
 
         {badge && (

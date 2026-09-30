@@ -24,7 +24,7 @@ const LAB_NOTES = [
 ]
 
 const inputClass =
-  'w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-colors duration-200 placeholder:text-neutral-400 focus:border-forest dark:border-neutral-700 dark:bg-[#0E1A15] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
+  'w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-colors duration-200 placeholder:text-neutral-400 focus:border-forest dark:border-neutral-700 dark:bg-surface-canvas dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
 
 function Field({ label, htmlFor, required, children }) {
   return (
@@ -82,7 +82,7 @@ export default function ContactInquiryForm() {
     <section id="inquiry" className="scroll-mt-20 py-16 md:py-20">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 md:px-6 lg:grid-cols-2">
         {/* Inquiry form */}
-        <div data-aos="fade-left" className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-[#16271F]">
+        <div data-aos="fade-left" className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-surface-storefront">
           <div className="flex items-center gap-3 bg-gradient-to-r from-forest to-forest-deep px-6 py-5 text-white">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/20">
               <MessageSquare size={18} />
@@ -145,7 +145,7 @@ export default function ContactInquiryForm() {
         </div>
 
         {/* Schedule */}
-        <div data-aos="fade-right" className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#16271F]">
+        <div data-aos="fade-right" className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-surface-storefront">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
@@ -186,7 +186,7 @@ export default function ContactInquiryForm() {
             ))}
           </div>
 
-          <div className="mt-6 rounded-xl bg-white p-4 text-sm leading-relaxed text-neutral-600 ring-1 ring-edge dark:bg-[#0E1A15]/50 dark:text-neutral-400">
+          <div className="mt-6 rounded-xl bg-white p-4 text-sm leading-relaxed text-neutral-600 ring-1 ring-edge dark:bg-surface-canvas/50 dark:text-neutral-400">
             <p>
               <span className="font-semibold text-neutral-900 dark:text-neutral-100">Good to know:</span> frames brought
               in for lens fitting are glazed and returned within 5–7 working days for standard prescriptions.

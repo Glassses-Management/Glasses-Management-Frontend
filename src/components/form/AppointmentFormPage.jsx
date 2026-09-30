@@ -105,7 +105,7 @@ const AppointmentForm = () => {
           <Field label="Optometrist ID" icon={Stethoscope} name="optometrist_id" value={form.optometrist_id} onChange={(e) => set('optometrist_id', e.target.value)} error={errors.optometrist_id} placeholder="Optional" />
           <Field label="Date & Time" icon={Clock} name="scheduled_at" type="datetime-local" min={minDateTime()} required value={form.scheduled_at} onChange={(e) => set('scheduled_at', e.target.value)} error={errors.scheduled_at} />
           <Field label="Status" icon={Calendar} name="status" value={form.status} onChange={(e) => set('status', e.target.value)}>
-            <select className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-100 dark:focus:border-[#8fa88f]">
+            <select className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-surface-ink outline-none transition-colors focus:border-sage dark:border-neutral-700 dark:bg-surface-dark dark:text-neutral-100 dark:focus:border-sage">
               <option value="SCHEDULED">Scheduled</option>
               <option value="IN_PROGRESS">In Progress</option>
               <option value="COMPLETED">Completed</option>
@@ -123,12 +123,12 @@ const AppointmentForm = () => {
             onChange={(e) => set('notes', e.target.value)}
             placeholder="Add any relevant notes about this appointment..."
             rows={4}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-[#1a1a2e] outline-none transition-colors focus:border-[#8fa88f] dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-100 dark:focus:border-[#8fa88f] dark:placeholder:text-neutral-500"
+            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-surface-ink outline-none transition-colors focus:border-sage dark:border-neutral-700 dark:bg-surface-dark dark:text-neutral-100 dark:focus:border-sage dark:placeholder:text-neutral-500"
           />
         </div>
       </Card>
 
-      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-[#1c1c28]/80 md:-mx-6 md:px-6 md:py-5">
+      <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-surface-dark/80 md:-mx-6 md:px-6 md:py-5">
         <div className="flex items-center justify-between gap-3">
           <p className="hidden text-xs text-gray-400 dark:text-neutral-500 sm:block">
             {isEdit ? 'Changes apply immediately.' : 'The appointment will appear in the list after saving.'}

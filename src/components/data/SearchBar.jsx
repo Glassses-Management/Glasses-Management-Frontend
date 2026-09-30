@@ -1,18 +1,33 @@
 // Search input that types instantly but only tells the parent after ~300ms of
 // silence, so list filtering doesn't run on every keystroke.
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function SearchBar({ value, onChange, placeholder = 'Search by name, phone, or email...' }) {
   const [input, setInput] = useState(value ?? '')
+  const [syncedFrom, setSyncedFrom] = useState(value ?? '')
 
+  // The newest value/onChange live in a ref rather than in the debounce's
+  // dependency array. Parents usually pass a fresh onChange closure on every
+  // render, and depending on it would reset the timer so often that onChange
+  // would never actually fire.
+  const latest = useRef({ value, onChange })
   useEffect(() => {
+    latest.current = { value, onChange }
+  }, [value, onChange])
+
+  // Adjust state during render (React's recommended alternative to a
+  // setState-in-effect) when the parent pushes a new value from outside, e.g.
+  // a "clear filters" button.
+  if ((value ?? '') !== syncedFrom) {
+    setSyncedFrom(value ?? '')
     setInput(value ?? '')
-  }, [value])
+  }
 
   useEffect(() => {
+    const snapshot = input
     const timeout = setTimeout(() => {
-      if (input !== value) onChange(input)
+      if (snapshot !== (latest.current.value ?? '')) latest.current.onChange(snapshot)
     }, 300)
     return () => clearTimeout(timeout)
   }, [input])
@@ -37,7 +52,7 @@ function SearchBar({ value, onChange, placeholder = 'Search by name, phone, or e
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none transition-colors duration-300 dark:border-neutral-700 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-violet-400"
+        className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-forest-400 focus:ring-2 focus:ring-forest-100 focus:outline-none transition-colors duration-300 dark:border-neutral-700 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-forest-400"
       />
     </div>
   )

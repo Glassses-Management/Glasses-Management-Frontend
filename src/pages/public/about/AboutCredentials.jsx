@@ -25,7 +25,7 @@ const CREDENTIALS = [
 
 function AboutCredentials() {
   return (
-    <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-[#121F18]">
+    <section className="bg-mist py-16 transition-colors duration-300 md:py-20 dark:bg-surface-deep">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-forest dark:text-leaf">
           Professional Credentials
@@ -44,7 +44,7 @@ function AboutCredentials() {
               key={item.title}
               data-aos="fade-up"
               data-aos-delay={`${i * 100}`}
-              className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 dark:bg-[#16271F]"
+              className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition-transform duration-300 hover:-translate-y-1 dark:bg-surface-storefront"
             >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
                 <item.icon className="h-6 w-6" strokeWidth={1.8} />

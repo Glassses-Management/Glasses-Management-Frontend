@@ -72,7 +72,7 @@ export default function DropdownMenu({ items = [], label = 'More actions' }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={label}
-        className="inline-flex size-8 items-center justify-center rounded-lg text-gray-500 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 focus-visible:ring-2 focus-visible:ring-violet-500 dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100"
+        className="inline-flex size-8 items-center justify-center rounded-lg text-gray-500 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 focus-visible:ring-2 focus-visible:ring-forest-500 dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100"
       >
         <MoreHorizontal size={16} />
       </button>
@@ -82,7 +82,7 @@ export default function DropdownMenu({ items = [], label = 'More actions' }) {
           ref={menuRef}
           role="menu"
           style={{ position: 'fixed', top: position.top, bottom: position.bottom, left: position.left, width: MENU_WIDTH }}
-          className="z-50 overflow-hidden rounded-xl border border-gray-200 bg-white py-1 shadow-lg dark:border-neutral-700 dark:bg-[#1c1c28]"
+          className="z-50 overflow-hidden rounded-xl border border-gray-200 bg-white py-1 shadow-lg dark:border-neutral-700 dark:bg-surface-dark"
         >
           {items.map((item) => (
             <button

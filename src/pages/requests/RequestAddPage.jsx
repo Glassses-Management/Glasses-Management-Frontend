@@ -135,7 +135,7 @@ function RequestAddPage() {
                 rows={4}
                 maxLength={NOTES_MAX}
                 placeholder="Enter any additional information about this request..."
-                className="h-auto w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-[#8fa88f] focus:ring-2 focus:ring-[#8fa88f]/20 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100 dark:placeholder:text-neutral-500"
+                className="h-auto w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-sage focus:ring-2 focus:ring-sage/20 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100 dark:placeholder:text-neutral-500"
               />
             </Field>
           </div>

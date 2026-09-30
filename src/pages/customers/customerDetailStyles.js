@@ -8,7 +8,7 @@
 // The standard dashboard card: white on the #f5f6fb canvas, hairline border,
 // no heavy shadow. Matches DashboardLayout's page background.
 export const card =
-  'rounded-2xl border border-gray-200 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]'
+  'rounded-2xl border border-gray-200 bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark'
 
 export const cardBody = 'p-5'
 export const cardTitle = 'text-sm font-semibold text-gray-900 dark:text-neutral-50'
@@ -35,8 +35,8 @@ export const tagChip =
 
 // A quieter, text-only action for card footers ("View All Orders").
 export const linkAction =
-  'text-sm font-medium text-violet-600 transition-colors duration-300 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300'
+  'text-sm font-medium text-forest-600 transition-colors duration-300 hover:text-forest-700 dark:text-forest-400 dark:hover:text-forest-300'
 
 // Soft icon square used in the summary cards and the profile header.
 export const iconTile =
-  'flex size-9 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-300'
+  'flex size-9 shrink-0 items-center justify-center rounded-xl bg-forest-50 text-forest-600 dark:bg-forest-500/10 dark:text-forest-300'

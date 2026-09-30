@@ -57,13 +57,13 @@ function AppointmentDetailPage() {
         <button
           type="button"
           onClick={() => navigate('/dashboard/appointments')}
-          className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-[#1a1a2e] dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100"
+          className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-surface-ink dark:text-neutral-500 dark:hover:bg-white/10 dark:hover:text-neutral-100"
           aria-label="Back to appointments"
         >
           <ArrowLeft size={20} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Appointment #{appointment.id}</h1>
+          <h1 className="text-2xl font-bold text-surface-ink dark:text-neutral-50">Appointment #{appointment.id}</h1>
           <p className="text-sm text-gray-400 dark:text-neutral-500">
             {formatDateTime(appointment.scheduled_at)}
           </p>
@@ -71,8 +71,8 @@ function AppointmentDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
-          <h3 className="mb-4 font-semibold text-[#1a1a2e] dark:text-neutral-50">Details</h3>
+        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
+          <h3 className="mb-4 font-semibold text-surface-ink dark:text-neutral-50">Details</h3>
           <div className="space-y-3">
             {[
               ['Customer', customerName],
@@ -82,14 +82,14 @@ function AppointmentDetailPage() {
             ].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between gap-3 text-sm">
                 <span className="text-gray-500 dark:text-neutral-400">{label}</span>
-                <span className="font-medium text-[#1a1a2e] dark:text-neutral-100">{value}</span>
+                <span className="font-medium text-surface-ink dark:text-neutral-100">{value}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
-          <h3 className="mb-4 font-semibold text-[#1a1a2e] dark:text-neutral-50">Notes</h3>
+        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
+          <h3 className="mb-4 font-semibold text-surface-ink dark:text-neutral-50">Notes</h3>
           <p className="text-sm text-gray-600 dark:text-neutral-300">
             {appointment.notes || 'No notes provided.'}
           </p>

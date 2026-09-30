@@ -122,7 +122,7 @@ function BulkPrescriptionPage() {
             <BulkPrescriptionForm customers={missing} form={draft} errors={errors} onChange={handleChange} />
           </div>
 
-          <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-[#1c1c28]/80 md:-mx-6 md:px-6">
+          <div className="sticky bottom-0 z-10 -mx-4 border-t border-gray-200/60 bg-white/80 px-4 py-4 backdrop-blur-md dark:border-neutral-800 dark:bg-surface-dark/80 md:-mx-6 md:px-6">
             <div className="flex flex-wrap items-center justify-end gap-3">
               <Button type="button" variant="outline" icon={<Plus size={16} />} disabled={hasErrors || !draft.customer_id} onClick={addToBatch}>
                 Add to Batch

@@ -4,24 +4,12 @@ import SearchBar from '@/components/data/SearchBar'
 import DataTable from '@/components/data/DataTable'
 import Pagination from '@/components/ui/Pagination'
 import Button from '@/components/ui/Button'
+import Avatar from '@/components/ui/Avatar'
 import { usePrescriptions } from '@/hook/UsePrescription'
 import { useCustomers } from '@/hook/UseCustomer'
-import { getInitials, getAvatarColors } from '@/utils/avatar'
 import { formatDate } from '@/utils/format'
 
 const ITEMS_PER_PAGE = 10
-
-function Avatar({ name, id }) {
-    const { bg, text } = getAvatarColors(id)
-    return (
-        <span
-            className="flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
-            style={{ backgroundColor: bg, color: text }}
-        >
-            {getInitials(name)}
-        </span>
-    )
-}
 
 const prescriptionId = (id) => `RX-${String(id).padStart(5, '0')}`
 

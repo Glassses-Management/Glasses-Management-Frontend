@@ -1,9 +1,7 @@
 // Dashboard stat card. The value/trend come from the summary object in mock data
 // — this component only styles them, it never touches the data itself.
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { cn } from '@/utils/cn'
 
 function TrendArrow({ up }) {
   return up ? (
@@ -42,7 +40,7 @@ function StatsCard({ label, value, trend, icon, className = '' }) {
   const hasDownTrend = trend?.startsWith('-')
 
   return (
-    <div className={cn('rounded-2xl border border-gray-200 bg-white p-5 transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]', className)}>
+    <div className={cn('rounded-2xl border border-gray-200 bg-white p-5 transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark', className)}>
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-gray-500 dark:text-neutral-400">{label}</p>

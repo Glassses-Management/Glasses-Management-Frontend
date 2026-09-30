@@ -121,7 +121,7 @@ export default function CatalogFilterGroups({
                 className={`flex flex-col items-center gap-1 rounded-xl border px-2 py-3 text-xs font-medium transition-colors ${
                   active
                     ? 'border-forest bg-forest/10 text-forest'
-                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-forest/50 dark:border-neutral-700 dark:bg-[#0E1A15] dark:text-neutral-300 dark:hover:border-leaf/50'
+                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-forest/50 dark:border-neutral-700 dark:bg-surface-canvas dark:text-neutral-300 dark:hover:border-leaf/50'
                 }`}
               >
                 <Icon size={18} />

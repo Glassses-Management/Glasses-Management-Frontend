@@ -25,16 +25,17 @@ function MyAppointmentPage() {
   const { user } = useAuth()
   const { customerId } = useOwnCustomerId()
   const { error: toastError } = useToast()
+  // While there is no signed-in customer record yet there is nothing to fetch,
+  // so "loading" is derived from this rather than being cleared inside the
+  // effect - setting it there would be a synchronous cascading render.
+  const canFetch = Boolean(user?.id) && customerId != null
   const [appointments, setAppointments] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [fetching, setFetching] = useState(true)
+  const loading = canFetch && fetching
 
   useEffect(() => {
-    if (!user?.id || customerId == null) {
-      setLoading(false)
-      return undefined
-    }
+    if (!canFetch) return undefined
     let cancelled = false
-    setLoading(true)
     getMyAppointments()
       .then((data) => { if (!cancelled) setAppointments(Array.isArray(data) ? data : []) })
       .catch((err) => {
@@ -42,9 +43,9 @@ function MyAppointmentPage() {
         console.error('MyAppointmentPage: failed to load:', err?.response?.status || err?.message || err)
         toastError(err?.response?.data?.message || err?.message || 'Failed to load your appointments')
       })
-      .finally(() => { if (!cancelled) setLoading(false) })
+      .finally(() => { if (!cancelled) setFetching(false) })
     return () => { cancelled = true }
-  }, [user?.id, customerId])
+  }, [user?.id, customerId, canFetch, toastError])
 
   const sorted = [...appointments].sort((a, b) => {
     const da = (a.scheduled_at || a.created_at || '').toString()
@@ -62,11 +63,11 @@ function MyAppointmentPage() {
       </div>
 
       {loading ? (
-        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-[#1c1c28] dark:text-neutral-400">
+        <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-surface-dark dark:text-neutral-400">
           Loading your appointments…
         </div>
       ) : sorted.length === 0 ? (
-        <div className="rounded-2xl bg-white p-10 text-center dark:bg-[#1c1c28]">
+        <div className="rounded-2xl bg-white p-10 text-center dark:bg-surface-dark">
           <CalendarClock size={40} className="mx-auto text-gray-300 dark:text-neutral-600" />
           <p className="mt-3 text-sm text-gray-500 dark:text-neutral-400">You don't have any appointments yet.</p>
         </div>
@@ -75,7 +76,7 @@ function MyAppointmentPage() {
           {sorted.map((a) => (
             <div
               key={a.id}
-              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]"
+              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark"
             >
               <div className="mb-4 flex items-start justify-between gap-3">
                 <div>

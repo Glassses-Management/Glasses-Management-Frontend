@@ -34,7 +34,7 @@ function OrderCard({ order }) {
 
       <div className="mt-2 flex items-center justify-between">
         <span className="text-sm font-semibold text-gray-900 dark:text-neutral-50">{formatCurrency(order.total)}</span>
-        <Link to={`/dashboard/orders/${order.id}`} className="inline-flex items-center gap-0.5 text-sm font-medium text-violet-600 dark:text-violet-400">
+        <Link to={`/dashboard/orders/${order.id}`} className="inline-flex items-center gap-0.5 text-sm font-medium text-forest-600 dark:text-forest-400">
           View
           <ChevronRight size={14} />
         </Link>
@@ -106,7 +106,7 @@ export default function CustomerOrdersTable({ orders, limit }) {
                       <StatusCell status={order.status} />
                     </td>
                     <td className={`${tableCell} text-right`}>
-                      <Link to={`/dashboard/orders/${order.id}`} className="text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400">
+                      <Link to={`/dashboard/orders/${order.id}`} className="text-sm font-medium text-forest-600 hover:text-forest-700 dark:text-forest-400">
                         View
                       </Link>
                     </td>

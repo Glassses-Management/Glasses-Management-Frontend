@@ -189,7 +189,7 @@ export default function PublicProductList() {
   )
 
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
+    <div className="min-h-screen bg-white font-sans text-neutral-800 antialiased transition-colors duration-300 dark:bg-surface-canvas dark:text-neutral-200">
       <Navbar />
 
       <CatalogHeader totalCount={catalog.length} shownCount={filtered.length} />
@@ -211,7 +211,7 @@ export default function PublicProductList() {
               onClick={() => setDrawerOpen(false)}
             />
             <div
-              className={`absolute inset-y-0 left-0 w-[85%] max-w-sm overflow-y-auto bg-white p-4 shadow-xl transition-transform duration-300 dark:bg-[#0E1A15] ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
+              className={`absolute inset-y-0 left-0 w-[85%] max-w-sm overflow-y-auto bg-white p-4 shadow-xl transition-transform duration-300 dark:bg-surface-canvas ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
             >
               <div className="mb-3 flex items-center justify-between">
                 <p className="font-sans font-semibold text-neutral-900 dark:text-neutral-50">Filters</p>

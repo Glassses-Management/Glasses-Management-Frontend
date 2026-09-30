@@ -39,7 +39,7 @@ function DetailRow({ icon: Icon, label, value }) {
       </span>
       <div className="min-w-0">
         <p className="text-xs text-gray-400 dark:text-neutral-500">{label}</p>
-        <p className={`truncate text-sm font-medium ${hasValue ? 'text-[#1a1a2e] dark:text-neutral-100' : 'text-gray-300 dark:text-neutral-600'}`}>
+        <p className={`truncate text-sm font-medium ${hasValue ? 'text-surface-ink dark:text-neutral-100' : 'text-gray-300 dark:text-neutral-600'}`}>
           {value || '—'}
         </p>
       </div>
@@ -118,7 +118,7 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
-      <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Account</h1>
+      <h1 className="text-2xl font-bold text-surface-ink dark:text-neutral-50">Account</h1>
       <hr className="mt-3 border-gray-100 dark:border-neutral-800" />
 
       {loading ? (
@@ -146,7 +146,7 @@ export default function ProfilePage() {
               <section className="py-5">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Name</p>
+                    <p className="text-sm font-semibold text-surface-ink dark:text-neutral-100">Name</p>
                     <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">Your display name and contact info</p>
                   </div>
                   <Button variant="outline" size="sm" icon={<Pencil size={14} />} onClick={() => setInfoOpen(true)}>
@@ -161,7 +161,7 @@ export default function ProfilePage() {
 
               {/* Account details */}
               <section className="py-5">
-                <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Account Details</p>
+                <p className="text-sm font-semibold text-surface-ink dark:text-neutral-100">Account Details</p>
                 <p className="mt-0.5 mb-4 text-xs text-gray-400 dark:text-neutral-500">Role, contact and membership info</p>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <DetailRow icon={Shield} label="Role" value={toLabel(role)} />
@@ -188,7 +188,7 @@ export default function ProfilePage() {
               {/* Password */}
               <section className="flex flex-wrap items-start justify-between gap-4 py-5">
                 <div>
-                  <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Password</p>
+                  <p className="text-sm font-semibold text-surface-ink dark:text-neutral-100">Password</p>
                   <p className="mt-1 text-xs text-gray-400 dark:text-neutral-500">
                     Log in with your password instead of using temporary login codes
                   </p>
@@ -204,9 +204,9 @@ export default function ProfilePage() {
           {customerId && (
             <aside className="lg:order-2 lg:col-span-1">
               <div className="lg:sticky lg:top-6">
-                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
                   <div className="mb-3 flex items-center justify-between gap-2">
-                    <p className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">Order History</p>
+                    <p className="text-sm font-semibold text-surface-ink dark:text-neutral-100">Order History</p>
                     {orderTotal > 0 && (
                       <span className="rounded-full bg-gray-50 px-2.5 py-0.5 text-xs font-medium text-gray-500 dark:bg-white/5 dark:text-neutral-400">
                         {orderTotal} total
@@ -229,13 +229,13 @@ export default function ProfilePage() {
                       {orders.map((order) => (
                         <div key={order.id} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-medium text-[#1a1a2e] dark:text-neutral-100">Order #{order.id}</p>
+                            <p className="truncate text-sm font-medium text-surface-ink dark:text-neutral-100">Order #{order.id}</p>
                             <p className="mt-0.5 text-xs text-gray-400 dark:text-neutral-500">
                               {formatDate(order.order_date || order.created_at)}
                             </p>
                           </div>
                           <div className="flex shrink-0 flex-col items-end gap-1">
-                            <span className="text-sm font-semibold text-[#1a1a2e] dark:text-neutral-100">
+                            <span className="text-sm font-semibold text-surface-ink dark:text-neutral-100">
                               {formatCurrency(order.total)}
                             </span>
                             <Badge text={order.status} />

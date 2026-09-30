@@ -35,7 +35,7 @@ function AccountFavorites() {
         </p>
         <Link
           to="/products"
-          className="mt-5 inline-flex items-center justify-center rounded-full bg-[#8fa88f] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#6f8a6f]"
+          className="mt-5 inline-flex items-center justify-center rounded-full bg-sage px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sage-deep"
         >
           Browse Products
         </Link>

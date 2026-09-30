@@ -96,11 +96,11 @@ function AttachmentUploader({
   const removeLabel = file ? 'Remove' : onRemove ? 'Delete' : 'Clear'
 
   const targetClass = isCircle
-    ? `relative size-16 shrink-0 cursor-pointer overflow-hidden rounded-full outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#8fa88f] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 ${dragging ? 'ring-2 ring-[#8fa88f]' : ''}`
-    : `relative flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 overflow-hidden rounded-2xl border-2 border-dashed text-center text-gray-400 transition-all outline-none aspect-[4/3] focus-visible:ring-2 focus-visible:ring-[#8fa88f] dark:text-neutral-500 ${
+    ? `relative size-16 shrink-0 cursor-pointer overflow-hidden rounded-full outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 ${dragging ? 'ring-2 ring-sage' : ''}`
+    : `relative flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 overflow-hidden rounded-2xl border-2 border-dashed text-center text-gray-400 transition-all outline-none aspect-[4/3] focus-visible:ring-2 focus-visible:ring-sage dark:text-neutral-500 ${
         dragging
-          ? 'border-[#8fa88f] bg-[#8fa88f]/10'
-          : 'border-gray-200 bg-gray-50 hover:border-[#8fa88f] hover:bg-[#8fa88f]/5 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-[#8fa88f]'
+          ? 'border-sage bg-sage/10'
+          : 'border-gray-200 bg-gray-50 hover:border-sage hover:bg-sage/5 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-sage'
       }`
 
   return (
@@ -149,7 +149,7 @@ function AttachmentUploader({
           <>
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-gray-400 shadow-sm transition-colors dark:bg-neutral-700 dark:text-neutral-300">
               {saving ? (
-                <span className="size-5 animate-spin rounded-full border-2 border-[#8fa88f] border-t-transparent" />
+                <span className="size-5 animate-spin rounded-full border-2 border-sage border-t-transparent" />
               ) : (
                 <UploadCloud size={22} />
               )}
@@ -175,7 +175,7 @@ function AttachmentUploader({
             {!defer && file && (
               <Button
                 size="sm"
-                variant="forest"
+                variant="primary"
                 loading={saving}
                 onClick={handleUpload}
                 icon={<UploadCloud size={12} />}

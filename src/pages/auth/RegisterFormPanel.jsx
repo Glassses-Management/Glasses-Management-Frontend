@@ -10,7 +10,7 @@ import { isGoogleConfigured } from '@/lib/googleIdentity'
 import { googleAccountExists } from '@/api/authApi'
 
 const inputClass =
-  'w-full rounded-xl border border-neutral-200 bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-900 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-[#0E1A15] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
+  'w-full rounded-xl border border-neutral-200 bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-900 outline-none transition-colors focus:border-forest dark:border-neutral-600 dark:bg-surface-canvas dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
 
 const iconClass = 'pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500'
 
@@ -114,7 +114,7 @@ function RegisterFormPanel() {
 
   return (
     <div className="flex items-center justify-center p-5 md:p-10">
-      <div className="w-full max-w-[440px] rounded-2xl bg-white p-7 shadow-lg ring-1 ring-neutral-200/60 transition-colors duration-300 md:p-8 dark:bg-[#16271F] dark:ring-neutral-800">
+      <div className="w-full max-w-[440px] rounded-2xl bg-white p-7 shadow-lg ring-1 ring-neutral-200/60 transition-colors duration-300 md:p-8 dark:bg-surface-storefront dark:ring-neutral-800">
         <h1 className="mb-4 font-sans text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
           Create your account
         </h1>

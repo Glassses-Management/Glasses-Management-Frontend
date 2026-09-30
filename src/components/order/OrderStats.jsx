@@ -14,7 +14,7 @@ function cardIcon({ tone }) {
 
 function OrderStats({ stats }) {
     const cards = [
-        { label: 'Total Orders', value: stats.total, icon: cardIcon({ tone: 'bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300' }) },
+        { label: 'Total Orders', value: stats.total, icon: cardIcon({ tone: 'bg-forest-100 text-forest-600 dark:bg-forest-500/20 dark:text-forest-300' }) },
         { label: 'Pending', value: stats.pending, icon: cardIcon({ tone: 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-300' }) },
         { label: 'Processing', value: stats.processing, icon: cardIcon({ tone: 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300' }) },
         { label: 'Ready', value: stats.ready, icon: cardIcon({ tone: 'bg-cyan-100 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-300' }) },

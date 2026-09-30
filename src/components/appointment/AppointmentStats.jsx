@@ -13,7 +13,7 @@ function cardIcon({ tone }) {
 
 function AppointmentStats({ stats }) {
     const cards = [
-        { label: 'Total Appointments', value: stats.total, icon: cardIcon({ tone: 'bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300' }) },
+        { label: 'Total Appointments', value: stats.total, icon: cardIcon({ tone: 'bg-forest-100 text-forest-600 dark:bg-forest-500/20 dark:text-forest-300' }) },
         { label: 'Pending Review', value: stats.pending, icon: cardIcon({ tone: 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-300' }) },
         { label: 'Scheduled', value: stats.scheduled, icon: cardIcon({ tone: 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300' }) },
         { label: 'Completed', value: stats.completed, icon: cardIcon({ tone: 'bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-300' }) },

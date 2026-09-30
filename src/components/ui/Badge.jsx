@@ -1,9 +1,8 @@
 // Reusable status pill for backend enum strings (Appointment.status, Order.status, Order.payment_status).
 // The backend sends raw SCREAMING_SNAKE_CASE values — this component turns them into readable labels.
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { cn } from '@/utils/cn'
+import { getVariantFromStatus } from '@/components/ui/badgeVariants'
 
 const variantClasses = {
   success: 'bg-green-50 text-green-700 ring-1 ring-green-200 dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/30',
@@ -28,36 +27,6 @@ const toTitleCase = (text) =>
     .filter(Boolean)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
-
-export const getVariantFromStatus = (status) => {
-  switch (status) {
-    case 'COMPLETED':
-    case 'READY':
-    case 'PAID':
-      return 'success'
-    case 'SCHEDULED':
-    case 'PROCESSING':
-    case 'PARTIAL':
-    case 'CONFIRMED':
-    case 'IN_PROGRESS':
-      return 'info'
-    // PENDING_SCHEDULING is the state an approved eye-exam request sits in until
-    // staff give it a date (RequestService.approve). Not a neutral grey: it is
-    // still waiting on the clinic.
-    case 'PENDING':
-    case 'PENDING_REVIEW':
-    case 'PENDING_SCHEDULING':
-    case 'UNPAID':
-      return 'warning'
-    case 'CANCELLED':
-    case 'FAILED':
-      return 'danger'
-    case 'READY_FOR_PICKUP':
-      return 'success'
-    default:
-      return 'neutral'
-  }
-}
 
 export function Badge({ text, variant, raw = false, className = '' }) {
   const displayText = raw ? text : toTitleCase(text || '')

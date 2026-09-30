@@ -13,7 +13,7 @@ import { usePrescriptions } from '@/hook/UsePrescription'
 import { useToast } from '@/hook/UseToast'
 import { deriveMemberId, formatDate } from '@/utils/format'
 
-const cardClass = 'rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-[#1c1c28]'
+const cardClass = 'rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-surface-dark'
 const toList = (data) => (Array.isArray(data?.content) ? data.content : Array.isArray(data) ? data : [])
 
 function InfoItem({ label, children }) {
@@ -85,7 +85,7 @@ function PrescriptionDetail() {
           <Button variant="ghost" size="sm" icon={<Printer size={14} />} onClick={() => window.print()}>Print</Button>
           <Button variant="ghost" size="sm" icon={<FileDown size={14} />} onClick={downloadPdf}>Download PDF</Button>
           <Button variant="outline" size="sm" icon={<Pencil size={14} />} onClick={() => navigate(`/dashboard/prescriptions/${prescription.id}/edit`)}>Edit</Button>
-          <Button variant="forest" size="sm" icon={<ShoppingBag size={14} />} onClick={goOrder}>Order Glasses</Button>
+          <Button variant="primary" size="sm" icon={<ShoppingBag size={14} />} onClick={goOrder}>Order Glasses</Button>
         </div>
       </nav>
 

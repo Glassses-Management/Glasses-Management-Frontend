@@ -19,10 +19,10 @@ const FEATURES = [
 ]
 
 const AVATARS = [
-  { initials: 'SC', bg: 'bg-[#8fa88f]' },
-  { initials: 'MK', bg: 'bg-[#6f8a6f]' },
+  { initials: 'SC', bg: 'bg-sage' },
+  { initials: 'MK', bg: 'bg-sage-deep' },
   { initials: 'JT', bg: 'bg-forest' },
-  { initials: '+', bg: 'bg-[#16302a]' },
+  { initials: '+', bg: 'bg-forest-deep' },
 ]
 
 function RegisterLeftPanel() {
@@ -65,7 +65,7 @@ function RegisterLeftPanel() {
             {AVATARS.map((a) => (
               <span
                 key={a.initials}
-                className={`flex size-8 items-center justify-center rounded-full text-[11px] font-semibold text-white ring-2 ring-mist-soft dark:ring-[#0E1A15] ${a.bg}`}
+                className={`flex size-8 items-center justify-center rounded-full text-[11px] font-semibold text-white ring-2 ring-mist-soft dark:ring-surface-canvas ${a.bg}`}
               >
                 {a.initials}
               </span>

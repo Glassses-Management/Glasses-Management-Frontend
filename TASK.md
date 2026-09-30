@@ -1,5 +1,14 @@
 # Task Division — 2 Developers
 
+> **Historical planning doc — do not use as a to-do list.**
+> The build this plan describes is complete. The status boxes below were never
+> updated, and several planned files never existed under those names
+> (`src/router.jsx` became `src/App.jsx`; `OrderForm` / `AppointmentForm` /
+> `ConfirmDialog` / `Toast` were superseded by `components/form/*`, `Modal.jsx`,
+> and `ToastContainer.jsx`; the unused `usePagination` / `useConfirmDialog` hooks
+> were removed). For the real layout and conventions see `Folder_Structure.md`
+> and `AGENTS.md`.
+
 ## Rules
 - Each person works ONLY on their assigned files
 - Create a feature branch per task: `git checkout -b feat/<task-name>`

@@ -5,7 +5,7 @@ import Avatar from '@/components/ui/Avatar'
 import { useAuth } from '@/hook/UseAuth'
 import { useToast } from '@/hook/UseToast'
 import { getMyAttachments, uploadAttachment } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 
 function AccountHeaderCard() {
   const { user } = useAuth()
@@ -51,7 +51,7 @@ function AccountHeaderCard() {
   }
 
   return (
-    <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]" data-aos="fade-up">
+    <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-storefront" data-aos="fade-up">
       <span className="inline-flex items-center gap-2 rounded-full bg-forest/10 px-3 py-1 text-xs font-semibold text-forest dark:bg-leaf/10 dark:text-leaf">
         <span className="size-1.5 animate-pulse rounded-full bg-forest dark:bg-leaf" />
         Wavefront Clinical Record Synced
@@ -66,10 +66,10 @@ function AccountHeaderCard() {
               disabled={uploading}
               title={avatar ? 'Click to change your profile picture' : 'Click to upload a profile picture'}
               aria-label="Upload profile picture"
-              className="relative shrink-0 cursor-pointer rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+              className="relative shrink-0 cursor-pointer rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-forest-500 focus-visible:ring-offset-2"
             >
               <Avatar name={displayName} id={user.id} src={avatar} size="size-16 text-xl" />
-              <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-forest text-white ring-2 ring-white dark:ring-[#16271F]" title="Change profile picture">
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-forest text-white ring-2 ring-white dark:ring-surface-storefront" title="Change profile picture">
                 <Camera size={12} />
               </span>
             </button>

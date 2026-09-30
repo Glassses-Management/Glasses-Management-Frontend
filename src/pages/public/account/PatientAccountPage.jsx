@@ -86,7 +86,7 @@ function PatientAccountPage() {
   const customerOrders = useCustomerOrders()
 
   return (
-    <div className="min-h-screen bg-mist-soft text-neutral-800 antialiased transition-colors duration-300 dark:bg-[#0E1A15] dark:text-neutral-200">
+    <div className="min-h-screen bg-mist-soft text-neutral-800 antialiased transition-colors duration-300 dark:bg-surface-canvas dark:text-neutral-200">
       <Navbar />
 
       <section className="mx-auto max-w-6xl px-4 py-10 md:px-6">

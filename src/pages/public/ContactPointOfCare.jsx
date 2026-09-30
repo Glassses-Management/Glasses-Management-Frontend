@@ -67,7 +67,7 @@ export default function ContactPointOfCare() {
               key={title}
               data-aos="fade-up"
               data-aos-delay={`${i * 100}`}
-              className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-700 dark:bg-[#16271F]"
+              className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-700 dark:bg-surface-storefront"
             >
               <span className="flex size-11 items-center justify-center rounded-full bg-forest/10 text-forest dark:bg-leaf/10 dark:text-leaf">
                 <Icon size={20} />

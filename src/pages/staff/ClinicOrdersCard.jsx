@@ -9,7 +9,7 @@ function ClinicOrdersCard({ orders }) {
   const list = useMemo(() => (Array.isArray(orders) ? orders : []), [orders])
 
   return (
-    <div className="rounded-xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]">
+    <div className="rounded-xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-storefront">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-edge px-5 py-4 dark:border-neutral-800">
         <h2 className="text-base font-semibold text-ink dark:text-neutral-50">Recent Orders</h2>
         <button

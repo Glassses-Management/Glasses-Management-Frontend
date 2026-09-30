@@ -55,7 +55,7 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-7xl px-4 pb-8 pt-6 sm:px-6">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1a1a2e] dark:text-neutral-50">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-surface-ink dark:text-neutral-50">Dashboard</h1>
           <p className="mt-1 text-sm text-gray-400 dark:text-neutral-500">
             Overview of your optical shop performance and daily prescriptions
           </p>
@@ -67,7 +67,7 @@ export default function DashboardPage() {
           <Button variant="outline" size="md">
             Add Product
           </Button>
-          <Button variant="forest" size="md">
+          <Button variant="primary" size="md">
             New Order
           </Button>
         </div>

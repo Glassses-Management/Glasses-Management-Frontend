@@ -1,9 +1,7 @@
 import { Check } from 'lucide-react'
 import { REQUEST_STEPS } from '@/utils/RequestOrder'
+import { cn } from '@/utils/cn'
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 // Visual only: pass in how many steps are done (see reachedStep in utils/RequestOrder).
 export default function RequestStepper({ current }) {

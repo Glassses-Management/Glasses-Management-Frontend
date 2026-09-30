@@ -93,7 +93,7 @@ export default function AccountRefractionVault() {
       {loading ? (
         <div className="space-y-3 px-6 py-6">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-9 animate-pulse rounded-lg bg-mist dark:bg-[#1E332B]" />
+            <div key={i} className="h-9 animate-pulse rounded-lg bg-mist dark:bg-surface-raised" />
           ))}
         </div>
       ) : error ? (

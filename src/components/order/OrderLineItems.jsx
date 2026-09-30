@@ -1,21 +1,6 @@
 import { Plus, Trash2 } from 'lucide-react'
 import { formatCurrency } from '@/utils/format'
-
-export const LENS_TYPES = ['Single Vision', 'Progressive', 'Bifocal', 'Standard']
-export const COATINGS = ['Standard', 'Anti-Glare', 'Blue Light']
-export const LENS_INDEXES = [1.5, 1.6, 1.67, 1.74]
-
-export function newRow() {
-  return {
-    rowId: Date.now() + Math.random(),
-    productId: '',
-    quantity: 1,
-    lenType: 'Single Vision',
-    coating: 'Standard',
-    lenIndex: 1.6,
-    lensPrice: '',
-  }
-}
+import { LENS_TYPES, COATINGS, LENS_INDEXES, newRow } from '@/components/order/orderLineItemOptions'
 
 function OrderLineItems({ products, rows, onRowsChange }) {
   const productById = (id) => products.find((p) => p.id === id)
@@ -35,7 +20,7 @@ function OrderLineItems({ products, rows, onRowsChange }) {
   }
 
   const selectClass =
-    'rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-leaf focus:outline-none dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100'
+    'rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-leaf focus:outline-none dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100'
 
   return (
     <div>

@@ -29,7 +29,7 @@ export default function RecentOrdersCard({ orders, onViewAll, onPage }) {
   const to = Math.min(filtered.length, safePage * PAGE_SIZE + PAGE_SIZE)
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <div className="flex h-full flex-col rounded-2xl border border-edge bg-white shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-dark">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-edge px-5 py-4 dark:border-neutral-800">
         <div className="flex items-center gap-2">
           <ClipboardList size={16} className="text-leaf dark:text-leaf" />
@@ -39,7 +39,7 @@ export default function RecentOrdersCard({ orders, onViewAll, onPage }) {
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="rounded-lg border border-edge bg-white px-3 py-1.5 text-sm text-ink outline-none transition-colors duration-300 focus:border-forest focus:ring-2 focus:ring-forest/20 dark:border-neutral-700 dark:bg-[#14141e] dark:text-neutral-200"
+            className="rounded-lg border border-edge bg-white px-3 py-1.5 text-sm text-ink outline-none transition-colors duration-300 focus:border-forest focus:ring-2 focus:ring-forest/20 dark:border-neutral-700 dark:bg-surface-ink-soft dark:text-neutral-200"
           >
             {FILTERS.map((f) => (
               <option key={f.key} value={f.key}>{f.label}</option>

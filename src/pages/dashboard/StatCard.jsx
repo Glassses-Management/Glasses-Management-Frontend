@@ -11,7 +11,7 @@ function StatCard({ icon: Icon, label, value, badge, tone = 'neutral' }) {
   const badgeTone = typeof badge === 'string' ? tone : (badge?.tone || tone)
 
   return (
-    <div className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm ring-1 ring-edge transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-neutral-800">
+    <div className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm ring-1 ring-edge transition-colors duration-300 dark:bg-surface-dark dark:ring-neutral-800">
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-leaf/15 text-forest dark:bg-leaf/10 dark:text-leaf">
         <Icon size={22} />
       </div>

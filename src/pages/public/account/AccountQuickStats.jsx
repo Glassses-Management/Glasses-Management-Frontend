@@ -51,7 +51,7 @@ export default function AccountQuickStats({ orders }) {
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-[#16271F]"
+          className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-colors duration-300 dark:border-neutral-800 dark:bg-surface-storefront"
         >
           <p className="text-xs font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
             {stat.label}

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Plus, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react'
+import { Plus, AlertCircle } from 'lucide-react'
 import InventoryStats from '@/components/inventory/InventoryStats'
 import InventoryFilter from '@/components/inventory/InventoryFilter'
 import InventoryTable from '@/components/inventory/InventoryTable'
@@ -9,6 +9,7 @@ import { inventoryStatus, INVENTORY_STATUS, INVENTORY_STATUS_OPTIONS } from '@/u
 import { useToast } from '@/hook/UseToast'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
+import Pagination from '@/components/ui/Pagination'
 
 const PAGE_SIZE = 10
 
@@ -18,7 +19,6 @@ function InventoryList() {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [totalPages, setTotalPages] = useState(0)
 
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('all')
@@ -36,16 +36,18 @@ function InventoryList() {
     return []
   }
 
-  const fetchData = async (searchTerm, cat, st) => {
-    setLoading(true)
+  // Only the search term is sent to the server; category and status are pure
+  // client-side filters over the rows that come back.
+  // setLoading(true) is not called here on purpose - doing it synchronously
+  // from the filter effect would be a cascading render. `loading` starts true,
+  // and the delete-reload below runs behind the modal's own spinner.
+  const fetchData = useCallback(async (searchTerm) => {
     setError('')
     try {
       const params = {}
       if (searchTerm?.trim()) params.search = searchTerm.trim()
       const data = await getInventories(params)
-      const list = normalizeData(data)
-      setItems(list)
-      setTotalPages(Math.ceil(list.length / PAGE_SIZE))
+      setItems(normalizeData(data))
     } catch (err) {
       const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to load inventory'
       setError(msg)
@@ -53,13 +55,13 @@ function InventoryList() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
-    let cancelled = false
-    fetchData(search, category, status)
-    return () => { cancelled = true }
-  }, [search, category, status, location.key])
+    // Deferred by one microtask so the state updates inside fetchData land in a
+    // promise callback instead of synchronously in the effect body.
+    void Promise.resolve().then(() => fetchData(search))
+  }, [search, location.key, fetchData])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -95,7 +97,7 @@ function InventoryList() {
       await deleteInventory(deleting.id)
       toastSuccess('Inventory item deleted.')
       setDeleting(null)
-      fetchData(search, category, status)
+      fetchData(search)
     } catch (err) {
       const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || 'Failed to delete'
       toastError(msg)
@@ -138,7 +140,7 @@ function InventoryList() {
         />
 
         {loading ? (
-          <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm transition-colors duration-300 dark:bg-[#1c1c28] dark:text-neutral-400">
+          <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm transition-colors duration-300 dark:bg-surface-dark dark:text-neutral-400">
             Loading inventory...
           </div>
         ) : error ? (
@@ -146,58 +148,19 @@ function InventoryList() {
             <AlertCircle size={32} className="mx-auto mb-3 text-red-500" />
             <p className="text-sm font-medium text-red-700 dark:text-red-300">{error}</p>
             <p className="mt-2 text-sm text-red-500 dark:text-red-400">Check the backend connection and try again.</p>
-            <Button variant="outline" className="mt-4" onClick={() => fetchData(search, category, status)}>Retry</Button>
+            <Button variant="outline" className="mt-4" onClick={() => fetchData(search)}>Retry</Button>
           </div>
         ) : (
           <>
             <InventoryTable products={paged} onEdit={handleEdit} onDelete={handleDeleteClick} />
 
-            <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Showing {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(safePage * PAGE_SIZE, filtered.length)} of {filtered.length} records
-              </p>
-
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                  disabled={safePage <= 1}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-colors duration-300 hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300 dark:text-neutral-400 dark:hover:bg-white/10 dark:disabled:text-neutral-600"
-                  aria-label="Previous page"
-                >
-                  <ChevronLeft size={16} />
-                </button>
-
-                {buildPageNumbers(safePage, effectiveTotalPages).map((page, i) =>
-                  page === '...' ? (
-                    <span key={`ellipsis-${i}`} className="inline-flex h-8 w-8 items-center justify-center text-sm text-gray-400 dark:text-neutral-500">…</span>
-                  ) : (
-                    <button
-                      key={page}
-                      type="button"
-                      onClick={() => setCurrentPage(page)}
-                      className={
-                        page === safePage
-                          ? 'inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-medium text-white'
-                          : 'inline-flex h-8 w-8 items-center justify-center rounded-lg text-sm text-gray-600 transition-colors duration-300 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-white/10'
-                      }
-                    >
-                      {page}
-                    </button>
-                  ),
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                  disabled={safePage >= effectiveTotalPages}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-colors duration-300 hover:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-300 dark:text-neutral-400 dark:hover:bg-white/10 dark:disabled:text-neutral-600"
-                  aria-label="Next page"
-                >
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            </div>
+            <Pagination
+              currentPage={safePage}
+              totalPages={effectiveTotalPages}
+              totalItems={filtered.length}
+              itemsPerPage={PAGE_SIZE}
+              onPageChange={setCurrentPage}
+            />
           </>
         )}
       </div>
@@ -223,20 +186,6 @@ function InventoryList() {
       </Modal>
     </div>
   )
-}
-
-function buildPageNumbers(currentPage, totalPages) {
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1)
-  }
-  const set = new Set([1, totalPages, currentPage, currentPage - 1, currentPage + 1])
-  const ordered = [...set].filter((p) => p >= 1 && p <= totalPages).sort((a, b) => a - b)
-  const result = []
-  for (let i = 0; i < ordered.length; i++) {
-    if (i > 0 && ordered[i] - ordered[i - 1] > 1) result.push('...')
-    result.push(ordered[i])
-  }
-  return result
 }
 
 export default InventoryList

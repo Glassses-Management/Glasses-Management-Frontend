@@ -38,7 +38,7 @@ function EmptyState() {
       </p>
       <Link
         to="/dashboard/appointments"
-        className="mt-4 inline-flex items-center rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-violet-700"
+        className="mt-4 inline-flex items-center rounded-lg bg-forest px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-forest-deep"
       >
         Book an eye exam
       </Link>

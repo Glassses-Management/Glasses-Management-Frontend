@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getMyAttachments } from '@/api/attachmentApi'
-import { pickImage } from '@/components/product/ProductImage'
+import { pickImage } from '@/components/product/productImageUtils'
 
 // Loads the signed-in user's profile picture url. Returns '' when the user has
 // no picture or the request fails, so callers can fall back to an initials

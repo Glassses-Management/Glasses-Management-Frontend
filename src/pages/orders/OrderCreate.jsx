@@ -9,14 +9,15 @@ import { useToast } from '@/hook/UseToast'
 import Button from '@/components/ui/Button'
 import CustomerPicker from '@/components/order/CustomerPicker'
 import PrescriptionPicker from '@/components/order/PrescriptionPicker'
-import OrderLineItems, { newRow } from '@/components/order/OrderLineItems'
+import OrderLineItems from '@/components/order/OrderLineItems'
+import { newRow } from '@/components/order/orderLineItemOptions'
 import { formatCurrency } from '@/utils/format'
 
 const toList = (data) => (Array.isArray(data?.content) ? data.content : Array.isArray(data) ? data : [])
 
 function Section({ title, description, children }) {
   return (
-    <section className="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#1c1c28]">
+    <section className="rounded-2xl bg-white p-6 shadow-sm dark:bg-surface-dark">
       <h2 className="text-base font-semibold text-ink dark:text-neutral-50">{title}</h2>
       {description && <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">{description}</p>}
       <div className="mt-4">{children}</div>

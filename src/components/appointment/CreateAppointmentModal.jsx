@@ -151,7 +151,7 @@ function AppointmentDialog({ customerId, customerName, context, initialNotes, ap
             name="optometrist_id"
             value={form.optometrist_id}
             onChange={(e) => set('optometrist_id', e.target.value)}
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-forest-500 focus:ring-2 focus:ring-forest-500 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100"
           >
             <option value="">{optometristRequired ? 'Select an optometrist…' : 'Not assigned yet'}</option>
             {optometrists.map((optometrist) => (
@@ -190,7 +190,7 @@ function AppointmentDialog({ customerId, customerName, context, initialNotes, ap
             onChange={(e) => set('notes', e.target.value)}
             rows={3}
             maxLength={REQUEST_NOTES_MAX}
-            className="h-20 w-full resize-none overflow-y-auto rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-500 dark:border-neutral-600 dark:bg-[#1c1c28] dark:text-neutral-100"
+            className="h-20 w-full resize-none overflow-y-auto rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none transition-colors duration-300 focus:border-forest-500 focus:ring-2 focus:ring-forest-500 dark:border-neutral-600 dark:bg-surface-dark dark:text-neutral-100"
           />
         </Field>
 

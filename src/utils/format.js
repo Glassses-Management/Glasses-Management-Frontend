@@ -2,29 +2,20 @@
 // (memberId, combined frame name, etc.) — all of these are derived here.
 
 import { formatCurrency } from '@/utils/FormatCurrency'
+import { formatDate as formatDateRaw } from '@/utils/FormatDate'
 
 // Re-exported so pages can import from a single format.js file.
 export { formatCurrency }
 
-export const formatDate = (dateStr, options) => {
-  if (!dateStr) return '—'
-  const date = new Date(dateStr)
-  if (Number.isNaN(date.getTime())) return '—'
-  return date.toLocaleDateString(undefined, options ?? { year: 'numeric', month: 'short', day: 'numeric' })
-}
+// Thin wrappers over the canonical @/utils/FormatDate implementation. The
+// difference is the empty-value fallback (an em-dash reads better than a blank
+// in tables) and `merge: false`, which keeps these call sites' habit of passing
+// options that replace the defaults rather than layering onto them.
+export const formatDate = (dateStr, options) =>
+  formatDateRaw(dateStr, { fallback: '—', merge: false, ...options })
 
-export const formatDateTime = (dateStr) => {
-  if (!dateStr) return '—'
-  const date = new Date(dateStr)
-  if (Number.isNaN(date.getTime())) return '—'
-  return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
+export const formatDateTime = (dateStr) =>
+  formatDateRaw(dateStr, { fallback: '—', withTime: true })
 
 export const deriveMemberId = (id) => {
   if (id === null || id === undefined) return '—'

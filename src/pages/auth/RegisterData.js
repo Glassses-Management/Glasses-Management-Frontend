@@ -3,7 +3,7 @@ import { HeartHandshake, Scan, ShieldCheck } from 'lucide-react'
 export const fieldLabel = 'mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-300'
 
 export const inputClass =
-  'w-full rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-forest dark:border-neutral-600 dark:bg-[#0E1A15] dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
+  'w-full rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-forest dark:border-neutral-600 dark:bg-surface-canvas dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-leaf'
 
 export const CARRIERS = [
   'TrueLife Vision Care',

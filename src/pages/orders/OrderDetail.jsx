@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, CalendarPlus, Check } from 'lucide-react'
-import Badge, { getVariantFromStatus } from '@/components/ui/Badge'
+import Badge from '@/components/ui/Badge'
+import { getVariantFromStatus } from '@/components/ui/badgeVariants'
 import OrderItemsTable from '@/components/order/OrderItemsTable'
 import { useProductImages } from '@/hook/UseProductImages'
 import { useToast } from '@/hook/UseToast'
@@ -48,7 +49,7 @@ const stepColors = [
   { track: 'bg-amber-200', dot: 'bg-amber-500', text: 'text-amber-600' },
   { track: 'bg-blue-200', dot: 'bg-blue-500', text: 'text-blue-600' },
   { track: 'bg-cyan-200', dot: 'bg-cyan-500', text: 'text-cyan-600' },
-  { track: 'bg-violet-200', dot: 'bg-violet-500', text: 'text-violet-600' },
+  { track: 'bg-forest-200', dot: 'bg-forest-500', text: 'text-forest-600' },
   { track: 'bg-green-200', dot: 'bg-green-500', text: 'text-green-600' },
 ]
 
@@ -86,12 +87,12 @@ function OrderDetail() {
   }, [id])
 
   if (loading) {
-    return <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-[#1c1c28] dark:text-neutral-400">Loading order...</div>
+    return <div className="rounded-2xl bg-white p-10 text-center text-sm text-gray-500 shadow-sm dark:bg-surface-dark dark:text-neutral-400">Loading order...</div>
   }
 
   if (!order || error) {
     return (
-      <div className="rounded-2xl bg-white p-10 text-center shadow-sm dark:bg-[#1c1c28]">
+      <div className="rounded-2xl bg-white p-10 text-center shadow-sm dark:bg-surface-dark">
         <p className="text-sm text-gray-500 dark:text-neutral-400">{error || `Order #${id} not found.`}</p>
         <Link to="/dashboard/orders" className="mt-4 inline-block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
           Back to Orders
@@ -156,7 +157,7 @@ function OrderDetail() {
       </div>
 
       {/* Status steps */}
-      <div className="rounded-2xl bg-white p-5 shadow-sm dark:bg-[#1c1c28]">
+      <div className="rounded-2xl bg-white p-5 shadow-sm dark:bg-surface-dark">
         <div className="flex items-center gap-2">
           {FLOW.map((s, i) => (
             <div key={s} className="flex flex-1 items-center gap-2">
@@ -205,7 +206,7 @@ function OrderDetail() {
       {/* Booking a fitting does not depend on the order status, so this stays
           available for orders stuck at Pending Review. */}
       {status !== 'COMPLETED' && status !== 'CANCELLED' && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm dark:bg-[#1c1c28]">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm dark:bg-surface-dark">
           <p className="text-sm text-gray-500 dark:text-neutral-400">
             Book a fitting date so the customer knows when to collect this order.
           </p>
@@ -222,7 +223,7 @@ function OrderDetail() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Order information */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#1c1c28] lg:col-span-2">
+        <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-surface-dark lg:col-span-2">
           <h2 className="text-base font-semibold text-gray-900 dark:text-neutral-50">Order Information</h2>
           <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
             <div>
@@ -257,7 +258,7 @@ function OrderDetail() {
         </div>
 
         {/* Status history timeline */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#1c1c28]">
+        <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-surface-dark">
           <h2 className="text-base font-semibold text-gray-900 dark:text-neutral-50">Timeline</h2>
           <ol className="mt-4 space-y-4">
             {[...history].reverse().map((h) => (

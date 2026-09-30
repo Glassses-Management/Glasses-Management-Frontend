@@ -9,7 +9,7 @@ export default function TrendTooltip({ active, payload, colors }) {
   const point = payload[0].payload
 
   return (
-    <div className="rounded-xl border border-edge bg-white px-3 py-2 shadow-lg dark:border-neutral-700 dark:bg-[#1c1c28]">
+    <div className="rounded-xl border border-edge bg-white px-3 py-2 shadow-lg dark:border-neutral-700 dark:bg-surface-dark">
       <p className="text-xs font-medium text-ink dark:text-neutral-100">{point.tooltipLabel || point.label}</p>
       <dl className="mt-1.5 space-y-1 text-xs">
         <div className="flex items-center justify-between gap-4">

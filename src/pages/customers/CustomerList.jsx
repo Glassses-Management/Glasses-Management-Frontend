@@ -26,7 +26,7 @@ function Avatar({ name, id }) {
 }
 
 const modalBackdrop = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'
-const modalCard = 'w-full max-w-md rounded-2xl bg-white p-6 shadow-xl transition-colors duration-300 dark:bg-[#1c1c28] dark:ring-1 dark:ring-neutral-800'
+const modalCard = 'w-full max-w-md rounded-2xl bg-white p-6 shadow-xl transition-colors duration-300 dark:bg-surface-dark dark:ring-1 dark:ring-neutral-800'
 
 function CustomerDeleteModal({ customer, onConfirm, onClose }) {
   return (

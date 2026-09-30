@@ -52,7 +52,7 @@ export default function RequestCard({ request, appointment, onChanged }) {
   const declined = request.status === REQUEST_REJECTED
 
   return (
-    <div className="flex overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-800 dark:bg-[#1c1c28]">
+    <div className="flex overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-neutral-800 dark:bg-surface-dark">
       <div aria-hidden="true" className={`w-1 shrink-0 ${STATUS_ACCENT[request.status] || 'bg-gray-300'}`} />
       <div className="flex flex-1 flex-col gap-4 p-5 sm:flex-row sm:items-start">
         <Avatar name={request.customer_name || '?'} id={request.customer_id} />
